@@ -18,6 +18,10 @@ config/name="KaeFarm"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[dotnet]
+
+project/assembly_name="KaeFarm"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
