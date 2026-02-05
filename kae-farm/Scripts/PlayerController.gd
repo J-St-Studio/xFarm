@@ -1,24 +1,28 @@
+# PlayerController.gd
+
 extends Node2D
 
-var InputController = preload("res://Scripts/InputController.gd");
-var InputTypes = preload("res://Scripts/InputTypes.gd");
-var PlayerStatus = preload("res://Scripts/PlayerStatus.gd");
+@onready var InputController = preload("res://Scripts/InputController.gd");
+@onready var InputTypes = preload("res://Scripts/InputTypes.gd");
+@onready var PlayerStatus = preload("res://Scripts/PlayerStatus.gd");
+@onready var GameController = preload("res://Scripts/GameController.gd")
+@onready var LogController = preload("res://Scripts/LogController.gd")
 
 @onready var player: Sprite2D = $"../PlayerSprite"
 @onready var GlobalDeltaTime: float = 0;
 @onready var CurrentMovementSpeed: int;
 @onready var MovementSpeedMultiplier: int;
-@onready var CurrentPlayerState: int;
-@onready var CurrentPlayerDirection: int;
+static var CurrentPlayerState: int;
+static var CurrentPlayerDirection: int;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("PlayerController: Input type -> ", InputController.GetControlType());
-	print("PlayerController: Changing Input Type...");
-
+	LogController.LogInputType(self)
+	LogController.LogMessage(self, "Changing Input Type...")
 	InputController.UpdateControlType(InputTypes.Types.PLAYER);
-	print("PlayerController: Input type -> ", InputController.GetControlType());
-
+	LogController.LogInputType(self)
+	LogController.LogPlayerState(self)
+	
 	CurrentMovementSpeed = 300;
 	MovementSpeedMultiplier = 1;
 	SetPlayerState(PlayerStatus.State.Idle);
@@ -27,14 +31,13 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# logic guard, if game is paused, the player ceases
+	if (GameController.GetCurrentGameState() == GameController.GameState.Paused): return
+	
 	GlobalDeltaTime = delta;
 	HandleInput();
-	
-	#print("PlayerController: ", InputController.GetControlType())
-	print("PlayerState: ", CurrentPlayerState)
-	print("PlayerDirection: ", CurrentPlayerDirection)
 
-	if (InputController.GetControlType() == InputTypes.Types.UI):
+	if (InputController.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
 		InputController.UpdateControlType(InputTypes.Types.PLAYER)
 	pass;
 
@@ -43,6 +46,14 @@ func _process(delta: float) -> void:
 #		not sure if it's really a problem worth solving. At the moment the player
 #		just stops. That's fine for now.
 func ProcessPlayerInput() -> void:
+	ProcessPlayerMovement()
+	ProcessPlayerActions()
+	
+func ProcessPlayerActions():
+	#actions include interacting with items/objects
+	pass
+
+func ProcessPlayerMovement():
 	if (InputController.MovingUpAndDown()):
 		SetPlayerState(PlayerStatus.State.Idle)
 	
@@ -123,7 +134,7 @@ func HandleInput() -> void:
 func GetPlayerDirection() -> int:
 	return CurrentPlayerDirection;
 
-func GetPlayerState() -> int:
+static func GetPlayerState() -> int:
 	return CurrentPlayerState;
 
 func SetPlayerState(state: int) -> void:

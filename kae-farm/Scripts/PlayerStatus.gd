@@ -1,3 +1,5 @@
+# PlayerStatus.gd
+
 extends Node
 
 enum State {
