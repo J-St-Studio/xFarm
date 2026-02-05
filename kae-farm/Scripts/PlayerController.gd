@@ -46,8 +46,8 @@ func _process(delta: float) -> void:
 #		not sure if it's really a problem worth solving. At the moment the player
 #		just stops. That's fine for now.
 func ProcessPlayerInput() -> void:
-	ProcessPlayerMovement()
-	ProcessPlayerActions()
+	ProcessPlayerMovement() #PlayerMovement.ProcessMovement()?
+	ProcessPlayerActions() #PlayerMovement.ProcessActions()? // dont over-architect/over-design
 	
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
