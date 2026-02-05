@@ -1,13 +1,5 @@
 extends Node2D
-
 var InputTypes = preload("res://Scripts/InputTypes.gd")
-
-# controls where input is going to be directed (player or UI)
-
-# basically this script will be responsible for housing the variables
-# that all other controllers will access for knowing what is going on with input
-
-# IE the player controller will pull from here to update it's "CurrentControlType"
 
 static var ControlType: int;
 
@@ -17,13 +9,59 @@ func _ready() -> void:
 	print("InputController: Control type -> ", ControlType)
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+# func _process(delta: float) -> void:
+# 	pass
 	
 static func UpdateControlType(_ControlType: int) -> void:
 	ControlType = _ControlType;
 	
 static func GetControlType() -> int:
 	return ControlType;
+
+
+static func MovingUp() -> bool:
+	return Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)
+
+static func MovingDown() -> bool:
+	return Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)
+
+
+static func MovingLeft() -> bool:
+	return Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)
+
+static func MovingRight() -> bool:
+	return Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)
+
+
+static func MovingLeftAndRight() -> bool:
+	return (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+
+static func MovingUpAndDown() -> bool:
+	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S))
+
+
+static func MovingUpAndRight() -> bool:
+	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+
+static func MovingUpAndLeft() -> bool:
+	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A))
+
+
+static func MovingDownAndLeft() -> bool:
+	return (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)) && (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A))
+
+static func MovingDownAndRight() -> bool:
+	return (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+
+static func MovingLeftRightAndDown() -> bool:
+	return (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)) && (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S))
+
+static func MovingLeftRightAndUp() -> bool:
+	return MovingLeft() && MovingRight() && MovingUp()
+
+static func MovingUpDownAndLeft() -> bool:
+	return MovingUp() && MovingDown() && MovingLeft()
+
+static func MovingUpDownAndRight() -> bool:
+	return MovingUp() && MovingDown() && MovingRight()
