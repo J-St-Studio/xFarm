@@ -1,3 +1,3 @@
 extends Node
 
-enum ControlTypes {NONE, PLAYER, UI}
+enum Types {NONE, PLAYER, UI}

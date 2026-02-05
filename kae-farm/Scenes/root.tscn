@@ -1,24 +1,14 @@
 [gd_scene format=3 uid="uid://00qbt71slxwx"]
 
+[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/GameController.gd" id="1_vnucn"]
 [ext_resource type="PackedScene" uid="uid://bv654ydli61s" path="res://Scenes/player.tscn" id="2_8pvmw"]
-
-[sub_resource type="GDScript" id="GDScript_i04dx"]
-script/source = "extends Node2D
-
-@onready var ControllingPlayer: bool = true
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
+[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/InputController.gd" id="3_c3mwy"]
 
 [node name="Root" type="Node2D" unique_id=1878218130]
-script = SubResource("GDScript_i04dx")
+script = ExtResource("1_vnucn")
 
 [node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_8pvmw")]
 position = Vector2(427, 191)
+
+[node name="InputController" type="Node2D" parent="." unique_id=1402947653]
+script = ExtResource("3_c3mwy")
