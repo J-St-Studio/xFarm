@@ -47,7 +47,7 @@ func ProcessPlayerInput() -> void:
 		SetPlayerState(PlayerStatus.State.Idle)
 	
 	elif (InputController.MovingLeftAndRight()):
-		SetPlayerState(PlayerStatus.State.Idle)
+		SetPlayerState(PlayerStatus.State.Idle) 
 
 	elif (InputController.MovingUpAndLeft()):
 		player.translate(Vector2(-1, -1) * PlayerSpeedCalculation())
