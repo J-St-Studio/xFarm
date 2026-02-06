@@ -9,16 +9,16 @@ radius = 83.00603
 
 [node name="Player" type="Node2D" unique_id=1150077415]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1187941988]
+[node name="PlayerController" type="Node2D" parent="." unique_id=1111889770]
+script = ExtResource("1_v0iea")
 
-[node name="PlayerSprite" type="Sprite2D" parent="CharacterBody2D" unique_id=671277541]
-texture = ExtResource("1_cvnsp")
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1187941988]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=2120505942]
 shape = SubResource("CircleShape2D_cvnsp")
 
+[node name="PlayerSprite" type="Sprite2D" parent="CharacterBody2D" unique_id=671277541]
+texture = ExtResource("1_cvnsp")
+
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1557441479]
 script = ExtResource("2_6t5aa")
-
-[node name="PlayerController" type="Node2D" parent="." unique_id=1111889770]
-script = ExtResource("1_v0iea")
