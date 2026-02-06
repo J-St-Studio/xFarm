@@ -10,7 +10,8 @@ var InputTypes = preload("res://Scripts/InputTypes.gd")
 
 var GlobalDelta: float
 
-@onready var chest_2: Sprite2D = $Chest2
+@onready var chest_2: Sprite2D = $"../../Chest2"
+
 
 # should game state enum be separated from GameController?
 # it's own gd file? GameStatus.gd?

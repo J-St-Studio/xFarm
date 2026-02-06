@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://vhwtn48205dl"]
+
+[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/GameController.gd" id="1_c8paj"]
+[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/InputController.gd" id="2_s7a50"]
+
+[node name="SystemControllers" type="Node2D" unique_id=342599273]
+
+[node name="GameController" type="Node2D" parent="." unique_id=1568654112]
+script = ExtResource("1_c8paj")
+
+[node name="InputController" type="Node2D" parent="." unique_id=1931101509]
+script = ExtResource("2_s7a50")

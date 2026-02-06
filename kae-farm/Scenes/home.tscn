@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d0vxkhsvlbu03"]
+
+[ext_resource type="PackedScene" uid="uid://bv654ydli61s" path="res://Scenes/player.tscn" id="2_llnbm"]
+[ext_resource type="PackedScene" uid="uid://vhwtn48205dl" path="res://Scenes/system_controllers.tscn" id="3_ibywg"]
+[ext_resource type="Texture2D" uid="uid://ccr1pxyoswjr8" path="res://Assets/Objects/Chest.png" id="4_vkfas"]
+
+[node name="Home" type="Node2D" unique_id=1878218130]
+
+[node name="SystemControllers" parent="." unique_id=342599273 instance=ExtResource("3_ibywg")]
+
+[node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_llnbm")]
+
+[node name="Chest2" type="Sprite2D" parent="." unique_id=1745142046]
+position = Vector2(-336, -164)
+texture = ExtResource("4_vkfas")
+
+[node name="Chest" type="Sprite2D" parent="." unique_id=1204285923]
+position = Vector2(373, 113)
+texture = ExtResource("4_vkfas")

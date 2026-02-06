@@ -8,7 +8,9 @@ extends Node2D
 @onready var GameController = preload("res://Scripts/GameController.gd")
 @onready var LogController = preload("res://Scripts/LogController.gd")
 
-@onready var player: Sprite2D = $"../PlayerSprite"
+@onready var player: CharacterBody2D = $"../CharacterBody2D"
+
+#@onready var player: Sprite2D = $"../PlayerSprite"
 @onready var GlobalDeltaTime: float = 0;
 @onready var CurrentMovementSpeed: int;
 @onready var MovementSpeedMultiplier: int;
