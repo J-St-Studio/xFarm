@@ -72,40 +72,34 @@ func ProcessPlayerActions():
 	pass
 
 func ProcessPlayerMovement():
-	if (InputController.MovingUpAndDown()):
+	if (InputController.MovingLeftRightAndDown()):
+		MovePlayerDown()
+	elif (InputController.MovingLeftRightAndUp()):
+		MovePlayerUp()
+	elif (InputController.MovingUpDownAndLeft()):
+		MovePlayerLeft()
+	elif (InputController.MovingUpDownAndRight()):
+		MovePlayerRight()
+	elif (InputController.MovingUpAndDown()):
 		SetPlayerState(PlayerStatus.State.Idle)
-	
 	elif (InputController.MovingLeftAndRight()):
 		SetPlayerState(PlayerStatus.State.Idle) 
-
 	elif (InputController.MovingUpAndLeft()):
-		player.translate(Vector2(-1, -1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
-
+		MovePlayerUpAndLeft()
 	elif (InputController.MovingUpAndRight()):
-		player.translate(Vector2(1, -1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
-
+		MovePlayerUpAndRight()
 	elif (InputController.MovingDownAndLeft()):
-		player.translate(Vector2(-1, 1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
-
+		MovePlayerDownAndLeft()
 	elif (InputController.MovingDownAndRight()):
-		player.translate(Vector2(1, 1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
-
+		MovePlayerDownAndRight()
 	elif (InputController.MovingUp()):
 		MovePlayerUp()
-
 	elif (InputController.MovingLeft()):
 		MovePlayerLeft()
-		
 	elif (InputController.MovingRight()):
 		MovePlayerRight()
-
 	elif (InputController.MovingDown()):
 		MovePlayerDown()
-
 	else:
 		SetPlayerState(PlayerStatus.State.Idle);
 	pass;
@@ -125,15 +119,37 @@ func MovePlayerLeft() -> void:
 func MovePlayerRight() -> void:
 	player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
 	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
+	
+func MovePlayerUpAndRight() -> void:
+	player.translate(Vector2(1, -1) * PlayerSpeedCalculation())
+	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
+
+func MovePlayerUpAndLeft() -> void:
+	player.translate(Vector2(-1, -1) * PlayerSpeedCalculation())
+	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
+	
+func MovePlayerDownAndRight() -> void:
+	player.translate(Vector2(1, 1) * PlayerSpeedCalculation())
+	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
+	
+func MovePlayerDownAndLeft() -> void:
+	player.translate(Vector2(-1, 1) * PlayerSpeedCalculation())
+	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
 
 func ProcessUserInterfaceInput() -> void:
 	if (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)):
+		# UI controller responsible for this? no?
+		# log message for now
+		LogController.LogMessage(self, "UI up pressed")
 		pass
 	elif (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)):
+		LogController.LogMessage(self, "UI left pressed")
 		pass
 	elif (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)):
+		LogController.LogMessage(self, "UI right pressed")
 		pass
 	elif (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)):
+		LogController.LogMessage(self, "UI down pressed")
 		pass
 	else:
 		pass
@@ -141,6 +157,7 @@ func ProcessUserInterfaceInput() -> void:
 
 # Determines where input will be focused (ie controlling the player or navigating UI)
 func HandleInput() -> void:
+	LogController.LogInputType(self)
 	if (InputController.GetControlType() == InputTypes.Types.PLAYER):
 		ProcessPlayerInput();
 	elif (InputController.GetControlType() == InputTypes.Types.UI):

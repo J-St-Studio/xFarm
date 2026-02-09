@@ -50,11 +50,11 @@ func CheckForGamePause() -> void:
 	if (InputController.PauseKeyPressed() && IsGamePaused()):
 		LogController.LogMessage(self, "Game Unpaused")
 		SetCurrentGameState(GameState.UnPaused)
-		InputController.UpdateControlType(InputTypes.Types.UI)
+		InputController.UpdateControlType(InputTypes.Types.PLAYER)
 	elif (InputController.PauseKeyPressed() && IsGameUnPaused()):
 		LogController.LogMessage(self, "Game Paused")
 		SetCurrentGameState(GameState.Paused)
-		InputController.UpdateControlType(InputTypes.Types.PLAYER)
+		InputController.UpdateControlType(InputTypes.Types.UI)
 
 static func GetCurrentGameState() -> int:
 	return CurrentGameState

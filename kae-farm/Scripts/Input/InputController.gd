@@ -1,4 +1,5 @@
 # InputController.gd
+# might re-work this idea/mess
 
 extends Node2D
 var InputTypes = preload("res://Scripts/Input/InputTypes.gd")
@@ -27,6 +28,8 @@ static func PauseKeyPressed() -> bool:
 
 # rename all bool return functions to Is naming convention
 # ie: IsMovingUp()
+# Should refactor naming to be input generic? PressingUp() etc..
+# Different logic for UI? (is_action_just_pressed better for UI and others for movement?)
 static func MovingUp() -> bool:
 	return Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)
 
@@ -40,25 +43,25 @@ static func MovingRight() -> bool:
 	return Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)
 
 static func MovingLeftAndRight() -> bool:
-	return (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+	return MovingLeft() && MovingRight()
 
 static func MovingUpAndDown() -> bool:
-	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S))
+	return MovingUp() && MovingDown()
 
 static func MovingUpAndRight() -> bool:
-	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+	return MovingUp() && MovingRight()
 
 static func MovingUpAndLeft() -> bool:
-	return (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)) && (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A))
+	return MovingUp() && MovingLeft()
 
 static func MovingDownAndLeft() -> bool:
-	return (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)) && (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A))
+	return MovingDown() && MovingLeft()
 
 static func MovingDownAndRight() -> bool:
-	return (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D))
+	return MovingDown() && MovingRight()
 
 static func MovingLeftRightAndDown() -> bool:
-	return (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)) && (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)) && (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S))
+	return MovingLeft() && MovingRight() && MovingDown()
 
 static func MovingLeftRightAndUp() -> bool:
 	return MovingLeft() && MovingRight() && MovingUp()
@@ -68,8 +71,6 @@ static func MovingUpDownAndLeft() -> bool:
 
 static func MovingUpDownAndRight() -> bool:
 	return MovingUp() && MovingDown() && MovingRight()
-
-
 
 static func Interact():
 	return Input.is_action_pressed("ui_accept") || Input.is_physical_key_pressed(KEY_E)
