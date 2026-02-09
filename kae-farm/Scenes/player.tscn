@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bv654ydli61s"]
 
 [ext_resource type="Texture2D" uid="uid://bxvyrqg1go81b" path="res://icon.svg" id="1_cvnsp"]
-[ext_resource type="Script" uid="uid://mw25spbuowcr" path="res://Scripts/PlayerController.gd" id="1_v0iea"]
-[ext_resource type="Script" uid="uid://bd4ft4llssx8o" path="res://Scripts/CameraController.gd" id="2_6t5aa"]
+[ext_resource type="Script" uid="uid://mw25spbuowcr" path="res://Scripts/Player/PlayerController.gd" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://bd4ft4llssx8o" path="res://Scripts/Camera/CameraController.gd" id="2_6t5aa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
 radius = 83.00603

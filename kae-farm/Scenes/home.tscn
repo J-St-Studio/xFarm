@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://vhwtn48205dl" path="res://Scenes/system_controllers.tscn" id="3_ibywg"]
 [ext_resource type="Texture2D" uid="uid://6k3obre2co25" path="res://Assets/Objects/Basic Furniture.png" id="4_12ycv"]
 [ext_resource type="Texture2D" uid="uid://ccr1pxyoswjr8" path="res://Assets/Objects/Chest.png" id="4_vkfas"]
-[ext_resource type="Script" uid="uid://c3osbuggh4asc" path="res://Scripts/Plant.gd" id="6_fhpuh"]
+[ext_resource type="Script" uid="uid://c3osbuggh4asc" path="res://Scripts/Items/Plant.gd" id="6_fhpuh"]
 
 [node name="Home" type="Node2D" unique_id=1878218130]
 
@@ -35,4 +35,3 @@ texture = ExtResource("4_12ycv")
 position = Vector2(1373, 527)
 scale = Vector2(-2120.2546, -657.63464)
 script = ExtResource("6_fhpuh")
-metadata/_custom_type_script = "uid://c3osbuggh4asc"

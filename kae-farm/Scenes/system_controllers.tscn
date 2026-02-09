@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://vhwtn48205dl"]
 
-[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/GameController.gd" id="1_c8paj"]
-[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/InputController.gd" id="2_s7a50"]
+[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/System/GameController.gd" id="1_c8paj"]
+[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/Input/InputController.gd" id="2_s7a50"]
 
 [node name="SystemControllers" type="Node2D" unique_id=342599273]
 

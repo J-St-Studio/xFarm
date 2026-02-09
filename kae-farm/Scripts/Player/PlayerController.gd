@@ -2,11 +2,11 @@
 
 extends Node2D
 
-@onready var InputController = preload("res://Scripts/InputController.gd");
-@onready var InputTypes = preload("res://Scripts/InputTypes.gd");
-@onready var PlayerStatus = preload("res://Scripts/PlayerStatus.gd");
-@onready var GameController = preload("res://Scripts/GameController.gd")
-@onready var LogController = preload("res://Scripts/LogController.gd")
+@onready var InputController = preload("res://Scripts/Input/InputController.gd");
+@onready var InputTypes = preload("res://Scripts/Input/InputTypes.gd");
+@onready var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd");
+@onready var GameController = preload("res://Scripts/System/GameController.gd")
+@onready var LogController = preload("res://Scripts/System/LogController.gd")
 
 @onready var player: CharacterBody2D = $"../CharacterBody2D"
 @onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"

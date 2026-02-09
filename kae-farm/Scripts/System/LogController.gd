@@ -3,11 +3,11 @@
 @tool
 extends EditorScript
 
-static var PlayerStatus = preload("res://Scripts/PlayerStatus.gd")
-static var PlayerController = preload("res://Scripts/PlayerController.gd")
-static var InputController = preload("res://Scripts/InputController.gd")
-static var GameController = preload("res://Scripts/GameController.gd")
-static var InputTypes = preload("res://Scripts/InputTypes.gd")
+static var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd")
+static var PlayerController = preload("res://Scripts/Player/PlayerController.gd")
+static var InputController = preload("res://Scripts/Input/InputController.gd")
+static var GameController = preload("res://Scripts/System/GameController.gd")
+static var InputTypes = preload("res://Scripts/Input/InputTypes.gd")
 
 const prefix: String = "LOG::"
 
