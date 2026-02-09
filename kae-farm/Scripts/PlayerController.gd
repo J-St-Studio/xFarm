@@ -9,6 +9,7 @@ extends Node2D
 @onready var LogController = preload("res://Scripts/LogController.gd")
 
 @onready var player: CharacterBody2D = $"../CharacterBody2D"
+@onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
 
 #@onready var player: Sprite2D = $"../PlayerSprite"
 @onready var GlobalDeltaTime: float = 0;
@@ -16,6 +17,7 @@ extends Node2D
 @onready var MovementSpeedMultiplier: int;
 static var CurrentPlayerState: int;
 static var CurrentPlayerDirection: int;
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -29,6 +31,9 @@ func _ready() -> void:
 	MovementSpeedMultiplier = 1;
 	SetPlayerState(PlayerStatus.State.Idle);
 	SetPlayerDirection(PlayerStatus.Direction.Left);
+	
+	#PlayerStatus.Health = 100
+	#PlayerStatus.MaxHealth = 100
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,6 +47,9 @@ func _process(delta: float) -> void:
 	if (InputController.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
 		InputController.UpdateControlType(InputTypes.Types.PLAYER)
 	pass;
+	
+func TakeDamage(DamageValue: float) -> void:
+	pass
 
 # ProcessPlayerInput: Handles logic for moving the player.
 # NOTE: Pressing 3 movement options at once doesn't behave as desired but
@@ -53,6 +61,14 @@ func ProcessPlayerInput() -> void:
 	
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
+	if (InputController.Interact()):
+		# context, need to know what was interacted with
+		# Interact with overlapping object/item
+		# 	What if overlapping with more than one? Most recent overlap?
+		#	How to find overlapping collision shapes?
+		#PlayerCollision.sweep
+		
+		pass
 	pass
 
 func ProcessPlayerMovement():

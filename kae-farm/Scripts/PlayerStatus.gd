@@ -16,3 +16,6 @@ enum Direction {
 	Left,
 	Right,
 }
+
+var Health: int = 100
+var MaxHealth: int = 100

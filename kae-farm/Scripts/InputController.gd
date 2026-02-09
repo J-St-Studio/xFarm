@@ -33,7 +33,6 @@ static func MovingUp() -> bool:
 static func MovingDown() -> bool:
 	return Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)
 
-
 static func MovingLeft() -> bool:
 	return Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)
 
@@ -69,3 +68,13 @@ static func MovingUpDownAndLeft() -> bool:
 
 static func MovingUpDownAndRight() -> bool:
 	return MovingUp() && MovingDown() && MovingRight()
+
+
+
+static func Interact():
+	return Input.is_action_pressed("ui_accept") || Input.is_physical_key_pressed(KEY_E)
+	
+	
+	
+	
+	
