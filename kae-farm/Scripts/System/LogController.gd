@@ -18,12 +18,39 @@ func _run() -> void:
 static func LogMessage(source: Node, message: String):
 	print(prefix, source.name, ": ", message)
 	
-static func LogPlayerState(source: Node):
-	print(prefix, source.name, ": PlayerState -> ", PlayerStatus.State.keys()[PlayerController.GetPlayerState()])
+static func LogPlayerState(source: Node, function=null, message: String=""):
+	print(
+		prefix, 
+		source.name,
+		"/", function.name, 
+		": PlayerState -> ", 
+		PlayerStatus.State.keys()[PlayerController.GetPlayerState()],
+		" :: (", message, ")"
+	)
 	
-static func LogInputType(source: Node):
-	print(prefix, source.name, ": InputType -> ", InputTypes.Types.keys()[InputController.GetControlType()])
+static func LogInputType(source: Node, function=null, message: String=""):
+	var FunctionName: String = "/" + function.name
+	var SourceName: String = source.name
+	
+	if (function.name == null): FunctionName = ""
+	if (source.name == null): SourceName = ""
+	
+	print(
+		prefix, 
+		SourceName,
+		FunctionName,
+		": InputType -> ", 
+		InputTypes.Types.keys()[InputController.GetControlType()],
+		" :: (", message, ")"
+	)
 
-func LogGameState(source: Node):
-	print(prefix, source.name, ": GameState -> ", GameController.GameState.keys()[GameController.GetCurrentGameState()])
+func LogGameState(source: Node, function=null, message: String=""):
+	print(
+		prefix, 
+		source.name,
+		"/", function.name, 
+		": GameState -> ", 
+		GameController.GameState.keys()[GameController.GetCurrentGameState()],
+		" :: (", message, ")"
+	)
 	pass

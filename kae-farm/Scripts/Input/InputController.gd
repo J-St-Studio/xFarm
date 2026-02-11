@@ -30,47 +30,47 @@ static func PauseKeyPressed() -> bool:
 # ie: IsMovingUp()
 # Should refactor naming to be input generic? PressingUp() etc..
 # Different logic for UI? (is_action_just_pressed better for UI and others for movement?)
-static func MovingUp() -> bool:
+static func Up() -> bool:
 	return Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)
 
-static func MovingDown() -> bool:
+static func Down() -> bool:
 	return Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)
 
-static func MovingLeft() -> bool:
+static func Left() -> bool:
 	return Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)
 
-static func MovingRight() -> bool:
+static func Right() -> bool:
 	return Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)
 
-static func MovingLeftAndRight() -> bool:
-	return MovingLeft() && MovingRight()
+static func LeftAndRight() -> bool:
+	return Left() && Right()
 
-static func MovingUpAndDown() -> bool:
-	return MovingUp() && MovingDown()
+static func UpAndDown() -> bool:
+	return Up() && Down()
 
-static func MovingUpAndRight() -> bool:
-	return MovingUp() && MovingRight()
+static func UpAndRight() -> bool:
+	return Up() && Right()
 
-static func MovingUpAndLeft() -> bool:
-	return MovingUp() && MovingLeft()
+static func UpAndLeft() -> bool:
+	return Up() && Left()
 
-static func MovingDownAndLeft() -> bool:
-	return MovingDown() && MovingLeft()
+static func DownAndLeft() -> bool:
+	return Down() && Left()
 
-static func MovingDownAndRight() -> bool:
-	return MovingDown() && MovingRight()
+static func DownAndRight() -> bool:
+	return Down() && Right()
 
-static func MovingLeftRightAndDown() -> bool:
-	return MovingLeft() && MovingRight() && MovingDown()
+static func LeftRightAndDown() -> bool:
+	return Left() && Right() && Down()
 
-static func MovingLeftRightAndUp() -> bool:
-	return MovingLeft() && MovingRight() && MovingUp()
+static func LeftRightAndUp() -> bool:
+	return Left() && Right() && Up()
 
-static func MovingUpDownAndLeft() -> bool:
-	return MovingUp() && MovingDown() && MovingLeft()
+static func UpDownAndLeft() -> bool:
+	return Up() && Down() && Left()
 
-static func MovingUpDownAndRight() -> bool:
-	return MovingUp() && MovingDown() && MovingRight()
+static func UpDownAndRight() -> bool:
+	return Up() && Down() && Right()
 
 static func Interact():
 	return Input.is_action_pressed("ui_accept") || Input.is_physical_key_pressed(KEY_E)
