@@ -18,22 +18,39 @@ func _run() -> void:
 static func LogMessage(source: Node, message: String):
 	print(prefix, source.name, ": ", message)
 	
-static func LogPlayerState(source: Node, function=null, message: String=""):
+static func LogPlayerState(source: Node, message: String=""):
+	var SourceName: String
+	var FunctionName: Variant = "NULL"
+	
+	if (source == null): 
+		SourceName = ""
+	else:
+		SourceName = source.name
+		
+	if (get_stack().size() > 2):
+		FunctionName = "/" + get_stack()[1].function
+	
 	print(
 		prefix, 
-		source.name,
-		"/", function.name, 
+		SourceName,
+		FunctionName, 
 		": PlayerState -> ", 
 		PlayerStatus.State.keys()[PlayerController.GetPlayerState()],
 		" :: (", message, ")"
 	)
 	
-static func LogInputType(source: Node, function=null, message: String=""):
-	var FunctionName: String = "/" + function.name
-	var SourceName: String = source.name
+static func LogInputType(source: Node, message: String=""):
+	var SourceName: String
+	var FunctionName: Variant = "NULL"
 	
-	if (function.name == null): FunctionName = ""
-	if (source.name == null): SourceName = ""
+	if (source == null): 
+		SourceName = ""
+	else:
+		SourceName = source.name
+		
+	if (get_stack().size() > 2):
+		FunctionName = "/" + get_stack()[1].function
+
 	
 	print(
 		prefix, 
@@ -44,11 +61,22 @@ static func LogInputType(source: Node, function=null, message: String=""):
 		" :: (", message, ")"
 	)
 
-func LogGameState(source: Node, function=null, message: String=""):
+func LogGameState(source: Node, message: String=""):
+	var SourceName: String
+	var FunctionName: Variant = "NULL"
+
+	if (source == null): 
+		SourceName = ""
+	else:
+		SourceName = source.name
+
+	if (get_stack().size() > 2):
+		FunctionName = "/" + get_stack()[1].function
+	
 	print(
 		prefix, 
-		source.name,
-		"/", function.name, 
+		SourceName,
+		FunctionName, 
 		": GameState -> ", 
 		GameController.GameState.keys()[GameController.GetCurrentGameState()],
 		" :: (", message, ")"

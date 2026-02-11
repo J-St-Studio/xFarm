@@ -157,7 +157,7 @@ func ProcessUserInterfaceInput() -> void:
 
 # Determines where input will be focused (ie controlling the player or navigating UI)
 func HandleInput() -> void:
-	LogController.LogInputType(self, HandleInput, "test")
+	LogController.LogInputType(self, "test")
 	if (InputController.GetControlType() == InputTypes.Types.PLAYER):
 		ProcessPlayerInput();
 	elif (InputController.GetControlType() == InputTypes.Types.UI):
