@@ -32,6 +32,6 @@ texture = ExtResource("4_12ycv")
 [node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_llnbm")]
 
 [node name="Plant" type="Node2D" parent="." unique_id=1515121500]
-position = Vector2(1373, 527)
+position = Vector2(47, 167.00003)
 scale = Vector2(-2120.2546, -657.63464)
 script = ExtResource("6_fhpuh")
