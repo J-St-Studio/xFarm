@@ -2,7 +2,6 @@
 # might re-work this idea/mess
 
 extends Node2D
-var InputTypes = preload("res://Scripts/Input/InputTypes.gd")
 var LogController = preload("res://Scripts/System/LogController.gd")
 
 static var ControlType: int;

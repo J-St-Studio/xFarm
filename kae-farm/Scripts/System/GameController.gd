@@ -6,11 +6,11 @@ extends Node2D
 
 var LogController = preload("res://Scripts/System/LogController.gd")
 var InputController = preload("res://Scripts/Input/InputController.gd")
-var InputTypes = preload("res://Scripts/Input/InputTypes.gd")
+#var InputTypes = preload("res://Scripts/Input/InputTypes.gd")
 
 var GlobalDelta: float
 
-@onready var chest_2: Sprite2D = $"../../Chest2"
+@onready var spinner_sprite: Sprite2D = $"../../TestingSprites/SpinnerSprite"
 
 
 # should game state enum be separated from GameController?
@@ -40,7 +40,7 @@ func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
 	
-	chest_2.rotate(PI * 2 * GlobalDelta)
+	spinner_sprite.rotate(PI * 2 * GlobalDelta)
 	# maybe handle things in here?
 	# Game time logic?
 	# Plant growth?

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://brwf3wferliq7"]
+
+[ext_resource type="Script" uid="uid://bl1tspxoxy560" path="res://Scripts/Environment/EnvironmentPlant.gd" id="1_s6egt"]
+[ext_resource type="Texture2D" uid="uid://bp2d3lukhvynn" path="res://Assets/Objects/Paths.png" id="2_8vlvr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s6egt"]
+size = Vector2(64, 72)
+
+[node name="EnvironmentPlant" type="Node2D" unique_id=1637131202]
+script = ExtResource("1_s6egt")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1201191011]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1682498891]
+position = Vector2(-2, -6)
+shape = SubResource("RectangleShape2D_s6egt")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=530451403]
+texture = ExtResource("2_8vlvr")

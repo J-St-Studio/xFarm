@@ -5,8 +5,14 @@ extends Node
 enum State {
 	Idle,
 	Moving,
-	Busy,
-	Dead,
+	Busy
+}
+
+enum HealthState {
+	Healthy,
+	Sick,
+	Dying,
+	Dead
 }
 
 enum Direction {

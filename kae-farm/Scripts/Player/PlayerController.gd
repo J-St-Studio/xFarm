@@ -3,10 +3,9 @@
 extends Node2D
 
 @onready var InputController = preload("res://Scripts/Input/InputController.gd");
-@onready var InputTypes = preload("res://Scripts/Input/InputTypes.gd");
 @onready var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd");
 @onready var GameController = preload("res://Scripts/System/GameController.gd")
-@onready var LogController = preload("res://Scripts/System/LogController.gd")
+#@onready var LogController = preload("res://Scripts/System/LogController.gd")
 
 @onready var player: CharacterBody2D = $"../CharacterBody2D"
 @onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
@@ -157,7 +156,7 @@ func ProcessUserInterfaceInput() -> void:
 
 # Determines where input will be focused (ie controlling the player or navigating UI)
 func HandleInput() -> void:
-	LogController.LogInputType(self, "test")
+	#LogController.LogInputType(self, "test")
 	if (InputController.GetControlType() == InputTypes.Types.PLAYER):
 		ProcessPlayerInput();
 	elif (InputController.GetControlType() == InputTypes.Types.UI):
