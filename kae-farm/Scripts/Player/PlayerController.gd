@@ -37,11 +37,12 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	HandleInput();
+	
 	# logic guard, if game is paused, the player ceases
-	if (GameController.GetCurrentGameState() == GameController.GameState.Paused): return
+	if (GameController.GamePaused()): return
 	
 	GlobalDeltaTime = delta;
-	HandleInput();
 
 	if (InputController.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
 		InputController.UpdateControlType(InputTypes.Types.PLAYER)

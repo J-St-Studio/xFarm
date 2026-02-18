@@ -2,7 +2,7 @@
 # controls many aspects of the game world
 
 
-extends Node2D
+class_name GameController extends Node2D
 
 var LogController = preload("res://Scripts/System/LogController.gd")
 var InputController = preload("res://Scripts/Input/InputController.gd")
@@ -47,11 +47,11 @@ func UpdateGameWorld():
 	# World events?
 
 func CheckForGamePause() -> void:
-	if (InputController.PauseKeyPressed() && IsGamePaused()):
+	if (InputController.PauseKeyPressed() && GamePaused()):
 		LogController.LogMessage(self, "Game Unpaused")
 		SetCurrentGameState(GameState.UnPaused)
 		InputController.UpdateControlType(InputTypes.Types.PLAYER)
-	elif (InputController.PauseKeyPressed() && IsGameUnPaused()):
+	elif (InputController.PauseKeyPressed() && GameUnPaused()):
 		LogController.LogMessage(self, "Game Paused")
 		SetCurrentGameState(GameState.Paused)
 		InputController.UpdateControlType(InputTypes.Types.UI)
@@ -62,9 +62,9 @@ static func GetCurrentGameState() -> int:
 static func SetCurrentGameState(state: int) -> void:
 	CurrentGameState = state
 	
-static func IsGamePaused() -> bool:
+static func GamePaused() -> bool:
 	return CurrentGameState == GameState.Paused
 
-static func IsGameUnPaused() -> bool:
+static func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
 	

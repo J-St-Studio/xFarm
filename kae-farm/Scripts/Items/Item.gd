@@ -4,6 +4,10 @@ var Name: String
 var Category: ItemTypes
 var Price: float
 
+var HoverFrequency: float
+var HoverAmplitude: float
+var TotalTime: float
+
 @onready var ItemArea2D: Area2D = $Area2D
 @onready var PlayerCollisionShape: CollisionShape2D = $CharacterBody2D/CollisionShape2D
 @onready var ItemCollisionShape: CollisionShape2D = $Area2D/CollisionShape2D
@@ -11,18 +15,20 @@ var Price: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	LogController.LogMessage(self, "Item Ready")
+	HoverFrequency = 0.5
+	HoverAmplitude = 15.0
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if (GameController.GetCurrentGameState() == GameController.GameState.Paused): return
 	IdleHover(delta)
-
 	IsOverlapped()
 	pass
 	
 func IdleHover(delta: float) -> void:
+	TotalTime += delta
+	position.y = HoverAmplitude * sin(TotalTime * HoverFrequency * TAU + 1 * TAU)
 	pass
 
 func SetName(value: String) -> void:
@@ -36,6 +42,6 @@ func SetPrice(value: float) -> void:
 	
 func IsOverlapped() -> void:
 	if (ItemArea2D.overlaps_area(CharacterBody)):
-		print("Collision with Player!")
+		LogController.LogMessage(self, "Overlapping with Player!")
 		pass
 	pass

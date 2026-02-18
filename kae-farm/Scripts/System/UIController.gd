@@ -14,4 +14,5 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# if the game is unpaused, no UI control? -> what about in-game menu?
 	pass
