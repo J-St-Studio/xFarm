@@ -9,6 +9,7 @@ static var InputController = preload("res://Scripts/Input/InputController.gd")
 static var GameController = preload("res://Scripts/System/GameController.gd")
 
 const prefix: String = "LOG::"
+const NoFunctionName: String = "/NULL"
 
 # Called when the script is executed (using File -> Run in Script Editor).
 func _run() -> void:
@@ -19,7 +20,7 @@ static func LogMessage(source: Node, message: String):
 	
 static func LogPlayerState(source: Node, message: String=""):
 	var SourceName: String
-	var FunctionName: Variant = "NULL"
+	var FunctionName: Variant = NoFunctionName
 	
 	if (source == null): 
 		SourceName = ""
@@ -40,7 +41,7 @@ static func LogPlayerState(source: Node, message: String=""):
 	
 static func LogInputType(source: Node, message: String=""):
 	var SourceName: String
-	var FunctionName: Variant = "NULL"
+	var FunctionName: Variant = NoFunctionName
 	
 	if (source == null): 
 		SourceName = ""
@@ -62,7 +63,7 @@ static func LogInputType(source: Node, message: String=""):
 
 func LogGameState(source: Node, message: String=""):
 	var SourceName: String
-	var FunctionName: Variant = "NULL"
+	var FunctionName: Variant = NoFunctionName
 
 	if (source == null): 
 		SourceName = ""
