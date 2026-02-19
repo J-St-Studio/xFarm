@@ -23,7 +23,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if (GameController.GetCurrentGameState() == GameController.GameState.Paused): return
 	IdleHover(delta)
-	IsOverlapped()
 	pass
 	
 func IdleHover(delta: float) -> void:
@@ -39,9 +38,3 @@ func SetCategory(value: ItemTypes) -> void:
 	
 func SetPrice(value: float) -> void:
 	Price = value
-	
-func IsOverlapped() -> void:
-	if (ItemArea2D.overlaps_area(CharacterBody)):
-		LogController.LogMessage(self, "Overlapping with Player!")
-		pass
-	pass

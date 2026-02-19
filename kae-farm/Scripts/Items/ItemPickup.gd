@@ -1,5 +1,7 @@
 extends Area2D
 
+@onready var item: Item = $".."
+@onready var sprite_2d: Sprite2D = $"../Sprite2D"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,5 +19,6 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	LogController.LogMessage(self, "Overlapping with: " + body.name)
+	LogController.LogMessage(self.get_parent(), item.Name + " picked up by: " + body.get_parent().name)
+	get_parent().queue_free()
 	pass

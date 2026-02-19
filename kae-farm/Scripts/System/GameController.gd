@@ -3,6 +3,7 @@
 
 
 class_name GameController extends Node2D
+@onready var home: Node2D = $"../.."
 
 var LogController = preload("res://Scripts/System/LogController.gd")
 var InputController = preload("res://Scripts/Input/InputController.gd")
@@ -27,7 +28,8 @@ static var CurrentWorldTime: String; # Ideally get this represented in UI in a 2
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	CurrentGameState = GameState.UnPaused
-	pass # Replace with function body.
+	SpawnItem("Corn", Vector2(20, 20), home)
+	pass # Replace with namefunction body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,6 +57,13 @@ func CheckForGamePause() -> void:
 		LogController.LogMessage(self, "Game Paused")
 		SetCurrentGameState(GameState.Paused)
 		InputController.UpdateControlType(InputTypes.Types.UI)
+
+func SpawnItem(name: String, position: Vector2, parentNode: Node) -> Item:
+	var new_item: Item = Item.new()
+	new_item.SetName(name)
+	parentNode.add_child(new_item)
+	new_item.position = position
+	return new_item
 
 static func GetCurrentGameState() -> int:
 	return CurrentGameState
