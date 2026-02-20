@@ -40,13 +40,6 @@ func IsEmpty() -> bool:
 func IsFull() -> bool:
 	return Inventory.size() >= MaxInventorySize
 	
-func NewItem(Name: String, Category: ItemTypes, Price: float) -> Item:
-	var item = Item.new()
-	item.Name = Name
-	item.Category = Category
-	item.Price = Price
-	return item
-
 # make an "item" class <- actual use-case for a class/OOP
 func AddItem(NewItem: Item) -> bool:
 	if (!IsEmpty()): return false

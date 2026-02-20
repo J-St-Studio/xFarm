@@ -3,6 +3,7 @@ class_name Item extends Node2D
 var Name: String
 var Category: ItemTypes
 var Price: float
+var Position: Vector2
 
 var HoverFrequency: float
 var HoverAmplitude: float
@@ -13,6 +14,9 @@ var TotalTime: float
 @onready var ItemCollisionShape: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var CharacterBody: CharacterBody2D = $CharacterBody2D
 
+func _init(item: Dictionary) -> void:
+	Name = item["Name"]
+	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	HoverFrequency = 0.5

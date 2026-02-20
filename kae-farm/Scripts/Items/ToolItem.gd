@@ -1,4 +1,4 @@
-class_name Tool extends Item
+class_name ToolItem extends Item
 
 var Durability: float
 var Strength: float
