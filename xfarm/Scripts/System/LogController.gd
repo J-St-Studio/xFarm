@@ -15,14 +15,18 @@ const NoFunctionName: String = "/NULL"
 func _run() -> void:
 	pass
 	
-static func LogMessage(source: Node, message: String):
-	print(prefix, source.name, ": ", message)
+static func LogMessage(source: Node, message: String, ...args):
+	# build a string of the args?
+	var tail_data: String = " ";
+	for arg in args:
+		tail_data += str(arg) + " "
+	print(prefix, source.name, ": ", message, tail_data)
 	
 static func LogPlayerState(source: Node, message: String=""):
 	var SourceName: String
 	var FunctionName: Variant = NoFunctionName
 	
-	if (source == null): 
+	if (source == null):
 		SourceName = ""
 	else:
 		SourceName = source.name

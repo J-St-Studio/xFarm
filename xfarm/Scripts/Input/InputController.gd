@@ -71,9 +71,11 @@ static func UpDownAndRight() -> bool:
 	return Up() && Down() && Right()
 
 static func Interact():
-	return Input.is_action_pressed("ui_accept") || Input.is_physical_key_pressed(KEY_E)
+	return Input.is_physical_key_pressed(KEY_E)
 	
-	
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		print(event)
 	
 	
 	

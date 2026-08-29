@@ -17,6 +17,8 @@ extends Node2D
 static var CurrentPlayerState: int;
 static var CurrentPlayerDirection: int;
 
+var logger = LogController
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -62,13 +64,16 @@ func ProcessPlayerInput() -> void:
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
 	if (InputController.Interact()):
+		logger.LogMessage(self, "test")
 		# context, need to know what was interacted with
 		# Interact with overlapping object/item
 		# 	What if overlapping with more than one? Most recent overlap?
 		#	How to find overlapping collision shapes?
 		#PlayerCollision.sweep
-		
+		var t = PlayerCollision.get_global_transform()
+		PlayerCollision.get
 		pass
+		
 	pass
 
 func ProcessPlayerMovement():

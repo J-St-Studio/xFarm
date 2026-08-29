@@ -26,6 +26,8 @@ The player/farmer will get weird looks from towns people sometimes when he goes 
 	(little hints to the player about whats going on)
 
 (try to make this as hidden as possible for the player, we want youtube explanation videos)
+
+Game is guised as a roguelike farm defence game, skin walker is the secret.
 """
 
 
@@ -33,12 +35,14 @@ class_name GameController extends Node2D
 @onready var Home: Node2D = $"../.."
 
 var InputController = preload("res://Scripts/Input/InputController.gd")
+const LogController = preload("res://Scripts/System/LogController.gd")
 const PLAYER = preload("res://Scenes/player.tscn")
 var GlobalDelta: float
 
 @export var PLANT_ITEM: PackedScene = preload("res://Scenes/Items/PlantItem.tscn")
 
 var Plants: PlantData = PlantData.new()
+var WorldTime: float = 0.0;
 
 @onready var spinner_sprite: Sprite2D = $"../../TestingSprites/SpinnerSprite"
 
@@ -67,8 +71,9 @@ func _process(delta: float) -> void:
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
-	
+	WorldTime += 0.01;
 	spinner_sprite.rotate(PI * 2 * GlobalDelta)
+	LogController.LogMessage(self, "WorldTime: ", WorldTime);
 	# maybe handle things in here?
 	# Game time logic?
 	# Plant growth?
@@ -83,7 +88,6 @@ func CheckForGamePause() -> void:
 		LogController.LogMessage(self, "Game Paused")
 		SetCurrentGameState(GameState.Paused)
 		InputController.UpdateControlType(InputTypes.Types.UI)
-
 
 func SpawnPlant(Plant: Dictionary, Position: Vector2) -> PlantItem:
 	var NewPlant = PlantItem.new(Plant)
