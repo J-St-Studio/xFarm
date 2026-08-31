@@ -55,7 +55,6 @@ static func LogInputType(source: Node, message: String=""):
 	if (get_stack().size() > 2):
 		FunctionName = "/" + get_stack()[1].function
 
-	
 	print(
 		prefix, 
 		SourceName,
