@@ -3,7 +3,7 @@
 # Controls the inventory and all management of the inventory
 # Will eventually be responsible for reporting to the UI controller for rendering
 
-extends Node
+class_name InventoryController extends Node
 
 var MaxInventorySize: int
 var Inventory: Array[Item]

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://vhwtn48205dl" path="res://Scenes/SystemControllers.tscn" id="3_ibywg"]
 [ext_resource type="Texture2D" uid="uid://6k3obre2co25" path="res://Assets/Objects/Basic Furniture.png" id="4_12ycv"]
 [ext_resource type="Texture2D" uid="uid://ccr1pxyoswjr8" path="res://Assets/Objects/Chest.png" id="4_vkfas"]
+[ext_resource type="PackedScene" uid="uid://c2y4kwemia0wx" path="res://Scenes/Items/PlantItem.tscn" id="5_fhpuh"]
 
 [node name="Home" type="Node2D" unique_id=1878218130]
 
@@ -13,7 +14,7 @@
 [node name="TestingSprites" type="Node2D" parent="." unique_id=614113462]
 
 [node name="Grass" type="Sprite2D" parent="TestingSprites" unique_id=1248133013]
-position = Vector2(-151, 307)
+position = Vector2(19, 307)
 scale = Vector2(16.09043, 25.00956)
 texture = ExtResource("2_fhpuh")
 
@@ -30,4 +31,8 @@ position = Vector2(-428.00003, 436.99997)
 scale = Vector2(3.8, 3.2800007)
 texture = ExtResource("4_12ycv")
 
+[node name="PlantItem" parent="TestingSprites" unique_id=204293392 instance=ExtResource("5_fhpuh")]
+position = Vector2(121, -89)
+
 [node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_llnbm")]
+position = Vector2(-108, 52)
