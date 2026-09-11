@@ -18,7 +18,8 @@ func _process(delta: float) -> void:
 	pass
 
 
-func BroadcastInventoryFull() -> void:
+static func Update(GameState: GameController.GameState) -> void:
 	# Implementation for broadcasting inventory full message
 	# update game UI
+	# this is gonna be a fucker of a function, not sure I like the design.
 	pass

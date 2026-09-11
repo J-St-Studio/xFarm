@@ -17,6 +17,8 @@ var TotalTime: float
 @onready var GameController = preload("res://Scripts/System/GameController.gd")
 @onready var InventoryController = preload("res://Scripts/Player/InventoryController.gd")
 
+@onready var LinkedMesh = preload("res://Scripts/System/LinkedMesh.gd")
+
 func _init(item: Dictionary) -> void:
 	Name = item["Name"]
 	
@@ -47,9 +49,13 @@ func _on_item_area_2d_body_entered(body: Node2D) -> void:
 	if body is CharacterBody2D or body is Area2D: # ai generated code lol ^^^
 		if InventoryController.IsFull():
 			# broadcast inventory full message for UIController
-			UIController.UpdateUI(GameController.GameState)
+			UIController.Update(GameController.GameState)
 			return
-
+		
+		var lm = LinkedMesh.new()
+		
+		lm.test()
+		
 		# Log message using assumed global LogController access
 		LogController.LogMessage(self, "Item picked up by: ", body.name)
 		# wow it re-used my own code ^^^

@@ -51,6 +51,11 @@ func _process(delta: float) -> void:
 	pass;
 	
 func TakeDamage(DamageValue: float) -> void:
+	PlayerStatus.Health -= DamageValue
+	if (PlayerStatus.Health <= 0.0):
+		PlayerStatus.Health = 0.0;
+		pass # dead
+	
 	pass
 
 # ProcessPlayerInput: Handles logic for moving the player.

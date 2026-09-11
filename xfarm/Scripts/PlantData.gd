@@ -46,7 +46,7 @@ var Watermelon: Dictionary = {
 	Price: 120,
 	HealingValue: 25,
 	HungerValue: 25,
-	XP: 50
+	XP: 50,
 }
 
 var PlantList: Dictionary = {

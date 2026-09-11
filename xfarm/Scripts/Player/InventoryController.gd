@@ -5,8 +5,8 @@
 
 class_name InventoryController extends Node
 
-var MaxInventorySize: int
-var Inventory: Array[Item]
+static var MaxInventorySize: int
+static var Inventory: Array[Item]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,37 +17,37 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 	
-func SortInventory() -> void:
+static func SortInventory() -> void:
 	pass
 
-func SortInventoryByCategory() -> void:
+static func SortInventoryByCategory() -> void:
 	pass
 
-func SortInventoryAlphabetical() -> void:
+static func SortInventoryAlphabetical() -> void:
 	SortInventory()
 	pass
 
 # reference or value?
-func GetInventory() -> Array:
+static func GetInventory() -> Array:
 	return Inventory
 
-func GetItemCount() -> int:
+static func GetItemCount() -> int:
 	return Inventory.size()
 
-func IsEmpty() -> bool:
+static func IsEmpty() -> bool:
 	return Inventory.size() == 0
 	
-func IsFull() -> bool:
+static func IsFull() -> bool:
 	return Inventory.size() >= MaxInventorySize
 	
 # make an "item" class <- actual use-case for a class/OOP
-func AddItem(NewItem: Item) -> bool:
+static func AddItem(NewItem: Item) -> bool:
 	if (!IsEmpty()): return false
 	else:
 		Inventory.append(NewItem)
 		return true
 
-func RemoveItem(ItemToRemove: String) -> bool:
+static func RemoveItem(ItemToRemove: String) -> bool:
 	var index: int = 0
 	for item in Inventory:
 		if (item.Name == ItemToRemove):
@@ -59,7 +59,7 @@ func RemoveItem(ItemToRemove: String) -> bool:
 	return false
 
 # doesn't drop the inventory items, deletes them.
-func ClearInventory() -> void:
+static func ClearInventory() -> void:
 	var index: int = 0
 	for CurrentItem in Inventory:
 		var TempItem = CurrentItem

@@ -1,7 +1,7 @@
 # InputController.gd
 # might re-work this idea/mess
 
-extends Node2D
+class_name InputController extends Node2D
 
 static var ControlType: int;
 

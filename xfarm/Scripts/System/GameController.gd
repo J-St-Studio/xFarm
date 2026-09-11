@@ -7,6 +7,9 @@ class_name GameController extends Node2D
 
 var InputController = preload("res://Scripts/Input/InputController.gd")
 const LogController = preload("res://Scripts/System/LogController.gd")
+
+var precision = preload("res://Scripts/System/precision.gd")
+
 const PLAYER = preload("res://Scenes/player.tscn")
 var GlobalDelta: float
 
@@ -14,6 +17,13 @@ var GlobalDelta: float
 
 var Plants: PlantData = PlantData.new()
 var WorldTime: float = 0.0;
+var WorldTimeReportInterval: int = 1;
+var IntervalDelta = 2;
+var OutputTime = true;
+
+const Minute: int = 60.0;
+const Hour: int = Minute * 60;
+const Day: int = Hour * 24;
 
 @onready var spinner_sprite: Sprite2D = $"../../TestingSprites/SpinnerSprite"
 
@@ -39,12 +49,23 @@ func _process(delta: float) -> void:
 	CheckForGamePause()
 	UpdateGameWorld()
 	
+func PrintWorldTime(interval: int):
+	if (WorldTime < interval): return
+	if (int(WorldTime) % interval == 0 && OutputTime):
+		OutputTime = false
+		IntervalDelta = WorldTime
+		LogController.LogMessage(self, "WorldTime: ", precision.at(WorldTime, 2));
+	if (IntervalDelta + interval <= WorldTime):
+		OutputTime = true
+	
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
-	WorldTime += 0.01;
+	WorldTime += 1 * GlobalDelta;
 	spinner_sprite.rotate(PI * 2 * GlobalDelta)
-	LogController.LogMessage(self, "WorldTime: ", WorldTime);
+	PrintWorldTime(10)
+	
+		#WorldTimeReportInterval *= 2
 	# maybe handle things in here?
 	# Game time logic?
 	# Plant growth?
