@@ -54,10 +54,13 @@ func PrintWorldTime(interval: int):
 	if (int(WorldTime) % interval == 0 && OutputTime):
 		OutputTime = false
 		IntervalDelta = WorldTime
-		LogController.LogMessage(self, "WorldTime: ", precision.at(WorldTime, 2));
+		LogController.LogMessage(self, "WorldTime: ", precision.for(WorldTime, 2));
 	if (IntervalDelta + interval <= WorldTime):
 		OutputTime = true
-	
+
+func GetWorldTime(decimal: int = 0) -> String:
+	return precision.for(WorldTime, 2)
+
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return

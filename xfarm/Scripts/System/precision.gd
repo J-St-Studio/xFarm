@@ -1,6 +1,6 @@
 extends EditorScript
 
-static func at(val: float, decimal: int) -> String:
+static func for(val: float, decimal: int) -> String:
 	return str(val).pad_decimals(2)
 
 #func of(val: float) -> Variant:
