@@ -23,3 +23,8 @@ static func Update(GameState: GameController.GameState) -> void:
 	# update game UI
 	# this is gonna be a fucker of a function, not sure I like the design.
 	pass
+
+# maybe generic menu function with args passed in? Maybe.
+static func RenderMainMenu() -> void:
+	
+	pass
