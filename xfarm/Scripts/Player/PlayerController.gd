@@ -62,12 +62,15 @@ func TakeDamage(DamageValue: float) -> void:
 # NOTE: Pressing 3 movement options at once doesn't behave as desired but
 #		not sure if it's really a problem worth solving. At the moment the player
 #		just stops. That's fine for now.
-func ProcessPlayerInput() -> void:
-	ProcessPlayerMovement() #PlayerMovement.ProcessMovement()?
-	ProcessPlayerActions() #PlayerMovement.ProcessActions()? // dont over-architect/over-design
-	
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
+	var current_mouse_position: Vector2 = Vector2.ZERO
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		current_mouse_position = InputController.GetMousePosition()
+
+	# Calculate the direction vector from player to mouse position
+	var aim_direction: Vector2 = current_mouse_position - global_position
+	print(aim_direction)
 	if (InputController.Interact()):
 		logger.LogMessage(self, "test")
 		# context, need to know what was interacted with

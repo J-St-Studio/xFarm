@@ -1,7 +1,5 @@
 # GameController.gd
 # controls many aspects of the game world
-
-
 class_name GameController extends Node2D
 @onready var Home: Node2D = $"../.."
 
@@ -17,9 +15,8 @@ var GlobalDelta: float
 
 var Plants: PlantData = PlantData.new()
 var WorldTime: float = 0.0;
-var WorldTimeReportInterval: int = 1;
-var IntervalDelta = 2;
-var OutputTime = true;
+const WorldTimeReportInterval: int = 1;
+var LastLoggedSecond: int = -1; # Tracks the last integer second logged to prevent skipping ticks
 
 const Minute: int = 60.0;
 const Hour: int = Minute * 60;
@@ -49,14 +46,8 @@ func _process(delta: float) -> void:
 	CheckForGamePause()
 	UpdateGameWorld()
 	
-func PrintWorldTime(interval: int):
-	if (WorldTime < interval): return
-	if (int(WorldTime) % interval == 0 && OutputTime):
-		OutputTime = false
-		IntervalDelta = WorldTime
-		LogController.LogMessage(self, "WorldTime: ", GetWorldTimeAsString());
-	if (IntervalDelta + interval <= WorldTime):
-		OutputTime = true
+# Removed PrintWorldTime function as its logic was flawed and replaced by direct logging in UpdateGameWorld().
+	
 
 func GetWorldTimeAsString(_precision: int = 0) -> String:
 	return precision.of(WorldTime, _precision)
@@ -67,15 +58,17 @@ func GetWorldTime() -> float:
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
+	
+	# Time advancement logic
+	var old_world_time = WorldTime;
 	WorldTime += 1 * GlobalDelta;
 	spinner_sprite.rotate(PI * 2 * GlobalDelta)
-	PrintWorldTime(1)
-	
-	# WorldTimeReportInterval *= 2
-	# maybe handle things in here?
-	# Game time logic?
-	# Plant growth?
-	# World events?
+	# Check if we have crossed an integer second boundary since the last log
+	var current_second = floor(WorldTime);
+	if (current_second > LastLoggedSecond):
+		LogController.LogMessage(self, "WorldTime: ", GetWorldTimeAsString(2));
+		LastLoggedSecond = int(current_second);
+	pass
 
 func CheckForGamePause() -> void:
 	if (InputController.PauseKeyPressed() && GamePaused()):
@@ -108,4 +101,3 @@ static func GamePaused() -> bool:
 
 static func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
-	
