@@ -54,21 +54,24 @@ func PrintWorldTime(interval: int):
 	if (int(WorldTime) % interval == 0 && OutputTime):
 		OutputTime = false
 		IntervalDelta = WorldTime
-		LogController.LogMessage(self, "WorldTime: ", precision.for(WorldTime, 2));
+		LogController.LogMessage(self, "WorldTime: ", GetWorldTimeAsString());
 	if (IntervalDelta + interval <= WorldTime):
 		OutputTime = true
 
-func GetWorldTime(decimal: int = 0) -> String:
-	return precision.for(WorldTime, 2)
+func GetWorldTimeAsString(_precision: int = 0) -> String:
+	return precision.of(WorldTime, _precision)
+
+func GetWorldTime() -> float:
+	return WorldTime
 
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
 	WorldTime += 1 * GlobalDelta;
 	spinner_sprite.rotate(PI * 2 * GlobalDelta)
-	PrintWorldTime(10)
+	PrintWorldTime(1)
 	
-		#WorldTimeReportInterval *= 2
+	# WorldTimeReportInterval *= 2
 	# maybe handle things in here?
 	# Game time logic?
 	# Plant growth?

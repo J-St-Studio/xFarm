@@ -1,6 +1,5 @@
 # LogController.gd
 
-@tool
 class_name LogController extends EditorScript
 
 static var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd")
@@ -11,11 +10,17 @@ static var GameController = preload("res://Scripts/System/GameController.gd")
 const prefix: String = "LOG::"
 const NoFunctionName: String = "/NULL"
 
+func _ready() -> void:
+	pass
 # Called when the script is executed (using File -> Run in Script Editor).
 func _run() -> void:
 	pass
-	
-static func LogMessage(source: Node, message: String, ...args):
+
+func message(source: Object, message: String, ...args) -> void:
+	LogMessage(source, message, args)
+	pass
+
+static func LogMessage(source: Object, message: String, ...args):
 	# build a string of the args?
 	var tail_data: String = " ";
 	for arg in args:

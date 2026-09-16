@@ -1,7 +1,7 @@
 extends EditorScript
 
-static func for(val: float, decimal: int) -> String:
-	return str(val).pad_decimals(2)
+static func of(val: float, decimal: int) -> String:
+	return str(val).pad_decimals(decimal)
 
 #func of(val: float) -> Variant:
 	#var data = PrecisionObjectData.new()
