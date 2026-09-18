@@ -3,6 +3,11 @@
 
 class_name InputController extends Node2D
 
+signal up_pressed
+signal down_pressed
+signal left_pressed
+signal right_pressed
+
 var ControlType: int = 0 # Initialize it for safety
 
 # Called when the node enters the scene tree for the first time.
@@ -29,16 +34,28 @@ func PauseKeyPressed() -> bool:
 # Should refactor naming to be input generic? PressingUp() etc..
 # Different logic for UI? (is_action_just_pressed better for UI and others for movement?)
 func Up() -> bool:
-	return Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)
+	var is_up = Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)
+	if is_up:
+		emit_signal("up_pressed")
+	return is_up
 
 func Down() -> bool:
-	return Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)
+	var is_down = Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)
+	if is_down:
+		emit_signal("down_pressed")
+	return is_down
 
 func Left() -> bool:
-	return Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)
+	var is_left = Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)
+	if is_left:
+		emit_signal("left_pressed")
+	return is_left
 
 func Right() -> bool:
-	return Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)
+	var is_right = Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)
+	if is_right:
+		emit_signal("right_pressed")
+	return is_right
 
 func LeftAndRight() -> bool:
 	return Left() && Right()

@@ -17,16 +17,12 @@ func _run() -> void:
 	pass
 
 func message(source: Object, message: String, ...args) -> void:
-	LogMessage(source, message, args)
-	pass
-
-static func LogMessage(source: Object, message: String, ...args):
-	# build a string of the args?
 	var tail_data: String = " ";
 	for arg in args:
 		tail_data += str(arg) + " "
 	print(prefix, source.name, ": ", message, tail_data)
-	
+	pass
+
 static func LogPlayerState(source: Node, message: String=""):
 	var SourceName: String
 	var FunctionName: Variant = NoFunctionName
@@ -38,7 +34,6 @@ static func LogPlayerState(source: Node, message: String=""):
 		
 	if (get_stack().size() > 2):
 		FunctionName = "/" + get_stack()[1].function
-	
 	print(
 		prefix, 
 		SourceName,
@@ -65,7 +60,7 @@ static func LogInputType(source: Node, message: String=""):
 		SourceName,
 		FunctionName,
 		": InputType -> ", 
-		InputTypes.Types.keys()[InputController.GetControlType()],
+		InputTypes.Types.keys()[GameController.input.GetControlType()],
 		" :: (", message, ")"
 	)
 
@@ -82,7 +77,7 @@ func LogGameState(source: Node, message: String=""):
 		FunctionName = "/" + get_stack()[1].function
 	
 	print(
-		prefix, 
+		prefix,
 		SourceName,
 		FunctionName, 
 		": GameState -> ", 

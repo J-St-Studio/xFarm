@@ -2,10 +2,8 @@
 
 extends Node2D
 
-@onready var InputController = preload("res://Scripts/Input/InputController.gd");
 @onready var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd");
 @onready var GameController = preload("res://Scripts/System/GameController.gd")
-#@onready var LogController = preload("res://Scripts/System/LogController.gd")
 
 @onready var player: CharacterBody2D = $"../CharacterBody2D"
 @onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
@@ -22,11 +20,11 @@ var logger = LogController
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	LogController.LogInputType(self)
-	LogController.LogMessage(self, "Changing Input Type...")
-	InputController.UpdateControlType(InputTypes.Types.PLAYER);
-	LogController.LogInputType(self)
-	LogController.LogPlayerState(self)
+	GameController.log.LogInputType(self)
+	GameController.logGameController.log.LogMessage(self, "Changing Input Type...")
+	GameController.input.UpdateControlType(InputTypes.Types.PLAYER);
+	GameController.log.LogInputType(self)
+	GameController.log.LogPlayerState(self)
 	
 	CurrentMovementSpeed = 300;
 	MovementSpeedMultiplier = 1;
@@ -46,8 +44,8 @@ func _process(delta: float) -> void:
 	
 	GlobalDeltaTime = delta;
 
-	if (InputController.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
-		InputController.UpdateControlType(InputTypes.Types.PLAYER)
+	if (GameController.input.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
+		GameController.input.UpdateControlType(InputTypes.Types.PLAYER)
 	pass;
 	
 func TakeDamage(DamageValue: float) -> void:
@@ -66,52 +64,50 @@ func ProcessPlayerActions():
 	#actions include interacting with items/objects
 	var current_mouse_position: Vector2 = Vector2.ZERO
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		current_mouse_position = InputController.GetMousePosition()
+		current_mouse_position = GameController.input.GetMousePosition()
 
 	# Calculate the direction vector from player to mouse position
 	var aim_direction: Vector2 = current_mouse_position - global_position
 	print(aim_direction)
-	if (InputController.Interact()):
+	if (GameController.input.Interact()):
 		logger.LogMessage(self, "test")
 		# context, need to know what was interacted with
 		# Interact with overlapping object/item
 		# 	What if overlapping with more than one? Most recent overlap?
 		#	How to find overlapping collision shapes?
 		#PlayerCollision.sweep
-		var t = PlayerCollision.get_global_transform()
-		PlayerCollision.get
-		pass
+	pass
 		
 	pass
 
 func ProcessPlayerMovement():
-	if (InputController.LeftRightAndDown()):
+	if (GameController.input.LeftRightAndDown()):
 		MoveDown()
-	elif (InputController.LeftRightAndUp()):
+	elif (GameController.input.LeftRightAndUp()):
 		MoveUp()
-	elif (InputController.UpDownAndLeft()):
+	elif (GameController.input.UpDownAndLeft()):
 		MoveLeft()
-	elif (InputController.UpDownAndRight()):
+	elif (GameController.input.UpDownAndRight()):
 		MoveRight()
-	elif (InputController.UpAndDown()):
+	elif (GameController.input.UpAndDown()):
 		SetPlayerState(PlayerStatus.State.Idle)
-	elif (InputController.LeftAndRight()):
+	elif (GameController.input.LeftAndRight()):
 		SetPlayerState(PlayerStatus.State.Idle) 
-	elif (InputController.UpAndLeft()):
+	elif (GameController.input.UpAndLeft()):
 		MoveUpAndLeft()
-	elif (InputController.UpAndRight()):
+	elif (GameController.input.UpAndRight()):
 		MoveUpAndRight()
-	elif (InputController.DownAndLeft()):
+	elif (GameController.input.DownAndLeft()):
 		MoveDownAndLeft()
-	elif (InputController.DownAndRight()):
+	elif (GameController.input.DownAndRight()):
 		MoveDownAndRight()
-	elif (InputController.Up()):
+	elif (GameController.input.Up()):
 		MoveUp()
-	elif (InputController.Left()):
+	elif (GameController.input.Left()):
 		MoveLeft()
-	elif (InputController.Right()):
+	elif (GameController.input.Right()):
 		MoveRight()
-	elif (InputController.Down()):
+	elif (GameController.input.Down()):
 		MoveDown()
 	else:
 		SetPlayerState(PlayerStatus.State.Idle);
@@ -171,11 +167,11 @@ func ProcessUserInterfaceInput() -> void:
 # Determines where input will be focused (ie controlling the player or navigating UI)
 func HandleInput() -> void:
 	#LogController.LogInputType(self, "test")
-	if (InputController.GetControlType() == InputTypes.Types.PLAYER):
-		ProcessPlayerInput();
-	elif (InputController.GetControlType() == InputTypes.Types.UI):
+	if (GameController.input.GetControlType() == InputTypes.Types.PLAYER):
+		ProcessPlayerMovement();
+	elif (GameController.input.GetControlType() == InputTypes.Types.UI):
 		ProcessUserInterfaceInput();
-	elif (InputController.GetControlType() == InputTypes.Types.NONE):
+	elif (GameController.input.GetControlType() == InputTypes.Types.NONE):
 		pass;
 	pass;
 

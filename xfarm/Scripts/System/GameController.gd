@@ -3,7 +3,7 @@
 class_name GameController extends Node2D
 @onready var Home: Node2D = $"../.."
 
-var InputController = preload("res://Scripts/Input/InputController.gd")
+const InputController = preload("res://Scripts/Input/InputController.gd")
 const LogController = preload("res://Scripts/System/LogController.gd")
 
 var precision = preload("res://Scripts/System/precision.gd")
@@ -35,10 +35,15 @@ enum GameState {
 static var CurrentGameState: int;
 static var CurrentWorldTime: String; # Ideally get this represented in UI in a 24HR clock
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	CurrentGameState = GameState.UnPaused
 	SpawnPlant(Plants.Watermelon, Vector2(20, 20))
+	
+	self.input = InputController.new()
+	self.log = LogController.new()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -47,7 +52,6 @@ func _process(delta: float) -> void:
 	UpdateGameWorld()
 	
 # Removed PrintWorldTime function as its logic was flawed and replaced by direct logging in UpdateGameWorld().
-	
 
 func GetWorldTimeAsString(_precision: int = 0) -> String:
 	return precision.of(WorldTime, _precision)
@@ -66,19 +70,19 @@ func UpdateGameWorld():
 	# Check if we have crossed an integer second boundary since the last log
 	var current_second = floor(WorldTime);
 	if (current_second > LastLoggedSecond):
-		LogController.LogMessage(self, "WorldTime: ", GetWorldTimeAsString(2));
+		self.log.message(self, "WorldTime: ", GetWorldTimeAsString(2));
 		LastLoggedSecond = int(current_second);
 	pass
 
 func CheckForGamePause() -> void:
-	if (InputController.PauseKeyPressed() && GamePaused()):
-		LogController.LogMessage(self, "Game Unpaused")
+	if (self.input.PauseKeyPressed() && GamePaused()):
+		self.log.LogMessage(self, "Game Unpaused")
 		SetCurrentGameState(GameState.UnPaused)
-		InputController.UpdateControlType(InputTypes.Types.PLAYER)
-	elif (InputController.PauseKeyPressed() && GameUnPaused()):
-		LogController.LogMessage(self, "Game Paused")
+		self.input.UpdateControlType(InputTypes.Types.PLAYER)
+	elif (self.input.PauseKeyPressed() && GameUnPaused()):
+		self.log.LogMessage(self, "Game Paused")
 		SetCurrentGameState(GameState.Paused)
-		InputController.UpdateControlType(InputTypes.Types.UI)
+		self.input.UpdateControlType(InputTypes.Types.UI)
 
 func SpawnPlant(Plant: Dictionary, Position: Vector2) -> PlantItem:
 	var NewPlant = PlantItem.new(Plant)
