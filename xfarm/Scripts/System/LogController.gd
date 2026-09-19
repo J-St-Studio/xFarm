@@ -1,11 +1,10 @@
 # LogController.gd
+# Used to log relevant info, currently tightly coupled
 
-class_name LogController extends EditorScript
+class_name LogController extends Node2D
 
 static var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd")
 static var PlayerController = preload("res://Scripts/Player/PlayerController.gd")
-static var InputController = preload("res://Scripts/Input/InputController.gd")
-static var GameController = preload("res://Scripts/System/GameController.gd")
 
 const prefix: String = "LOG::"
 const NoFunctionName: String = "/NULL"
@@ -60,7 +59,7 @@ static func LogInputType(source: Node, message: String=""):
 		SourceName,
 		FunctionName,
 		": InputType -> ", 
-		InputTypes.Types.keys()[GameController.input.GetControlType()],
+		InputTypes.Types.keys()[InputController.GetControlType()],
 		" :: (", message, ")"
 	)
 

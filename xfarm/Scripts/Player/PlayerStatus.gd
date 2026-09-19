@@ -1,6 +1,6 @@
 # PlayerStatus.gd
 
-extends Node
+class_name PlayerStatus extends Node
 
 enum State {
 	Idle,
@@ -42,17 +42,21 @@ enum DamageTypes {
 
 var GlobalDamageMultiplier: float = 1.0;
 
-var MeleeDamageM
+var MeleeDamageM: float = 1.0;
 var NecromancyDamageM: float = 1.0;
 var ArcaneDamageM: float = 1.0;
 var IceDamageM: float = 1.0;
 var FireDamageM: float = 1.0;
 
-var MoveSpeed: float = 10.0;
+var MoveSpeedM: float = 1.0;
+var MoveSpeed: float = 300.0;
 var MaxMoveSpeed: float = 100.0;
 
 var MaxHealth: float = 100.0
 var Health: float = MaxHealth
+
+var MaxShield: float = 100.0
+var Shield: float = MaxShield
 
 var MaxPower: float = 100.0
 var Power: float = MaxPower

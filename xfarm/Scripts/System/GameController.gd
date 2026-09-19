@@ -1,28 +1,27 @@
 # GameController.gd
 # controls many aspects of the game world
+# emits signals for game world / game systems
 class_name GameController extends Node2D
-@onready var Home: Node2D = $"../.."
 
-const InputController = preload("res://Scripts/Input/InputController.gd")
-const LogController = preload("res://Scripts/System/LogController.gd")
+signal game_paused
+signal game_unpaused
+signal game_over
+signal set_control_type
+signal one_second_elapsed
 
 var precision = preload("res://Scripts/System/precision.gd")
 
-const PLAYER = preload("res://Scenes/player.tscn")
 var GlobalDelta: float
-
-@export var PLANT_ITEM: PackedScene = preload("res://Scenes/Items/PlantItem.tscn")
-
 var Plants: PlantData = PlantData.new()
 var WorldTime: float = 0.0;
 const WorldTimeReportInterval: int = 1;
 var LastLoggedSecond: int = -1; # Tracks the last integer second logged to prevent skipping ticks
-
 const Minute: int = 60.0;
 const Hour: int = Minute * 60;
 const Day: int = Hour * 24;
+static var CurrentGameState: int;
+static var CurrentWorldTime: String; # Ideally get this represented in UI in a 24HR clock
 
-@onready var spinner_sprite: Sprite2D = $"../../TestingSprites/SpinnerSprite"
 
 # should game state enum be separated from GameController?
 # it's own gd file? GameStatus.gd?
@@ -32,23 +31,15 @@ enum GameState {
 	UnPaused
 }
 
-static var CurrentGameState: int;
-static var CurrentWorldTime: String; # Ideally get this represented in UI in a 24HR clock
-
-
+var log: LogController = LogController.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	CurrentGameState = GameState.UnPaused
-	SpawnPlant(Plants.Watermelon, Vector2(20, 20))
-	
-	self.input = InputController.new()
-	self.log = LogController.new()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	GlobalDelta = delta
-	CheckForGamePause()
 	UpdateGameWorld()
 	
 # Removed PrintWorldTime function as its logic was flawed and replaced by direct logging in UpdateGameWorld().
@@ -62,35 +53,17 @@ func GetWorldTime() -> float:
 func UpdateGameWorld():
 	# don't update the game world if game is paused (time/enemies?/etc)
 	if (CurrentGameState == GameState.Paused): return
-	
 	# Time advancement logic
 	var old_world_time = WorldTime;
 	WorldTime += 1 * GlobalDelta;
-	spinner_sprite.rotate(PI * 2 * GlobalDelta)
 	# Check if we have crossed an integer second boundary since the last log
 	var current_second = floor(WorldTime);
 	if (current_second > LastLoggedSecond):
-		self.log.message(self, "WorldTime: ", GetWorldTimeAsString(2));
+		log.message(self, "WorldTime: ", GetWorldTimeAsString(2));
 		LastLoggedSecond = int(current_second);
+		one_second_elapsed.emit()
 	pass
 
-func CheckForGamePause() -> void:
-	if (self.input.PauseKeyPressed() && GamePaused()):
-		self.log.LogMessage(self, "Game Unpaused")
-		SetCurrentGameState(GameState.UnPaused)
-		self.input.UpdateControlType(InputTypes.Types.PLAYER)
-	elif (self.input.PauseKeyPressed() && GameUnPaused()):
-		self.log.LogMessage(self, "Game Paused")
-		SetCurrentGameState(GameState.Paused)
-		self.input.UpdateControlType(InputTypes.Types.UI)
-
-func SpawnPlant(Plant: Dictionary, Position: Vector2) -> PlantItem:
-	var NewPlant = PlantItem.new(Plant)
-	var plant = PLANT_ITEM.instantiate() as Node2D
-	Home.add_child(plant)
-	plant.position = Position
-	return NewPlant
-	
 func SpawnTool(Tool: Dictionary) -> ToolItem:
 	return ToolItem.new(Tool)
 
@@ -105,3 +78,23 @@ static func GamePaused() -> bool:
 
 static func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
+
+#func _on_input_controller_pause_button_pressed() -> void:
+	#print("pause pressed")
+	#pass # Replace with function body.
+
+
+func _on_input_controller_pause_button_pressed() -> void:
+	if (GamePaused()):
+		SetCurrentGameState(GameState.UnPaused)
+		set_control_type.emit(InputTypes.Types.PLAYER)
+		log.message(self, "Game Unpaused")
+		log.LogInputType(self)
+		
+	elif (GameUnPaused()):
+		SetCurrentGameState(GameState.Paused)
+		set_control_type.emit(InputTypes.Types.UI)
+		log.message(self, "Game Paused")
+		log.LogInputType(self)
+		
+	pass # Replace with function body.

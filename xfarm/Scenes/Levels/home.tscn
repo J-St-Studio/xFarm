@@ -1,38 +1,32 @@
 [gd_scene format=3 uid="uid://d0vxkhsvlbu03"]
 
-[ext_resource type="Texture2D" uid="uid://byq86yeswjk0t" path="res://Assets/Tilesets/Grass.png" id="2_fhpuh"]
+[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/System/GameController.gd" id="1_sob3c"]
 [ext_resource type="PackedScene" uid="uid://bv654ydli61s" path="res://Scenes/player.tscn" id="2_llnbm"]
-[ext_resource type="PackedScene" uid="uid://vhwtn48205dl" path="res://Scenes/SystemControllers.tscn" id="3_ibywg"]
-[ext_resource type="Texture2D" uid="uid://6k3obre2co25" path="res://Assets/Objects/Basic Furniture.png" id="4_12ycv"]
-[ext_resource type="Texture2D" uid="uid://ccr1pxyoswjr8" path="res://Assets/Objects/Chest.png" id="4_vkfas"]
-[ext_resource type="PackedScene" uid="uid://c2y4kwemia0wx" path="res://Scenes/Items/PlantItem.tscn" id="5_fhpuh"]
+[ext_resource type="Script" uid="uid://mw25spbuowcr" path="res://Scripts/Player/PlayerController.gd" id="2_nktc3"]
+[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/Input/InputController.gd" id="7_wi0jg"]
+[ext_resource type="Script" uid="uid://du66p4dreuehv" path="res://Scripts/System/LogController.gd" id="8_sxov8"]
 
 [node name="Home" type="Node2D" unique_id=1878218130]
 
-[node name="SystemControllers" parent="." unique_id=342599273 instance=ExtResource("3_ibywg")]
-
-[node name="TestingSprites" type="Node2D" parent="." unique_id=614113462]
-
-[node name="Grass" type="Sprite2D" parent="TestingSprites" unique_id=1248133013]
-position = Vector2(19, 307)
-scale = Vector2(16.09043, 25.00956)
-texture = ExtResource("2_fhpuh")
-
-[node name="SpinnerSprite" type="Sprite2D" parent="TestingSprites" unique_id=1745142046]
-position = Vector2(-336, -164)
-texture = ExtResource("4_vkfas")
-
-[node name="Chest" type="Sprite2D" parent="TestingSprites" unique_id=1204285923]
-position = Vector2(373, 113)
-texture = ExtResource("4_vkfas")
-
-[node name="BasicFurniture" type="Sprite2D" parent="TestingSprites" unique_id=1916952485]
-position = Vector2(-428.00003, 436.99997)
-scale = Vector2(3.8, 3.2800007)
-texture = ExtResource("4_12ycv")
-
-[node name="PlantItem" parent="TestingSprites" unique_id=204293392 instance=ExtResource("5_fhpuh")]
-position = Vector2(121, -89)
-
 [node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_llnbm")]
 position = Vector2(-108, 52)
+script = ExtResource("2_nktc3")
+
+[node name="SystemControllers" type="Node2D" parent="." unique_id=1902706739]
+
+[node name="GameController" type="Node2D" parent="SystemControllers" unique_id=834168200]
+script = ExtResource("1_sob3c")
+
+[node name="InputController" type="Node2D" parent="SystemControllers" unique_id=1786180768]
+script = ExtResource("7_wi0jg")
+
+[node name="LogController" type="Node2D" parent="SystemControllers" unique_id=106847437]
+script = ExtResource("8_sxov8")
+
+[connection signal="game_paused" from="SystemControllers/GameController" to="Player" method="_on_game_controller_game_paused"]
+[connection signal="set_control_type" from="SystemControllers/GameController" to="SystemControllers/InputController" method="_on_game_controller_set_control_type"]
+[connection signal="down_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_down_pressed"]
+[connection signal="left_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_left_pressed"]
+[connection signal="pause_button_pressed" from="SystemControllers/InputController" to="SystemControllers/GameController" method="_on_input_controller_pause_button_pressed"]
+[connection signal="right_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_right_pressed"]
+[connection signal="up_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_up_pressed"]

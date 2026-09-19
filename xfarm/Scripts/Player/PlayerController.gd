@@ -2,10 +2,8 @@
 
 extends Node2D
 
-@onready var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd");
-@onready var GameController = preload("res://Scripts/System/GameController.gd")
-
-@onready var player: CharacterBody2D = $"../CharacterBody2D"
+@onready var PlayerState = preload("res://Scripts/Player/PlayerStatus.gd");
+@onready var player: CharacterBody2D = $CharacterBody2D
 @onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
 
 #@onready var player: Sprite2D = $"../PlayerSprite"
@@ -15,18 +13,17 @@ extends Node2D
 static var CurrentPlayerState: int;
 static var CurrentPlayerDirection: int;
 
-var logger = LogController
-
+var log: LogController = LogController.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	GameController.log.LogInputType(self)
-	GameController.logGameController.log.LogMessage(self, "Changing Input Type...")
-	GameController.input.UpdateControlType(InputTypes.Types.PLAYER);
-	GameController.log.LogInputType(self)
-	GameController.log.LogPlayerState(self)
+	log.LogInputType(self)
+	log.message(self, "Changing Input Type...")
+	#GameController.input.UpdateControlType(InputTypes.Types.PLAYER);
+	log.LogInputType(self)
+	log.LogPlayerState(self)
 	
-	CurrentMovementSpeed = 300;
+	#CurrentMovementSpeed = PlayerStatus.MoveSpeed;
 	MovementSpeedMultiplier = 1;
 	SetPlayerState(PlayerStatus.State.Idle);
 	SetPlayerDirection(PlayerStatus.Direction.Left);
@@ -37,23 +34,19 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	HandleInput();
-	
+	#HandleInput();
 	# logic guard, if game is paused, the player ceases
 	if (GameController.GamePaused()): return
-	
 	GlobalDeltaTime = delta;
-
-	if (GameController.input.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
-		GameController.input.UpdateControlType(InputTypes.Types.PLAYER)
+	if (InputController.GetControlType() == InputTypes.Types.UI && GameController.GetCurrentGameState() == GameController.GameState.UnPaused):
+		InputController.UpdateControlType(InputTypes.Types.PLAYER)
 	pass;
 	
 func TakeDamage(DamageValue: float) -> void:
-	PlayerStatus.Health -= DamageValue
-	if (PlayerStatus.Health <= 0.0):
-		PlayerStatus.Health = 0.0;
+	PlayerState.Health -= DamageValue
+	if (PlayerState.Health <= 0.0):
+		PlayerState.Health = 0.0;
 		pass # dead
-	
 	pass
 
 # ProcessPlayerInput: Handles logic for moving the player.
@@ -64,54 +57,19 @@ func ProcessPlayerActions():
 	#actions include interacting with items/objects
 	var current_mouse_position: Vector2 = Vector2.ZERO
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		current_mouse_position = GameController.input.GetMousePosition()
+		current_mouse_position = InputController.new().GetMousePosition()
 
 	# Calculate the direction vector from player to mouse position
 	var aim_direction: Vector2 = current_mouse_position - global_position
 	print(aim_direction)
-	if (GameController.input.Interact()):
-		logger.LogMessage(self, "test")
+	if (InputController.new().Interact()):
+		self.log.LogMessage(self, "test")
 		# context, need to know what was interacted with
 		# Interact with overlapping object/item
 		# 	What if overlapping with more than one? Most recent overlap?
 		#	How to find overlapping collision shapes?
 		#PlayerCollision.sweep
 	pass
-		
-	pass
-
-func ProcessPlayerMovement():
-	if (GameController.input.LeftRightAndDown()):
-		MoveDown()
-	elif (GameController.input.LeftRightAndUp()):
-		MoveUp()
-	elif (GameController.input.UpDownAndLeft()):
-		MoveLeft()
-	elif (GameController.input.UpDownAndRight()):
-		MoveRight()
-	elif (GameController.input.UpAndDown()):
-		SetPlayerState(PlayerStatus.State.Idle)
-	elif (GameController.input.LeftAndRight()):
-		SetPlayerState(PlayerStatus.State.Idle) 
-	elif (GameController.input.UpAndLeft()):
-		MoveUpAndLeft()
-	elif (GameController.input.UpAndRight()):
-		MoveUpAndRight()
-	elif (GameController.input.DownAndLeft()):
-		MoveDownAndLeft()
-	elif (GameController.input.DownAndRight()):
-		MoveDownAndRight()
-	elif (GameController.input.Up()):
-		MoveUp()
-	elif (GameController.input.Left()):
-		MoveLeft()
-	elif (GameController.input.Right()):
-		MoveRight()
-	elif (GameController.input.Down()):
-		MoveDown()
-	else:
-		SetPlayerState(PlayerStatus.State.Idle);
-	pass;
 
 func MoveUp() -> void:
 	player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
@@ -149,30 +107,19 @@ func ProcessUserInterfaceInput() -> void:
 	if (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)):
 		# UI controller responsible for this? no?
 		# log message for now
-		LogController.LogMessage(self, "UI up pressed")
+		self.log.message(self, "UI up pressed")
 		pass
 	elif (Input.is_action_pressed("ui_left") || Input.is_key_pressed(KEY_A)):
-		LogController.LogMessage(self, "UI left pressed")
+		self.log.message(self, "UI left pressed")
 		pass
 	elif (Input.is_action_pressed("ui_right") || Input.is_key_pressed(KEY_D)):
-		LogController.LogMessage(self, "UI right pressed")
+		self.log.message(self, "UI right pressed")
 		pass
 	elif (Input.is_action_pressed("ui_down") || Input.is_key_pressed(KEY_S)):
-		LogController.LogMessage(self, "UI down pressed")
+		self.log.message(self, "UI down pressed")
 		pass
 	else:
 		pass
-	pass;
-
-# Determines where input will be focused (ie controlling the player or navigating UI)
-func HandleInput() -> void:
-	#LogController.LogInputType(self, "test")
-	if (GameController.input.GetControlType() == InputTypes.Types.PLAYER):
-		ProcessPlayerMovement();
-	elif (GameController.input.GetControlType() == InputTypes.Types.UI):
-		ProcessUserInterfaceInput();
-	elif (GameController.input.GetControlType() == InputTypes.Types.NONE):
-		pass;
 	pass;
 
 func GetPlayerDirection() -> int:
@@ -193,4 +140,24 @@ func SetPlayerStateAndDirection(state: int, direction: int) -> void:
 	pass;
 
 func PlayerSpeedCalculation() -> float:
-	return CurrentMovementSpeed * MovementSpeedMultiplier * GlobalDeltaTime;
+	return PlayerState.MoveSpeed * PlayerState.MoveSpeedM * GlobalDeltaTime;
+
+func _on_game_controller_game_paused() -> void:
+	print("game paused")
+	pass # Replace with function body.
+
+func _on_input_controller_up_pressed() -> void:
+	if (GameController.GameUnPaused()):
+		MoveUp()
+	
+func _on_input_controller_right_pressed() -> void:
+	if (GameController.GameUnPaused()):
+		MoveRight()
+
+func _on_input_controller_left_pressed() -> void:
+	if (GameController.GameUnPaused()):
+		MoveLeft()
+
+func _on_input_controller_down_pressed() -> void:
+	if (GameController.GameUnPaused()):
+		MoveDown()

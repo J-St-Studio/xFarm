@@ -1,0 +1,1 @@
+class_name SystemController extends Node2D

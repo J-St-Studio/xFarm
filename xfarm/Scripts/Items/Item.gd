@@ -57,7 +57,7 @@ func _on_item_area_2d_body_entered(body: Node2D) -> void:
 		lm.test()
 		
 		# Log message using assumed global LogController access
-		LogController.LogMessage(self, "Item picked up by: ", body.name)
+		GameController.log.message(self, "Item picked up by: ", body.name)
 		# wow it re-used my own code ^^^
 		# Delete the item instance from the scene tree
 		queue_free()
