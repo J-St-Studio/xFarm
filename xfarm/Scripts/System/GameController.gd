@@ -22,7 +22,6 @@ const Day: int = Hour * 24;
 static var CurrentGameState: int;
 static var CurrentWorldTime: String; # Ideally get this represented in UI in a 24HR clock
 
-
 # should game state enum be separated from GameController?
 # it's own gd file? GameStatus.gd?
 enum GameState {
@@ -64,8 +63,19 @@ func UpdateGameWorld():
 		one_second_elapsed.emit()
 	pass
 
-func SpawnTool(Tool: Dictionary) -> ToolItem:
-	return ToolItem.new(Tool)
+func SpawnItem(item: Resource, location: Vector2) -> Node2D:
+	# get root scene$"../.."
+	 # 1. Instantiate the scene/resource provided by the caller.                                                       
+	var new_item = item.instantiate()                                                                        
+																													  
+	# 2. Set its global position in the game world.                                                                   
+	new_item.global_position = location                                                                               
+	# 3. Add it as a child of the GameController (the main world container).                                          
+	add_child(new_item)
+	print("Item Spawned: ", new_item)                                                                                   
+																													  
+	# 4. Return the newly spawned item instance.                                                                      
+	return new_item
 
 static func GetCurrentGameState() -> int:
 	return CurrentGameState
@@ -79,22 +89,15 @@ static func GamePaused() -> bool:
 static func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
 
-#func _on_input_controller_pause_button_pressed() -> void:
-	#print("pause pressed")
-	#pass # Replace with function body.
-
-
 func _on_input_controller_pause_button_pressed() -> void:
 	if (GamePaused()):
 		SetCurrentGameState(GameState.UnPaused)
 		set_control_type.emit(InputTypes.Types.PLAYER)
 		log.message(self, "Game Unpaused")
 		log.LogInputType(self)
-		
 	elif (GameUnPaused()):
 		SetCurrentGameState(GameState.Paused)
 		set_control_type.emit(InputTypes.Types.UI)
 		log.message(self, "Game Paused")
 		log.LogInputType(self)
-		
-	pass # Replace with function body.
+	pass

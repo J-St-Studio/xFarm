@@ -3,7 +3,6 @@ class_name Item extends Node2D
 var Name: String
 var Category: ItemTypes
 var Price: float
-var Position: Vector2
 
 var HoverFrequency: float
 var HoverAmplitude: float
@@ -14,13 +13,10 @@ var TotalTime: float
 @onready var ItemCollisionShape: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var CharacterBody: CharacterBody2D = $CharacterBody2D
 
-@onready var GameController = preload("res://Scripts/System/GameController.gd")
-@onready var InventoryController = preload("res://Scripts/Player/InventoryController.gd")
-
-@onready var LinkedMesh = preload("res://Scripts/System/LinkedMesh.gd")
+var log = LogController.new()
 
 func _init(item: Dictionary) -> void:
-	Name = item["Name"]
+	Name = item["name"]
 	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -52,12 +48,8 @@ func _on_item_area_2d_body_entered(body: Node2D) -> void:
 			UIController.Update(GameController.GameState)
 			return
 		
-		var lm = LinkedMesh.new()
-		
-		lm.test()
-		
 		# Log message using assumed global LogController access
-		GameController.log.message(self, "Item picked up by: ", body.name)
+		log.message(self, "Item picked up by: ", body.name)
 		# wow it re-used my own code ^^^
 		# Delete the item instance from the scene tree
 		queue_free()

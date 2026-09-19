@@ -1,8 +1,9 @@
 # PlayerController.gd
 
-extends Node2D
+class_name PlayerController extends Node2D
+var System = preload("res://Scripts/System/SystemController.gd")
 
-@onready var PlayerState = preload("res://Scripts/Player/PlayerStatus.gd");
+@onready var PlayerState = preload("res://Scripts/Player/PlayerStatus.gd").new();
 @onready var player: CharacterBody2D = $CharacterBody2D
 @onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
 
@@ -14,6 +15,7 @@ static var CurrentPlayerState: int;
 static var CurrentPlayerDirection: int;
 
 var log: LogController = LogController.new()
+var Game: GameController = System.GetGameController()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,7 +24,6 @@ func _ready() -> void:
 	#GameController.input.UpdateControlType(InputTypes.Types.PLAYER);
 	log.LogInputType(self)
 	log.LogPlayerState(self)
-	
 	#CurrentMovementSpeed = PlayerStatus.MoveSpeed;
 	MovementSpeedMultiplier = 1;
 	SetPlayerState(PlayerStatus.State.Idle);
@@ -49,10 +50,6 @@ func TakeDamage(DamageValue: float) -> void:
 		pass # dead
 	pass
 
-# ProcessPlayerInput: Handles logic for moving the player.
-# NOTE: Pressing 3 movement options at once doesn't behave as desired but
-#		not sure if it's really a problem worth solving. At the moment the player
-#		just stops. That's fine for now.
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
 	var current_mouse_position: Vector2 = Vector2.ZERO
@@ -70,38 +67,6 @@ func ProcessPlayerActions():
 		#	How to find overlapping collision shapes?
 		#PlayerCollision.sweep
 	pass
-
-func MoveUp() -> void:
-	player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Up)
-
-func MoveDown() -> void:
-	player.translate(Vector2(0, 1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Down)
-
-func MoveLeft() -> void:
-	player.translate(Vector2(-1, 0) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
-
-func MoveRight() -> void:
-	player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
-	
-func MoveUpAndRight() -> void:
-	player.translate(Vector2(1, -1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
-
-func MoveUpAndLeft() -> void:
-	player.translate(Vector2(-1, -1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
-	
-func MoveDownAndRight() -> void:
-	player.translate(Vector2(1, 1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
-	
-func MoveDownAndLeft() -> void:
-	player.translate(Vector2(-1, 1) * PlayerSpeedCalculation())
-	SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
 
 func ProcessUserInterfaceInput() -> void:
 	if (Input.is_action_pressed("ui_up") || Input.is_key_pressed(KEY_W)):
@@ -148,16 +113,27 @@ func _on_game_controller_game_paused() -> void:
 
 func _on_input_controller_up_pressed() -> void:
 	if (GameController.GameUnPaused()):
-		MoveUp()
+		player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
+		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Up)
 	
 func _on_input_controller_right_pressed() -> void:
 	if (GameController.GameUnPaused()):
-		MoveRight()
+		player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
+		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
 
 func _on_input_controller_left_pressed() -> void:
 	if (GameController.GameUnPaused()):
-		MoveLeft()
+		player.translate(Vector2(-1, 0) * PlayerSpeedCalculation())
+		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
 
 func _on_input_controller_down_pressed() -> void:
 	if (GameController.GameUnPaused()):
-		MoveDown()
+		player.translate(Vector2(0, 1) * PlayerSpeedCalculation())
+		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Down)
+
+func _on_input_controller_left_mouse_press() -> void:
+	print("left mouse button clicked!!")
+	var item = preload("res://Scenes/Items/Item.tscn")
+	var location = Vector2(0, 0)
+	Game.SpawnItem(item, location)
+	pass # Replace with function body.
