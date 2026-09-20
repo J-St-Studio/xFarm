@@ -1,44 +1,13 @@
 [gd_scene format=3 uid="uid://d0vxkhsvlbu03"]
 
-[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/System/GameController.gd" id="1_sob3c"]
-[ext_resource type="PackedScene" uid="uid://bv654ydli61s" path="res://Scenes/player.tscn" id="2_llnbm"]
-[ext_resource type="Script" uid="uid://mw25spbuowcr" path="res://Scripts/Player/PlayerController.gd" id="2_nktc3"]
 [ext_resource type="Script" uid="uid://egj14ot5o5dx" path="res://Scripts/System/SystemController.gd" id="3_icb1n"]
 [ext_resource type="Texture2D" uid="uid://6k3obre2co25" path="res://Assets/Objects/Basic Furniture.png" id="6_sob3c"]
-[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/Input/InputController.gd" id="7_wi0jg"]
-[ext_resource type="Script" uid="uid://du66p4dreuehv" path="res://Scripts/System/LogController.gd" id="8_sxov8"]
-[ext_resource type="PackedScene" uid="uid://sh3vqfkayfpy" path="res://Scenes/Items/Item.tscn" id="8_wi0jg"]
 
 [node name="Home" type="Node2D" unique_id=1878218130]
-
-[node name="Player" parent="." unique_id=1150077415 instance=ExtResource("2_llnbm")]
-position = Vector2(-108, 52)
-script = ExtResource("2_nktc3")
 
 [node name="SystemControllers" type="Node2D" parent="." unique_id=1902706739]
 script = ExtResource("3_icb1n")
 
-[node name="GameController" type="Node2D" parent="SystemControllers" unique_id=834168200]
-script = ExtResource("1_sob3c")
-
-[node name="InputController" type="Node2D" parent="SystemControllers" unique_id=1786180768]
-script = ExtResource("7_wi0jg")
-
-[node name="LogController" type="Node2D" parent="SystemControllers" unique_id=106847437]
-script = ExtResource("8_sxov8")
-
 [node name="BasicFurniture" type="Sprite2D" parent="." unique_id=1688738121]
 position = Vector2(-236, 128)
 texture = ExtResource("6_sob3c")
-
-[node name="Item" parent="." unique_id=204293392 instance=ExtResource("8_wi0jg")]
-position = Vector2(-365, -53)
-
-[connection signal="game_paused" from="SystemControllers/GameController" to="Player" method="_on_game_controller_game_paused"]
-[connection signal="set_control_type" from="SystemControllers/GameController" to="SystemControllers/InputController" method="_on_game_controller_set_control_type"]
-[connection signal="down_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_down_pressed"]
-[connection signal="left_mouse_press" from="SystemControllers/InputController" to="Player" method="_on_input_controller_left_mouse_press"]
-[connection signal="left_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_left_pressed"]
-[connection signal="pause_button_pressed" from="SystemControllers/InputController" to="SystemControllers/GameController" method="_on_input_controller_pause_button_pressed"]
-[connection signal="right_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_right_pressed"]
-[connection signal="up_pressed" from="SystemControllers/InputController" to="Player" method="_on_input_controller_up_pressed"]

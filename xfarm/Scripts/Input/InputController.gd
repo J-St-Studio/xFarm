@@ -117,6 +117,9 @@ func GetMousePosition() -> Vector2:
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		print(event)
+	if event is InputEventKey:
+		print(event)
+		#ProcessInput()
 
 func _on_game_controller_set_control_type(ControlType: InputTypes.Types) -> void:
 	UpdateControlType(ControlType)

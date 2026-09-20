@@ -8,8 +8,10 @@ signal game_unpaused
 signal game_over
 signal set_control_type
 signal one_second_elapsed
+signal spawn_player
 
 var precision = preload("res://Scripts/System/precision.gd")
+var enemy_one: PackedScene = preload("res://Scenes/Enemy.tscn")
 
 var GlobalDelta: float
 var Plants: PlantData = PlantData.new()
@@ -35,13 +37,23 @@ var log: LogController = LogController.new()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	CurrentGameState = GameState.UnPaused
+	SystemController.System.GetLogController().message(self, "GameController ready")
+	#spawn_player.emit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	GlobalDelta = delta
-	UpdateGameWorld()
+	if (UpdateGameWorld()):
+		pass
 	
 # Removed PrintWorldTime function as its logic was flawed and replaced by direct logging in UpdateGameWorld().
+
+func SpawnEnemyWave():
+	if int(floor(WorldTime)) % 5 == 0:
+		print("spawning enemy")
+		var enemy = enemy_one.instantiate()
+		add_child(enemy)
+		
 
 func GetWorldTimeAsString(_precision: int = 0) -> String:
 	return precision.of(WorldTime, _precision)
@@ -49,9 +61,9 @@ func GetWorldTimeAsString(_precision: int = 0) -> String:
 func GetWorldTime() -> float:
 	return WorldTime
 
-func UpdateGameWorld():
+func UpdateGameWorld() -> bool:
 	# don't update the game world if game is paused (time/enemies?/etc)
-	if (CurrentGameState == GameState.Paused): return
+	if (CurrentGameState == GameState.Paused): return false
 	# Time advancement logic
 	var old_world_time = WorldTime;
 	WorldTime += 1 * GlobalDelta;
@@ -61,19 +73,18 @@ func UpdateGameWorld():
 		log.message(self, "WorldTime: ", GetWorldTimeAsString(2));
 		LastLoggedSecond = int(current_second);
 		one_second_elapsed.emit()
+	return true
 	pass
 
 func SpawnItem(item: Resource, location: Vector2) -> Node2D:
 	# get root scene$"../.."
 	 # 1. Instantiate the scene/resource provided by the caller.                                                       
 	var new_item = item.instantiate()                                                                        
-																													  
 	# 2. Set its global position in the game world.                                                                   
 	new_item.global_position = location                                                                               
 	# 3. Add it as a child of the GameController (the main world container).                                          
 	add_child(new_item)
 	print("Item Spawned: ", new_item)                                                                                   
-																													  
 	# 4. Return the newly spawned item instance.                                                                      
 	return new_item
 

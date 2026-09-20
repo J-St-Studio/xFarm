@@ -1,6 +1,8 @@
 # PlayerStatus.gd
 
-class_name PlayerStatus extends Node
+class_name Player extends Node2D
+
+var player_scene: PackedScene = preload("res://Scenes/player.tscn")
 
 enum State {
 	Idle,
@@ -60,3 +62,9 @@ var Shield: float = MaxShield
 
 var MaxPower: float = 100.0
 var Power: float = MaxPower
+
+func _ready() -> void:
+	pass
+	
+func _process(delta: float) -> void:
+	pass

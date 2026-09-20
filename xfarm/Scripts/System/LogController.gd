@@ -3,7 +3,7 @@
 
 class_name LogController extends Node2D
 
-static var PlayerStatus = preload("res://Scripts/Player/PlayerStatus.gd")
+static var Player = preload("res://Scripts/Player/Player.gd")
 static var PlayerController = preload("res://Scripts/Player/PlayerController.gd")
 
 const prefix: String = "LOG::"
@@ -38,7 +38,7 @@ static func LogPlayerState(source: Node, message: String=""):
 		SourceName,
 		FunctionName, 
 		": PlayerState -> ", 
-		PlayerStatus.State.keys()[PlayerController.GetPlayerState()],
+		Player.State.keys()[PlayerController.GetPlayerState()],
 		" :: (", message, ")"
 	)
 	

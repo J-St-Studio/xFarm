@@ -3,11 +3,8 @@
 class_name PlayerController extends Node2D
 var System = preload("res://Scripts/System/SystemController.gd")
 
-@onready var PlayerState = preload("res://Scripts/Player/PlayerStatus.gd").new();
-@onready var player: CharacterBody2D = $CharacterBody2D
-@onready var PlayerCollision: CollisionShape2D = $"../CharacterBody2D/CollisionShape2D"
+@onready var player;
 
-#@onready var player: Sprite2D = $"../PlayerSprite"
 @onready var GlobalDeltaTime: float = 0;
 @onready var CurrentMovementSpeed: int;
 @onready var MovementSpeedMultiplier: int;
@@ -24,10 +21,11 @@ func _ready() -> void:
 	#GameController.input.UpdateControlType(InputTypes.Types.PLAYER);
 	log.LogInputType(self)
 	log.LogPlayerState(self)
+	#Game.spawn_player.connect(SpawnPlayer)
 	#CurrentMovementSpeed = PlayerStatus.MoveSpeed;
 	MovementSpeedMultiplier = 1;
-	SetPlayerState(PlayerStatus.State.Idle);
-	SetPlayerDirection(PlayerStatus.Direction.Left);
+	SetPlayerState(Player.State.Idle);
+	SetPlayerDirection(Player.Direction.Left);
 	
 	#PlayerStatus.Health = 100
 	#PlayerStatus.MaxHealth = 100
@@ -43,10 +41,18 @@ func _process(delta: float) -> void:
 		InputController.UpdateControlType(InputTypes.Types.PLAYER)
 	pass;
 	
+func SpawnPlayer() -> void:
+	var new_player: Player = Player.new()
+	var ret = new_player.player_scene.instantiate()
+	get_parent().add_sibling(ret)
+	print("player spawn")
+	player = new_player
+	pass
+	
 func TakeDamage(DamageValue: float) -> void:
-	PlayerState.Health -= DamageValue
-	if (PlayerState.Health <= 0.0):
-		PlayerState.Health = 0.0;
+	player.Health -= DamageValue
+	if (player.Health <= 0.0):
+		player.Health = 0.0;
 		pass # dead
 	pass
 
@@ -105,7 +111,7 @@ func SetPlayerStateAndDirection(state: int, direction: int) -> void:
 	pass;
 
 func PlayerSpeedCalculation() -> float:
-	return PlayerState.MoveSpeed * PlayerState.MoveSpeedM * GlobalDeltaTime;
+	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime;
 
 func _on_game_controller_game_paused() -> void:
 	print("game paused")
@@ -114,22 +120,22 @@ func _on_game_controller_game_paused() -> void:
 func _on_input_controller_up_pressed() -> void:
 	if (GameController.GameUnPaused()):
 		player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Up)
+		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Up)
 	
 func _on_input_controller_right_pressed() -> void:
 	if (GameController.GameUnPaused()):
 		player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Right)
+		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Right)
 
 func _on_input_controller_left_pressed() -> void:
 	if (GameController.GameUnPaused()):
 		player.translate(Vector2(-1, 0) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Left)
+		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Left)
 
 func _on_input_controller_down_pressed() -> void:
 	if (GameController.GameUnPaused()):
 		player.translate(Vector2(0, 1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(PlayerStatus.State.Moving, PlayerStatus.Direction.Down)
+		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Down)
 
 func _on_input_controller_left_mouse_press() -> void:
 	print("left mouse button clicked!!")
