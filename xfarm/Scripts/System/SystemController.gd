@@ -1,44 +1,78 @@
-class_name SystemController extends Node2D
+class_name SystemController extends Controller
 
-static var System: SystemController = SystemController.new()
-
-static var Game: GameController
-static var Log: LogController
-static var InputC: InputController
-static var PlayerC: PlayerController
-
+static var game: GameController
+static var log: LogController
+static var input: InputController
+static var player: PlayerController
+static var UI: UIController
+static var audio: AudioController
 
 static var Controllers: Array
 
 func _ready() -> void:
-	InitializeSystemController()
-	InitializeGameController()
+	Initialize()
 
-func InitializeControllers() -> bool:
-	return false
+func Initialize() -> void:
+	print("System online, initializing controllers...\n")
+	log = InitializeController(LogController)
+	game = InitializeController(GameController)
+	input = InitializeController(InputController)
+	audio = InitializeController(AudioController)
+	UI = InitializeController(UIController)
+	player = InitializeController(PlayerController)
+	
+	PrintSystemReport()
+	return
 
-func InitializeSystemController() -> void:
-	Game = GameController.new()
-	Log = LogController.new()
-	InputC = InputController.new()
-	PlayerC = PlayerController.new()
-	Log.message(self, "SystemController ready")
-
-func InitializeGameController() -> void:
-	Controllers.append(Game)
-	add_child(Game)
+func InitializeController(ControllerType: Variant) -> Controller:
+	var controller: Controller = ControllerType.new()
+	if (!controller):
+		print(ControllerType, "failed to initialize, CRITICAL FAILURE, exiting")
+		return null
+	var name = controller.get_script().get_global_name()
+	print("SYSTEM: Initializing [", name, "] ...")
+	controller.name = name
+	Controllers.append(controller)
+	add_child(controller)
+	controller.status = ControllerStatus[ONLINE]
+	print("SYSTEM: ", controller.name, " initialized!\n")
+	return controller
 
 static func GetGameController() -> GameController:
-	return Game
+	return game
 
 static func GetLogController() -> LogController:
-	return Log
+	return log
 
 static func GetInputController() -> InputController:
-	return InputC
+	return input
 
 static func GetPlayerController() -> PlayerController:
-	return PlayerC
+	return player
 	
 static func GetControllers() -> Array:
 	return Controllers
+	
+func IsSystemOnline() -> bool:
+	for controller in Controllers:
+		if (!controller.status):
+			return false
+	return true
+
+func SystemReport() -> Dictionary:
+	var ControllerStates: Dictionary;
+	for controller in Controllers:
+		ControllerStates[controller] = controller.GetControllerStatus();
+	return ControllerStates
+
+func PrintSystemReport() -> void:
+	var report: Dictionary = SystemReport();
+	var keys = report.keys()
+	var max_length_ = 0
+	for key in report.keys():
+		max_length_ = maxi(max_length_, key.name.length())
+	print("SYSTEM: CONTROLLER INITIALIZATION COMPLETE -> {")
+	for key in keys:
+		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key])
+	print("\t}\n")
+	

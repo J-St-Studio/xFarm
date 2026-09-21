@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://d0vxkhsvlbu03"]
+
+[ext_resource type="Script" uid="uid://egj14ot5o5dx" path="res://Scripts/System/SystemController.gd" id="1_yjsus"]
+[ext_resource type="PackedScene" uid="uid://dvslor41tf13e" path="res://Scenes/Enemy.tscn" id="2_yjsus"]
+
+[node name="main" type="Node2D" unique_id=1878218130]
+
+[node name="SystemController" type="Node2D" parent="." unique_id=668560776]
+script = ExtResource("1_yjsus")
+
+[node name="Enemy" parent="." unique_id=413101023 instance=ExtResource("2_yjsus")]
+position = Vector2(-441, -92)

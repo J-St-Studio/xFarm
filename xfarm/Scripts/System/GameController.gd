@@ -1,7 +1,7 @@
 # GameController.gd
 # controls many aspects of the game world
 # emits signals for game world / game systems
-class_name GameController extends Node2D
+class_name GameController extends Controller
 
 signal game_paused
 signal game_unpaused
@@ -9,6 +9,7 @@ signal game_over
 signal set_control_type
 signal one_second_elapsed
 signal spawn_player
+signal go_to_main_menu
 
 var precision = preload("res://Scripts/System/precision.gd")
 var enemy_one: PackedScene = preload("res://Scenes/Enemy.tscn")
@@ -32,49 +33,45 @@ enum GameState {
 	UnPaused
 }
 
-var log: LogController = LogController.new()
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	SystemController.GetLogController().message(self, "online")
 	CurrentGameState = GameState.UnPaused
-	SystemController.System.GetLogController().message(self, "GameController ready")
 	#spawn_player.emit()
+	ConnectSignals()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	GlobalDelta = delta
-	if (UpdateGameWorld()):
-		pass
-	
-# Removed PrintWorldTime function as its logic was flawed and replaced by direct logging in UpdateGameWorld().
+	UpdateGameWorld()
 
-func SpawnEnemyWave():
-	if int(floor(WorldTime)) % 5 == 0:
-		print("spawning enemy")
-		var enemy = enemy_one.instantiate()
-		add_child(enemy)
-		
+func ConnectSignals() -> void:
+	#print(PC)
+	return
+
+func UpdateGameWorld() -> bool:
+	# don't update the game world if game is paused (time/enemies?/etc)
+	if (CurrentGameState != GameState.UnPaused): return false
+	if (CurrentGameState == GameState.MainMenu):
+		go_to_main_menu.emit()
+		return false
+	AdvanceWorldTime()
+	return true
+
+func AdvanceWorldTime() -> void:
+	var old_world_time = WorldTime;
+	WorldTime += 1 * GlobalDelta;
+	# Check if we have crossed an integer second boundary since the last log
+	var current_second = floor(WorldTime);
+	if (current_second > LastLoggedSecond):
+		LastLoggedSecond = int(current_second);
+		one_second_elapsed.emit()
 
 func GetWorldTimeAsString(_precision: int = 0) -> String:
 	return precision.of(WorldTime, _precision)
 
 func GetWorldTime() -> float:
 	return WorldTime
-
-func UpdateGameWorld() -> bool:
-	# don't update the game world if game is paused (time/enemies?/etc)
-	if (CurrentGameState == GameState.Paused): return false
-	# Time advancement logic
-	var old_world_time = WorldTime;
-	WorldTime += 1 * GlobalDelta;
-	# Check if we have crossed an integer second boundary since the last log
-	var current_second = floor(WorldTime);
-	if (current_second > LastLoggedSecond):
-		log.message(self, "WorldTime: ", GetWorldTimeAsString(2));
-		LastLoggedSecond = int(current_second);
-		one_second_elapsed.emit()
-	return true
-	pass
 
 func SpawnItem(item: Resource, location: Vector2) -> Node2D:
 	# get root scene$"../.."
@@ -88,6 +85,9 @@ func SpawnItem(item: Resource, location: Vector2) -> Node2D:
 	# 4. Return the newly spawned item instance.                                                                      
 	return new_item
 
+func SetLevel(Level: PackedScene) -> void:
+	pass
+
 static func GetCurrentGameState() -> int:
 	return CurrentGameState
 
@@ -100,15 +100,11 @@ static func GamePaused() -> bool:
 static func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
 
-func _on_input_controller_pause_button_pressed() -> void:
+func PauseGame() -> void:
 	if (GamePaused()):
 		SetCurrentGameState(GameState.UnPaused)
 		set_control_type.emit(InputTypes.Types.PLAYER)
-		log.message(self, "Game Unpaused")
-		log.LogInputType(self)
 	elif (GameUnPaused()):
 		SetCurrentGameState(GameState.Paused)
 		set_control_type.emit(InputTypes.Types.UI)
-		log.message(self, "Game Paused")
-		log.LogInputType(self)
 	pass

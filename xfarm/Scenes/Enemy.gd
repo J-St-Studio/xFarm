@@ -1,1 +1,1 @@
-class_name Enemy extends Node2D
+class_name Enemy extends Entity

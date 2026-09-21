@@ -45,7 +45,7 @@ func _on_item_area_2d_body_entered(body: Node2D) -> void:
 	if body is CharacterBody2D or body is Area2D: # ai generated code lol ^^^
 		if InventoryController.IsFull():
 			# broadcast inventory full message for UIController
-			UIController.Update(GameController.GameState)
+			#UIController.Update(GameController.GameState)
 			return
 		
 		# Log message using assumed global LogController access
