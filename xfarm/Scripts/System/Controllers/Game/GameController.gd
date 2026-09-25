@@ -3,9 +3,9 @@
 # emits signals for game world / game systems
 class_name GameController extends Controller
 var EC = System.GetEventController()
+var LC = System.GetLogController()
 var Scenes = EnvironmentScenes
 var oneShot: OneShot = OneShot.new()
-
 
 # class controllers
 var enemyController: EnemyController
@@ -28,7 +28,7 @@ func _ready() -> void:
 	super._ready()
 	CurrentGameState = GameState.UnPaused
 	ConnectSignals({
-		EC.game["game_paused"]: PauseGame,
+		EC.game_paused: PauseGame,
 	})
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,33 +38,15 @@ func _process(delta: float) -> void:
 		GenerateGameWorld().once = true
 		UpdateGameWorld()
 
-func InstantiateControllers() -> void:
-	if (System.IsOnline() and spawn_controllers):
-		#enemyController = System.InitializeController(enemyController)
-		#timeController = System.InitializeController(timeController)
-		#add_child(enemyController)
-		#add_child(timeController)
-		spawn_controllers = false
-	return
-	
 func GenerateGameWorld() -> OneShot:
 	if (oneShot.once): return oneShot
-	# complex math / algo to generate a world based on some input
-	# fake it for now.
-	System.GetLogController().message(self, "generating game world")
-	EC.BroadcastGenerateWorld()
-	var plant: Resource = Scenes.Plant
-	SpawnItem(plant, Vector2(100, 100))
-	for  i in range(0, 100):
-		var shouldNegate = randi_range(0, 1)
-		if (shouldNegate):
-			shouldNegate = -1
-		else:
-			shouldNegate = 1
-		SpawnItem(plant, Vector2(
-			randi() % randi() + 1 * shouldNegate, 
-			randi() % randi() + 1 * shouldNegate
-		))
+	LC.message(self, "generating game world")
+	# GenerateSurface()
+	GeneratePlants(1000, Vector2(100 * 100, 100 * 100))
+	# GenerateBuildings()
+	# GenerateEnemySpawnPoints()
+	# GenerateItems()
+	# GenerateMisc ...
 	return oneShot
 
 func UpdateGameWorld() -> bool:
@@ -80,11 +62,29 @@ func SpawnEntity(entity: Entity, parameters: EntityParams) -> Node2D:
 	var new_entity = entity.instantiate()
 	return new_entity
 
-func SpawnItem(item: Resource, location: Vector2) -> Node2D:
-	var new_item = item.instantiate()
-	new_item.global_position = location
-	add_child(new_item)
-	return new_item
+func SpawnScene(scene: Resource, location: Vector2) -> Node2D:
+	var new_scene = scene.instantiate()
+	new_scene.global_position = location
+	add_child(new_scene)
+	return new_scene
+
+func GeneratePlants(quantity: int, spawnRange: Vector2) -> void:
+	var x = int(spawnRange.x)
+	var y = int(spawnRange.y)
+	var plant: Resource = Scenes.Plant
+	SpawnScene(plant, Vector2(100, 100))
+	for  i in range(0, quantity):
+		var shouldNegate = randi_range(0, 1)
+		if (shouldNegate):
+			shouldNegate = -1
+		else:
+			shouldNegate = 1
+		SpawnScene(plant, Vector2(
+			randi() % x + 1 * shouldNegate, 
+			randi() % y + 1 * shouldNegate
+		))
+	pass
+pass
 
 func SetLevel(Level: PackedScene) -> void:
 	pass

@@ -17,14 +17,14 @@ func _ready() -> void:
 	super._ready()
 	var EC = System.GetEventController()
 	ConnectSignals ({
-		EC.confirm_pressed: OnConfirmPressed,
-		EC.escape_pressed: OnEscapePressed,
-		EC.up_pressed: OnUpPressed,
-		EC.down_pressed: OnDownPressed,
-		EC.left_pressed: OnLeftPressed,
-		EC.right_pressed: OnRightPressed,
-		EC.left_mouse_pressed: OnLeftMousePressed,
-		EC.right_mouse_pressed: OnRightMousePressed
+		EC.input_confirm_pressed: OnConfirmPressed,
+		EC.input_escape_pressed: OnEscapePressed,
+		EC.input_up_pressed: OnUpPressed,
+		EC.input_down_pressed: OnDownPressed,
+		EC.input_left_pressed: OnLeftPressed,
+		EC.input_right_pressed: OnRightPressed,
+		EC.input_left_mouse_pressed: OnLeftMousePressed,
+		EC.input_right_mouse_pressed: OnRightMousePressed
 	})
 	return
 
@@ -100,9 +100,7 @@ func OnLeftPressed() -> void:
 		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Left)
 
 func OnLeftMousePressed() -> void:
-	print("left mouse button clicked!!")
-	var item = preload("res://Scenes/Items/Item.tscn")
-	var location = Vector2(0, 0)
+	#EC.BroadcastSpawnItem(item, location)
 	pass # Replace with function body.
 
 func OnRightMousePressed() -> void:

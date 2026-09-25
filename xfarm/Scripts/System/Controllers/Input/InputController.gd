@@ -54,7 +54,7 @@ static func GetControlType() -> int:
 func ProcessInput() -> void:
 	PauseKeyPressed()
 	LeftMouseButton()
-	Interact()
+	Confirm()
 	Up()
 	Down()
 	Left()
@@ -64,43 +64,43 @@ func LeftMouseButton() -> bool:
 	# update for re-bindable inputs
 	var is_left = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)                              
 	if (is_left):                                                                                                     
-		Event.left_mouse_pressed.emit()                                                                                       
+		Event.BroadcastInputLeftMousePressed()                                                                              
 	return is_left
 	
 func PauseKeyPressed() -> bool:
 	var pause_pressed = Input.is_action_just_pressed(BackInput[GetControlType()])
 	if (pause_pressed):
-		Event.escape_pressed.emit()
+		Event.BroadcastInputEscapePressed()
 	return pause_pressed
 
 func Up() -> bool:
 	var is_up = Input.is_key_pressed(UpInput[GetControlType()])
 	if is_up:
-		Event.up_pressed.emit()
+		Event.BroadcastInputUpPressed()
 	return is_up
 
 func Down() -> bool:
 	var is_down = Input.is_key_pressed(DownInput[GetControlType()])
 	if is_down:
-		Event.down_pressed.emit()
+		Event.BroadcastInputDownPressed()
 	return is_down
 
 func Left() -> bool:
 	var is_left = Input.is_key_pressed(LeftInput[GetControlType()])
 	if is_left:
-		Event.left_pressed.emit()
+		Event.BroadcastInputLeftPressed()
 	return is_left
 
 func Right() -> bool:
 	var is_right = Input.is_key_pressed(RightInput[GetControlType()])
 	if is_right:
-		Event.right_pressed.emit()
+		Event.BroadcastInputRightPressed()
 	return is_right
 
-func Interact():
+func Confirm():
 	var confirm = Input.is_physical_key_pressed(InteractInput[GetControlType()])
 	if (confirm):
-		Event.confirm_pressed.emit()
+		Event.BroadcastInputConfirmPressed()
 	return confirm
 
 func GetMousePosition() -> Vector2:
