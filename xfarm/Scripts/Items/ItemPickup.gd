@@ -2,8 +2,6 @@ class_name ItemPickup extends Area2D
 
 @onready var sprite_2d: Sprite2D = $"../Sprite2D"
 
-var log: LogController = preload("res://Scripts/System/LogController.gd").new()
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Make sure these are enabled (usually are by default)
@@ -19,6 +17,7 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
+	var log = System.GetLogController()
 	log.message(self.get_parent(), get_parent().name + " picked up by: " + body.get_parent().name)
 	get_parent().queue_free()
 	pass

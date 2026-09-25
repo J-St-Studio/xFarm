@@ -10,6 +10,9 @@ enum ControllerState {
 	FAIL
 }
 
+var EnemyControllerType = EnemyController
+var PlayerControllerType = PlayerController
+
 var ControllerStatus: Dictionary = {
 	ONLINE: ControllerState.ONLINE,
 	OFFLINE: ControllerState.OFFLINE,
@@ -17,6 +20,19 @@ var ControllerStatus: Dictionary = {
 }
 
 var status = ControllerStatus[OFFLINE]
+
+func _ready() -> void:
+	if (System.GetLogController()):
+		System.GetLogController().message(self, "online")
+	else: # we are the log controller
+		print(">>> LogController: online")
+
+func ConnectSignals(signal_map: Dictionary) -> void:
+	for sig in signal_map:
+		sig.connect(signal_map[sig])
+	System.GetLogController().message(self, "signals connected")
+	return
+		
 
 func GetControllerStatus() -> String:
 	if status == ControllerState.ONLINE: return ONLINE

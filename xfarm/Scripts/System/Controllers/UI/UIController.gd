@@ -8,16 +8,13 @@ class_name UIController extends Controller
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	SystemController.GetLogController().message(self, "online")
+	super._ready()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# if the game is unpaused, no UI control? -> what about in-game menu?
 	pass
-	
-func ConnectSignals() -> void:
-	return
 
 func Update(GameState: GameController.GameState) -> void:
 	# Implementation for broadcasting inventory full message

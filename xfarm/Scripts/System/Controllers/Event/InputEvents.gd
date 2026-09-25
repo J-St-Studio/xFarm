@@ -1,0 +1,10 @@
+class_name InputEvents extends EditorScript
+
+signal escape_pressed
+signal up_pressed
+signal down_pressed
+signal left_pressed
+signal right_pressed
+signal confirm_pressed
+signal left_mouse_pressed
+signal right_mouse_pressed

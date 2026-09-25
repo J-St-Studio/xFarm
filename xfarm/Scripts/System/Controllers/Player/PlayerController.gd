@@ -2,8 +2,6 @@
 
 class_name PlayerController extends Controller
 
-var IC: InputController;
-
 @onready var player_scene = preload("res://Scenes/player.tscn");
 
 var GlobalDeltaTime: float = 0;
@@ -16,8 +14,18 @@ var player: Player = null;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	SystemController.GetLogController().message(self, "online")
-	ConnectInputSignals()
+	super._ready()
+	var EC = System.GetEventController()
+	ConnectSignals ({
+		EC.confirm_pressed: OnConfirmPressed,
+		EC.escape_pressed: OnEscapePressed,
+		EC.up_pressed: OnUpPressed,
+		EC.down_pressed: OnDownPressed,
+		EC.left_pressed: OnLeftPressed,
+		EC.right_pressed: OnRightPressed,
+		EC.left_mouse_pressed: OnLeftMousePressed,
+		EC.right_mouse_pressed: OnRightMousePressed
+	})
 	return
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,16 +33,7 @@ func _process(delta: float) -> void:
 	#if (GC.GamePaused()): return
 	SpawnPlayer()
 	GlobalDeltaTime = delta;
-	
 	pass;
-
-func ConnectInputSignals() -> void:
-	var IC = SystemController.GetInputController()
-	IC.up_pressed.connect(OnInputControllerUpPressed)
-	IC.down_pressed.connect(OnInputControllerDownPressed)
-	IC.left_pressed.connect(OnInputControllerLeftPressed)
-	IC.right_pressed.connect(OnInputControllerRightPressed)
-	IC.pause_button_pressed.connect(OnInputControllerPausePressed)
 
 func SpawnPlayer() -> void:
 	if (player): return
@@ -47,7 +46,7 @@ func ProcessPlayerActions():
 	#actions include interacting with items/objects
 	var current_mouse_position: Vector2 = Vector2.ZERO
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		current_mouse_position = Core.GetSystemController().GetInputController().GetMousePosition()
+		current_mouse_position = System.GetInputController().GetMousePosition()
 	# Calculate the direction vector from player to mouse position
 	var aim_direction: Vector2 = current_mouse_position - global_position
 	#print(aim_direction)
@@ -73,32 +72,38 @@ func SetPlayerStateAndDirection(state: int, direction: int) -> void:
 func PlayerSpeedCalculation() -> float:
 	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime;
 
-func OnInputControllerPausePressed() -> void:
+func OnConfirmPressed() -> void:
+	return
+
+func OnEscapePressed() -> void:
 	#ask_to_pause_game.emit()
 	pass # Replace with function body.
 
-func OnInputControllerUpPressed() -> void:
-	if (Core.GetSystemController().GetGameController().GameUnPaused()):
+func OnUpPressed() -> void:
+	if (System.GetGameController().GameUnPaused()):
 		player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
 		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Up)
 
-func OnInputControllerDownPressed() -> void:
-	if (Core.GetSystemController().GetGameController().GameUnPaused()):
+func OnDownPressed() -> void:
+	if (System.GetGameController().GameUnPaused()):
 		player.translate(Vector2(0, 1) * PlayerSpeedCalculation())
 		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Down)
 
-func OnInputControllerRightPressed() -> void:
-	if (Core.GetSystemController().GetGameController().GameUnPaused()):
+func OnRightPressed() -> void:
+	if (System.GetGameController().GameUnPaused()):
 		player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
 		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Right)
 
-func OnInputControllerLeftPressed() -> void:
-	if (Core.GetSystemController().GetGameController().GameUnPaused()):
+func OnLeftPressed() -> void:
+	if (System.GetGameController().GameUnPaused()):
 		player.translate(Vector2(-1, 0) * PlayerSpeedCalculation())
 		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Left)
 
-func OnInputControllerLeftMousePressed() -> void:
+func OnLeftMousePressed() -> void:
 	print("left mouse button clicked!!")
 	var item = preload("res://Scenes/Items/Item.tscn")
 	var location = Vector2(0, 0)
 	pass # Replace with function body.
+
+func OnRightMousePressed() -> void:
+	return
