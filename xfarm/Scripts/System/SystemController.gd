@@ -7,6 +7,8 @@ static var player: PlayerController
 static var UI: UIController
 static var audio: AudioController
 static var event: EventController
+static var time: TimeController
+static var enemy: EnemyController
 
 static var SystemControllers: Array
 
@@ -26,13 +28,10 @@ func Initialize() -> int:
 	audio = InitializeController(AudioController)
 	UI = InitializeController(UIController)
 	player = InitializeController(PlayerController)
-	
-	# This is a style choice, enemy and time controllers
-	# could just as well exist as direct children of the system
+	time = InitializeController(TimeController)
+	enemy = InitializeController(EnemyController)
 	print("SYSTEM: all system-level controllers initialized")
-	print("SYSTEM: Initializing Game Controllers ...\n")
-	game.enemyController = InitializeController(EnemyController)
-	game.timeController = InitializeController(TimeController)
+
 	if (IsOnline()):
 		PrintSystemReport()
 	else:
@@ -68,6 +67,12 @@ static func GetPlayerController() -> PlayerController:
 	
 static func GetEventController() -> EventController:
 	return event
+
+static func GetTimeController() -> TimeController:
+	return time
+
+static func GetEnemyController() -> EnemyController:
+	return enemy
 	
 static func GetSystemControllers() -> Array:
 	return SystemControllers

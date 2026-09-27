@@ -13,24 +13,6 @@ signal input_input_right_pressed
 signal input_left_mouse_pressed
 signal input_right_mouse_pressed
 
-# game event signals
-signal game_paused
-signal game_unpaused
-signal game_over
-signal game_set_control_type
-signal game_spawn_player
-signal game_go_to_main_menu
-signal game_start_game
-signal game_generate_world
-
-func BroadcastStartGame() -> void:
-	LC.message(self, "start game")
-	game_start_game.emit()
-
-func BroadcastGameGenerateWorld() -> void:
-	LC.message(self, "generate world")
-	game_generate_world.emit()
-
 # Input Signals
 func BroadcastInputEscapePressed() -> void:
 	LC.message(self, "escape pressed")
@@ -64,7 +46,24 @@ func BroadcastInputRightMousePressed() -> void:
 	LC.message(self, "right mouse pressed")
 	input_right_mouse_pressed.emit()
 
-# Game Signals
+# game event signals
+signal game_paused
+signal game_unpaused
+signal game_over
+signal game_set_control_type
+signal game_spawn_player
+signal game_go_to_main_menu
+signal game_start_game
+signal game_generate_world
+
+func BroadcastStartGame() -> void:
+	LC.message(self, "start game")
+	game_start_game.emit()
+
+func BroadcastGameGenerateWorld() -> void:
+	LC.message(self, "generate world")
+	game_generate_world.emit()
+
 func BroadcastGamePaused() -> void:
 	LC.message(self, "game paused")
 	game_paused.emit()
@@ -88,3 +87,17 @@ func BroadcastGameSpawnPlayer() -> void:
 func BroadcastGameGoToMainMenu() -> void:
 	LC.message(self, "go to main menu")
 	game_go_to_main_menu.emit()
+	
+# player signals
+signal player_current_location
+
+func BroadcastPlayerLocation(location: Vector2) -> void:
+	LC.message(self, "player current location")
+	player_current_location.emit(location)
+
+# world signals
+signal world_generate_world
+
+func BroadcastWorldGenerateWorld() -> void:
+	LC.message(self, "world generate world")
+	world_generate_world.emit()

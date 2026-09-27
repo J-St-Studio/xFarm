@@ -4,6 +4,8 @@ class_name PlayerController extends Controller
 
 @onready var player_scene = preload("res://Scenes/player.tscn");
 
+var playerLocationOneShot: OneShot;
+
 var GlobalDeltaTime: float = 0;
 var CurrentMovementSpeed: int;
 var MovementSpeedMultiplier: int;
@@ -34,7 +36,7 @@ func _process(delta: float) -> void:
 	SpawnPlayer()
 	GlobalDeltaTime = delta;
 	pass;
-
+	
 func SpawnPlayer() -> void:
 	if (player): return
 	player = player_scene.instantiate()

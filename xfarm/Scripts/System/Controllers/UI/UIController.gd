@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 	# if the game is unpaused, no UI control? -> what about in-game menu?
 	pass
 
-func Update(GameState: GameController.GameState) -> void:
+func Update(state: GameState) -> void:
 	# Implementation for broadcasting inventory full message
 	# update game UI
 	# this is gonna be a fucker of a function, not sure I like the design.

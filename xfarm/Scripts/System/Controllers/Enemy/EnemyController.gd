@@ -1,7 +1,7 @@
 class_name EnemyController extends Controller
 
 
-var enemy_one: PackedScene = preload("res://Scenes/Enemy.tscn")
+var enemy_one: PackedScene = preload("res://Scenes/enemy.tscn")
 
 
 signal spawn_enemy_wave

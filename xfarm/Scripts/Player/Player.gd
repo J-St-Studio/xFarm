@@ -2,10 +2,11 @@
 
 class_name Player extends Entity
 var log = System.GetLogController()
-var GC = System.GetGameController()
+var game = System.GetGameController()
 func _ready() -> void:
 	log.message(self, "I am alive!")
-	log.message(self, "Game state: ", GC.CurrentGameState)
+	log.message(self, "Game state: ", game.GetCurrentGameState())
+	log.message(self, "location: ", position)
 	pass
 	
 func _process(delta: float) -> void:
