@@ -16,7 +16,7 @@ var TotalTime: float
 
 @onready var GameController = preload("res://Scripts/System/GameController.gd")
 @onready var InventoryController = preload("res://Scripts/Player/InventoryController.gd")
-
+@onready var UIController = preload("res://Scripts/System/UIController.gd")
 @onready var LinkedMesh = preload("res://Scripts/System/LinkedMesh.gd")
 
 func _init(item: Dictionary) -> void:
