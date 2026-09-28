@@ -101,3 +101,10 @@ signal world_generate_world
 func BroadcastWorldGenerateWorld() -> void:
 	LC.message(self, "world generate world")
 	world_generate_world.emit()
+	
+# enemy controller signals
+signal enemy_spawn_wave
+
+func BroadcastEnemySpawnWave() -> void:
+	LC.message(self, "enemy spawn wave")
+	enemy_spawn_wave.emit()

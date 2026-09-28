@@ -42,6 +42,9 @@ func GamePaused() -> bool:
 func GameUnPaused() -> bool:
 	return CurrentGameState == GameState.UnPaused
 
+func GetWorld() -> WorldGenerator:
+	return world
+
 func PauseGame() -> void:
 	if (GamePaused()):
 		LC.message(self, "unpausing game ...")
