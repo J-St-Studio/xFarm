@@ -1,4 +1,4 @@
-extends Area2D
+class_name ItemPickup extends Area2D
 
 @onready var sprite_2d: Sprite2D = $"../Sprite2D"
 
@@ -7,7 +7,6 @@ func _ready() -> void:
 	# Make sure these are enabled (usually are by default)
 	monitoring = true
 	monitorable = true   # usually not needed for detection, but good to have
-	
 	# Connect in code (recommended over editor for reusable scenes)
 	body_entered.connect(_on_body_entered)
 
@@ -18,6 +17,7 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	LogController.LogMessage(self.get_parent(), get_parent().name + " picked up by: " + body.get_parent().name)
+	var log = System.GetLogController()
+	log.message(self.get_parent(), get_parent().name + " picked up by: " + body.get_parent().name)
 	get_parent().queue_free()
 	pass

@@ -1,17 +1,20 @@
 [gd_scene format=3 uid="uid://vhwtn48205dl"]
 
-[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/System/GameController.gd" id="1_c8paj"]
-[ext_resource type="Script" uid="uid://bcfe47bnykihl" path="res://Scripts/Player/InventoryController.gd" id="1_dpqhp"]
-[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/Input/InputController.gd" id="2_s7a50"]
+[ext_resource type="Script" uid="uid://ds6mw5l0hx6mu" path="res://Scripts/System/Controllers/Game/GameController.gd" id="1_c8paj"]
+[ext_resource type="Script" uid="uid://c1fdup3ikhebw" path="res://Scripts/System/Controllers/Input/InputController.gd" id="2_s7a50"]
+[ext_resource type="Script" uid="uid://du66p4dreuehv" path="res://Scripts/System/Controllers/Log/LogController.gd" id="3_dpqhp"]
+[ext_resource type="Script" uid="uid://mw25spbuowcr" path="res://Scripts/System/Controllers/Player/PlayerController.gd" id="4_v1m7p"]
 
 [node name="SystemControllers" type="Node2D" unique_id=342599273]
-
-[node name="InventoryController" type="Node" parent="." unique_id=894515281]
-script = ExtResource("1_dpqhp")
-metadata/_custom_type_script = "uid://bcfe47bnykihl"
 
 [node name="GameController" type="Node2D" parent="." unique_id=1568654112]
 script = ExtResource("1_c8paj")
 
+[node name="LogController" type="Node2D" parent="." unique_id=1222277885]
+script = ExtResource("3_dpqhp")
+
 [node name="InputController" type="Node2D" parent="." unique_id=1931101509]
 script = ExtResource("2_s7a50")
+
+[node name="PlayerController" type="Node2D" parent="." unique_id=740445763]
+script = ExtResource("4_v1m7p")

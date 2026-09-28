@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dvslor41tf13e"]
+
+[ext_resource type="Texture2D" uid="uid://bxbkdi1i3bh05" path="res://Assets/Objects/Free_Chicken_House.png" id="1_m1htj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7fd37"]
+
+[node name="Enemy" type="Node2D" unique_id=413101023]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=921005935]
+texture = ExtResource("1_m1htj")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=166067214]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=160385374]
+scale = Vector2(4.433022, 4.941829)
+shape = SubResource("RectangleShape2D_7fd37")
