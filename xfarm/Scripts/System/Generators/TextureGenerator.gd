@@ -4,15 +4,15 @@ const TEXTURE_SIZE: int = 64
 const BRICK_DEFAULT_COLOR = Color(0.17, 0.17, 0.17, 1)
 const BRICK_LINE_DEFAULT_COLOR = Color(0.11, 0.11, 0.11, 1)
 
+const red = "red"
+const blue = "blue"
+const green = "green"
+const roughness = "roughness"
+const detail_scale = "detail_scale"
+const octaves = "octaves"
+
 func _ready() -> void:
 	pass
-
-func GenerateTexture(r: int, b: int, g: int, a: int) -> Texture2D:
-	var texture: Texture2D = Texture2D.new()
-	var image: Image = Image.create(TEXTURE_SIZE, TEXTURE_SIZE, false, Image.FORMAT_RGBA8)
-	image.fill(Color(r, g, b, a))
-	texture = ImageTexture.create_from_image(image)
-	return texture
 
 func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Color = BRICK_LINE_DEFAULT_COLOR) -> Texture2D:
 	var pathTexture: Texture2D = Texture2D.new()
@@ -60,16 +60,19 @@ func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Co
 	pathTexture = ImageTexture.create_from_image(image)
 	return pathTexture
 
-func GenerateGroundTexture(
-			base_color_r: float, base_color_g: float, base_color_b: float,
-			roughness: float = 0.3,
-			detail_scale: float = 40.0,
-			octaves: int = 5
-		) -> Texture2D:
+func GenerateTexture(textureData: Dictionary) -> Texture2D:
+	
+	var base_color_r = textureData["red"]
+	var base_color_g = textureData["green"]
+	var base_color_b = textureData["blue"]
+	var roughness = textureData["roughness"]
+	var detail_scale = textureData["detail_scale"]
+	var octaves = textureData["octaves"]
 
 	var texture_size = 64
 	var image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
 	
+	# MAGIC NUMBER HELL LMFAO
 	for y in range(texture_size):
 		for x in range(texture_size):
 			# Normalized UV coordinates

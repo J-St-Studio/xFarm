@@ -113,5 +113,3 @@ signal enemy_spawn_wave
 func BroadcastEnemySpawnWave() -> void:
 	LC.message(self, "enemy spawn wave")
 	enemy_spawn_wave.emit()
-
-

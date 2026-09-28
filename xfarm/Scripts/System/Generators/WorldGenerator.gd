@@ -2,6 +2,8 @@ class_name WorldGenerator extends Controller
 
 var EC = System.GetEventController()
 var LC = System.GetLogController()
+var generator = TextureGenerator.new()
+
 
 const MapMultiplier: int = 1;
 const MapSize: int = 1000;
@@ -26,36 +28,51 @@ const MapType: int = MapTypes.Dirt
 
 var generatedTextures: Array
 
+var GrassTexture: Texture2D = generator.GenerateTexture({
+	TextureGenerator.red: 0.2,
+	TextureGenerator.green: 0.4,
+	TextureGenerator.blue: 0.2,
+	TextureGenerator.roughness: randf_range(2, 3),
+	TextureGenerator.detail_scale: randf_range(10, 20),
+	TextureGenerator.octaves: randf_range(8, 9)
+})
+
+var GrassTexture_2: Texture2D = generator.GenerateTexture({
+	TextureGenerator.red: 0.21,
+	TextureGenerator.green: 0.4,
+	TextureGenerator.blue: 0.2,
+	TextureGenerator.roughness: randf_range(2, 3),
+	TextureGenerator.detail_scale: randf_range(10, 20),
+	TextureGenerator.octaves: randf_range(8, 9)
+})
+
+var VariableTexture: Texture2D = generator.GenerateTexture({
+	TextureGenerator.red: randf_range(0, 0.5),
+	TextureGenerator.green: randf_range(0, 0.5),
+	TextureGenerator.blue: randf_range(0, 0.5),
+	TextureGenerator.roughness: randf_range(2, 3),
+	TextureGenerator.detail_scale: randf_range(0, 20),
+	TextureGenerator.octaves: randf_range(0, 20)
+})
+
 func _ready() -> void:
 	LC.message(self, "WorldGenerator initialized")
+
 	generatedTextures = GenerateTextures(MapType)
+
 	GenerateGameWorld()
+
+	# add_child(GrassTile)
+	# tile_3.position = Vector2(200, 0)
+
+
 
 # _process
 
 # buggy, doesn't work as expected
 func GenerateTextures(type: int) -> Array:
 	var generator = TextureGenerator.new()
-	return [
-		generator.GenerateGroundTexture(
-			randi_range(0, 255), 
-			randi_range(0, 255), 
-			randi_range(0, 255), 
-			randi_range(0, 255)
-		),
-		generator.GenerateGroundTexture(
-			randi_range(0, 255),
-			randi_range(0, 255), 
-			randi_range(0, 255), 
-			randi_range(0, 255)
-		),
-		generator.GenerateGroundTexture(
-			randi_range(0, 255), 
-			randi_range(0, 255), 
-			randi_range(0, 255), 
-			randi_range(0, 255)
-		),
-	]
+	return [1]
 
 func GenerateGameWorld() -> void:
 	GenerateGameWorldResponse()
@@ -93,7 +110,7 @@ func GenerateBaseTileMap() -> void:
 	for x in range(MapLeftBound, MapRightBound, TileStep):
 		for y in range(MapUpperBound, MapLowerBound, -TileStep):
 			var spawn_point: Vector2 = Vector2(x, y)
-			GroundMap[spawn_point] = SpawnDirtTile(spawn_point)
+			GroundMap[spawn_point] = SpawnWildcardTexture(spawn_point)
 		pass
 	pass
 ## end
@@ -102,7 +119,7 @@ func GenerateWalls() -> void:
 	# generate upper wall
 	for x in range(MapLeftBound, MapRightBound, TileStep):
 		var spawn_point: Vector2 = Vector2(x, MapUpperBound)
-		GroundMap[spawn_point] = SpawnTile(spawn_point)
+		GroundMap[spawn_point] = SpawnDynamicTile(spawn_point)
 	return
 
 func GeneratePaths() -> void:
@@ -125,8 +142,12 @@ func GeneratePaths() -> void:
 	add_child(tile_4)
 	return
 
-func SpawnTile(location: Vector2) -> Tile:
-	print("texture list: ", generatedTextures)
+func SpawnTile(tile: Tile, location: Vector2) -> Tile:
+	tile.global_position = location
+	add_child(tile)
+	return tile
+
+func SpawnDynamicTile(location: Vector2) -> DynamicTile:
 	var tile: DynamicTile = DynamicTile.new(generatedTextures)
 	tile.global_position = location
 	if (randi_range(0, 1)): tile.global_rotation = PI * 2
@@ -147,6 +168,14 @@ func SpawnDirtTile(location: Vector2) -> DirtTile:
 	add_child(dirt_tile)
 	return dirt_tile
 
+func SpawnGrassTile(location: Vector2) -> Tile:
+	var texture: Texture2D = choose([GrassTexture, GrassTexture_2])
+	var tile: Tile = Tile.new(
+		texture, location, GetRandomRotation()
+	)
+	add_child(tile)
+	return tile
+
 func SpawnEntity(entity: Entity, parameters: EntityParams) -> Node2D:
 	var new_entity = entity.instantiate()
 	return new_entity
@@ -157,4 +186,15 @@ func SpawnPlant(location: Vector2) -> Node2D:
 	add_child(plant)
 	return plant
 
-	
+func SpawnWildcardTexture(location: Vector2) -> Tile:
+	var tile: Tile = Tile.new(VariableTexture, location, GetRandomRotation())
+	add_child(tile)
+	return tile
+
+func GetRandomRotation() -> float:
+	if (randi_range(0, 1)):
+		return PI * 2
+	return 0.0
+
+func choose(elements: Array) -> Variant:
+	return elements[randi_range(0, elements.size() - 1)]

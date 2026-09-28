@@ -19,10 +19,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if int(time.GetWorldTime()) % 10 == 0: # AND signal connected
-		event.BroadcastEnemySpawnWave()
-		event.enemy_spawn_wave.disconnect(SpawnWave)
-	else:
-		event.enemy_spawn_wave.connect(SpawnWave)
+		# event.BroadcastEnemySpawnWave()
+		# event.enemy_spawn_wave.disconnect(SpawnWave)
+		pass
+		# event.enemy_spawn_wave.connect(SpawnWave)
 		# need a oneshot implementation
 func SpawnWave() -> void:
 		print("spawn enemy wave")
