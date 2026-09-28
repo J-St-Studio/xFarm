@@ -22,11 +22,11 @@ func Initialize() -> int:
 	
 	log = InitializeController(LogController)
 	event = InitializeController(EventController)
-	
-	game = InitializeController(GameController)
 	input = InitializeController(InputController)
 	audio = InitializeController(AudioController)
 	UI = InitializeController(UIController)
+
+	game = InitializeController(GameController)
 	player = InitializeController(PlayerController)
 	time = InitializeController(TimeController)
 	enemy = InitializeController(EnemyController)
