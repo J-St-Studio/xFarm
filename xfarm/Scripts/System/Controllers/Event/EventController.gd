@@ -97,7 +97,12 @@ func BroadcastPlayerLocation(location: Vector2) -> void:
 
 # world signals
 signal world_generate_world
+signal world_generate_tiles
 
 func BroadcastWorldGenerateWorld() -> void:
 	LC.message(self, "world generate world")
 	world_generate_world.emit()
+	
+func BroadcastWorldGenerateTiles(tileType: int) -> void:
+	LC.message(self, "world generate tiles")
+	world_generate_tiles.emit(tileType)

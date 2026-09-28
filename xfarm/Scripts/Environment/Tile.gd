@@ -1,11 +1,22 @@
-class_name Tile extends Spawnable
+class_name Tile extends Sprite2D
 
-var tile_texture_1: Resource = preload("res://Assets/PixelArt/ground_tile_1.png")
-var tile_texture_2: Resource = preload("res://Assets/PixelArt/ground_tile_2.png")
+var texture_list: Array
+
+func _init(texture_: Texture2D = null) -> void:
+	self.texture = texture_;
 
 func _ready() -> void:
-	setTextures([
-		tile_texture_1,
-		tile_texture_2
-	])
-	self.texture = getTexture()
+	if (self.texture == null):
+		self.texture = assignTexture()
+
+func setTextures(textures: Array) -> void:
+	texture_list = textures
+		
+func setTexture(texture_: Texture2D) -> void:
+	self.texture = texture_
+
+func assignTexture() -> Texture2D:
+	return texture_list[randi_range(0, texture_list.size() - 1)]
+
+func getTexture() -> Texture2D:
+	return self.texture
