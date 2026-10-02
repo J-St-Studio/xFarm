@@ -13,12 +13,7 @@ var spawn_controllers: bool = true
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
-	CurrentGameState = GameState.UnPaused
-	ConnectSignals({
-		EC.input_escape_pressed: PauseGame,
-	})
-	world = WorldGenerator.new()
-	add_child(world)
+	Initialize()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -27,6 +22,15 @@ func _process(delta: float) -> void:
 	if (System.IsOnline() and world != null):
 		# do stuff here eventually maybe
 		pass
+
+func Initialize() -> int:
+	CurrentGameState = GameState.MainMenu
+	ConnectSignals({
+		EC.input_escape_pressed: PauseGame,
+	})
+	world = WorldGenerator.new()
+	add_child(world)
+	return CurrentGameState
 
 func SetLevel(Level: PackedScene) -> void:
 	pass
@@ -45,6 +49,9 @@ func GameUnPaused() -> bool:
 
 func GetWorld() -> WorldGenerator:
 	return world
+	
+func StartGame() -> void:
+	CurrentGameState = GameState.UnPaused
 
 func PauseGame() -> void:
 	if (GamePaused()):

@@ -1,8 +1,8 @@
 class_name Controller extends Node2D
 
-const ONLINE = "online"
-const OFFLINE = "offline"
-const FAIL = "fail"
+const ONLINE = 1
+const OFFLINE = 0
+const FAIL = -1
 
 enum ControllerState {
 	OFFLINE,
@@ -16,7 +16,8 @@ var ControllerStatus: Dictionary = {
 	FAIL: ControllerState.FAIL
 }
 
-var status = ControllerStatus[OFFLINE]
+var state: int = ControllerStatus[OFFLINE]
+var signals: Array
 
 func _ready() -> void:
 	if (System.GetLogController()):
@@ -27,10 +28,12 @@ func _ready() -> void:
 func ConnectSignals(signal_map: Dictionary) -> void:
 	for sig in signal_map:
 		sig.connect(signal_map[sig])
+		signals.append(signal_map[sig])
 	System.GetLogController().message(self, "signals connected")
 	return
 
-func GetControllerStatus() -> String:
-	if status == ControllerState.ONLINE: return ONLINE
-	if status == ControllerState.OFFLINE: return OFFLINE
-	else: return FAIL
+func GetControllerState() -> int:
+	return state
+	
+func _exit_tree() -> void:
+	free()

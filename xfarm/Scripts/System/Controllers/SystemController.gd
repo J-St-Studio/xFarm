@@ -13,19 +13,16 @@ static var enemy: EnemyController
 static var SystemControllers: Array
 
 func _ready() -> void:
-	var SystemStatus = Initialize()
-	if (SystemStatus != 0):
-		print("System Errors")
+	Initialize()
+	print("SYSTEM STATE: ", state)
 
 func Initialize() -> int:
 	print("Core online, initializing system controllers...\n")
-	
 	log = InitializeController(LogController)
 	event = InitializeController(EventController)
 	input = InitializeController(InputController)
 	audio = InitializeController(AudioController)
 	UI = InitializeController(UIController)
-
 	game = InitializeController(GameController)
 	player = InitializeController(PlayerController)
 	time = InitializeController(TimeController)
@@ -33,11 +30,14 @@ func Initialize() -> int:
 	print("SYSTEM: all system-level controllers initialized")
 
 	if (IsOnline()):
+		SystemControllers.append(self)
 		PrintSystemReport()
+		state = 1
 	else:
 		print("CRITICAL SYSTEM FAILURE. ABORTING.")
-		return -1
-	return 0
+		state = -1
+		
+	return state
 
 func InitializeController(ControllerType: Variant) -> Controller:
 	var controller: Controller = ControllerType.new()
@@ -49,7 +49,7 @@ func InitializeController(ControllerType: Variant) -> Controller:
 	controller.name = name
 	SystemControllers.append(controller)
 	add_child(controller)
-	controller.status = ControllerStatus[ONLINE]
+	controller.state = ControllerStatus[ONLINE]
 	print("SYSTEM: ", controller.name, " initialized!\n")
 	return controller
 
@@ -61,6 +61,12 @@ static func GetLogController() -> LogController:
 
 static func GetInputController() -> InputController:
 	return input
+
+static func GetAudioController() -> AudioController:
+	return audio
+
+static func GetUIController() -> UIController:
+	return UI
 
 static func GetPlayerController() -> PlayerController:
 	return player
@@ -79,18 +85,18 @@ static func GetSystemControllers() -> Array:
 	
 static func IsOnline() -> bool:
 	for controller in SystemControllers:
-		if (!controller.status):
+		if (!controller.state):
 			return false
 	return true
 
 func SystemReport() -> Dictionary:
-	var ControllerStates: Dictionary;
+	var ControllerStates: Dictionary
 	for controller in SystemControllers:
-		ControllerStates[controller] = controller.GetControllerStatus();
+		ControllerStates[controller] = controller.GetControllerState()
 	return ControllerStates
 
 func PrintSystemReport() -> void:
-	var report: Dictionary = SystemReport();
+	var report: Dictionary = SystemReport()
 	var keys = report.keys()
 	var max_length_ = 0
 	for key in report.keys():
@@ -99,4 +105,3 @@ func PrintSystemReport() -> void:
 	for key in keys:
 		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key])
 	print("\t}\n")
-	

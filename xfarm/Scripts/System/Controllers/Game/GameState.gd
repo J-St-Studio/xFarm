@@ -1,4 +1,4 @@
-class_name GameState extends Script
+class_name GameState extends EditorScript
 
 const MainMenu: int = 0;
 const Paused: int = 1;
