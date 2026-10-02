@@ -10,13 +10,13 @@ enum ControllerState {
 	FAIL
 }
 
-var ControllerStatus: Dictionary = {
+static var ControllerStatus: Dictionary = {
 	ONLINE: ControllerState.ONLINE,
 	OFFLINE: ControllerState.OFFLINE,
 	FAIL: ControllerState.FAIL
 }
 
-var state: int = ControllerStatus[OFFLINE]
+static var state: int = ControllerStatus[OFFLINE]
 var signals: Array
 
 func _ready() -> void:
@@ -32,7 +32,7 @@ func ConnectSignals(signal_map: Dictionary) -> void:
 	System.GetLogController().message(self, "signals connected")
 	return
 
-func GetControllerState() -> int:
+static func GetControllerState() -> int:
 	return state
 	
 func _exit_tree() -> void:

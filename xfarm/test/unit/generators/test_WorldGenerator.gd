@@ -15,5 +15,8 @@ class TestWorldGenerator:
 		game.Initialize()
 		world = game.GetWorld()
 		
-	func test_WorldExists():
+	func test_WorldGeneratorExists():
 		assert_not_null(world)
+		
+	func test_HasTextureGenerator():
+		assert_not_null(world.generator)

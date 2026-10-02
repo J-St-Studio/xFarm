@@ -44,12 +44,11 @@ func InitializeController(ControllerType: Variant) -> Controller:
 	if (!controller):
 		print(ControllerType, "failed to initialize, CRITICAL FAILURE, exiting")
 		return null
-	var name = controller.get_script().get_global_name()
-	print("SYSTEM: Initializing [", name, "] ...")
-	controller.name = name
+	print("SYSTEM: Initializing [", controller.name, "] ...")
+	controller.name = controller.get_script().get_global_name()
+	controller.state = ControllerStatus[ONLINE]
 	SystemControllers.append(controller)
 	add_child(controller)
-	controller.state = ControllerStatus[ONLINE]
 	print("SYSTEM: ", controller.name, " initialized!\n")
 	return controller
 
@@ -85,9 +84,10 @@ static func GetSystemControllers() -> Array:
 	
 static func IsOnline() -> bool:
 	for controller in SystemControllers:
-		if (!controller.state):
+		if (!controller):
+			state = ControllerState.FAIL
 			return false
-	return true
+	return state
 
 func SystemReport() -> Dictionary:
 	var ControllerStates: Dictionary
