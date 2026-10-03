@@ -1,9 +1,7 @@
 class_name WorldGenerator extends Controller
-
-var EC = System.GetEventController()
-var LC = System.GetLogController()
-var generator = TextureGenerator.new()
-
+var event: EventController
+var logger: LogController
+var generator: TextureGenerator
 
 const MapMultiplier: int = 1;
 const MapSize: int = 1000;
@@ -20,65 +18,79 @@ const PlantDensityDivider: int = 4;
 var PlantMap: Dictionary
 var GroundMap: Dictionary
 
-var WorldGrid: Array
+var WorldGrid: Array[Array]
 
 # eventually will be assigned by the
 # UI controller from the main menu
 const MapType: int = MapTypes.Dirt
 
 var generatedTextures: Array
+var GrassTexture: Texture2D
+var GrassTexture_2: Texture2D
+var VariableTexture: Texture2D
 
-var GrassTexture: Texture2D = generator.GenerateTexture({
-	TextureGenerator.red: 0.2,
-	TextureGenerator.green: 0.4,
-	TextureGenerator.blue: 0.2,
-	TextureGenerator.roughness: randf_range(2, 3),
-	TextureGenerator.detail_scale: randf_range(10, 20),
-	TextureGenerator.octaves: randf_range(8, 9)
-})
-
-var GrassTexture_2: Texture2D = generator.GenerateTexture({
-	TextureGenerator.red: 0.21,
-	TextureGenerator.green: 0.4,
-	TextureGenerator.blue: 0.2,
-	TextureGenerator.roughness: randf_range(2, 3),
-	TextureGenerator.detail_scale: randf_range(10, 20),
-	TextureGenerator.octaves: randf_range(8, 9)
-})
-
-var VariableTexture: Texture2D = generator.GenerateTexture({
-	TextureGenerator.red: randf_range(0, 0.5),
-	TextureGenerator.green: randf_range(0, 0.5),
-	TextureGenerator.blue: randf_range(0, 0.5),
-	TextureGenerator.roughness: randf_range(2, 3),
-	TextureGenerator.detail_scale: randf_range(0, 20),
-	TextureGenerator.octaves: randf_range(0, 20)
-})
 
 func _ready() -> void:
-	LC.message(self, "WorldGenerator initialized")
-
-	generatedTextures = GenerateTextures(MapType)
-
+	super._ready()
+	Initialize()
+	
+	# default behavior, hard coded
+	# eventually this function will be called when the game starts a level
 	GenerateGameWorld()
+	
+func Initialize() -> Controller.State:
+	if (!system):
+		state = Controller.State.FAIL
+		return state
+	event = system.GetEventController()
+	if (!event):
+		state = Controller.State.FAIL
+		return state
+	logger = system.GetLogController()
+	if (!logger):
+		state = Controller.State.FAIL
+		return state
+	generator = TextureGenerator.new()
+	if (!generator):
+		state = Controller.State.FAIL
+		return state
+		
+	GrassTexture = generator.GenerateTexture({
+		TextureGenerator.red: 0.2,
+		TextureGenerator.green: 0.4,
+		TextureGenerator.blue: 0.2,
+		TextureGenerator.roughness: randf_range(2, 3),
+		TextureGenerator.detail_scale: randf_range(10, 20),
+		TextureGenerator.octaves: randf_range(8, 9)
+	})
 
-	# add_child(GrassTile)
-	# tile_3.position = Vector2(200, 0)
+	GrassTexture_2 = generator.GenerateTexture({
+		TextureGenerator.red: 0.21,
+		TextureGenerator.green: 0.4,
+		TextureGenerator.blue: 0.2,
+		TextureGenerator.roughness: randf_range(2, 3),
+		TextureGenerator.detail_scale: randf_range(10, 20),
+		TextureGenerator.octaves: randf_range(8, 9)
+	})
 
+	VariableTexture = generator.GenerateTexture({
+		TextureGenerator.red: randf_range(0, 0.5),
+		TextureGenerator.green: randf_range(0, 0.5),
+		TextureGenerator.blue: randf_range(0, 0.5),
+		TextureGenerator.roughness: randf_range(2, 3),
+		TextureGenerator.detail_scale: randf_range(0, 20),
+		TextureGenerator.octaves: randf_range(0, 20)
+	})
+	
+	state = Controller.State.ONLINE
+	return state
 
-
-# _process
-
-# buggy, doesn't work as expected
-func GenerateTextures(type: int) -> Array:
-	var generator = TextureGenerator.new()
-	return [1]
 
 func GenerateGameWorld() -> void:
 	GenerateGameWorldResponse()
 
 func GenerateGameWorldResponse() -> void:
-	LC.message(self, "generating game world")
+	logger.message(self, "generating game world")
 	GenerateBaseTileMap()
 	GeneratePlants()
 	# GenerateWalls()

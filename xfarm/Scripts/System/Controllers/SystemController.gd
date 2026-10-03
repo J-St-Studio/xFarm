@@ -1,24 +1,23 @@
 class_name System extends Controller
 
-static var game: GameController
-static var log: LogController
-static var input: InputController
-static var player: PlayerController
-static var UI: UIController
-static var audio: AudioController
-static var event: EventController
-static var time: TimeController
-static var enemy: EnemyController
+var game: GameController
+var logger: LogController
+var input: InputController
+var player: PlayerController
+var UI: UIController
+var audio: AudioController
+var event: EventController
+var time: TimeController
+var enemy: EnemyController
 
-static var SystemControllers: Array
+var SystemControllers: Array[Controller]
 
 func _ready() -> void:
 	Initialize()
-	print("SYSTEM STATE: ", state)
 
-func Initialize() -> int:
+func Initialize() -> Controller.State:
 	print("Core online, initializing system controllers...\n")
-	log = InitializeController(LogController)
+	logger = InitializeController(LogController)
 	event = InitializeController(EventController)
 	input = InitializeController(InputController)
 	audio = InitializeController(AudioController)
@@ -27,15 +26,14 @@ func Initialize() -> int:
 	player = InitializeController(PlayerController)
 	time = InitializeController(TimeController)
 	enemy = InitializeController(EnemyController)
-	print("SYSTEM: all system-level controllers initialized")
-
-	if (IsOnline()):
-		SystemControllers.append(self)
-		PrintSystemReport()
-		state = 1
+	PrintSystemReport()
+	
+	state = IsOnline()
+	
+	if (state == Controller.State.ONLINE):
+		print("SYSTEM: all system-level controllers initialized successfully")
 	else:
 		print("CRITICAL SYSTEM FAILURE. ABORTING.")
-		state = -1
 		
 	return state
 
@@ -44,64 +42,77 @@ func InitializeController(ControllerType: Variant) -> Controller:
 	if (!controller):
 		print(ControllerType, "failed to initialize, CRITICAL FAILURE, exiting")
 		return null
-	print("SYSTEM: Initializing [", controller.name, "] ...")
 	controller.name = controller.get_script().get_global_name()
-	controller.state = ControllerStatus[ONLINE]
+	#controller.state = Controller.State.ONLINE
+	print("SYSTEM: Initializing [", controller.name, "] ...")
 	SystemControllers.append(controller)
+	allocations.append(controller)
 	add_child(controller)
 	print("SYSTEM: ", controller.name, " initialized!\n")
 	return controller
 
-static func GetGameController() -> GameController:
+func GetGameController() -> GameController:
 	return game
 
-static func GetLogController() -> LogController:
-	return log
+func GetLogController() -> LogController:
+	return logger
 
-static func GetInputController() -> InputController:
+func GetInputController() -> InputController:
 	return input
 
-static func GetAudioController() -> AudioController:
+func GetAudioController() -> AudioController:
 	return audio
 
-static func GetUIController() -> UIController:
+func GetUIController() -> UIController:
 	return UI
 
-static func GetPlayerController() -> PlayerController:
+func GetPlayerController() -> PlayerController:
 	return player
 	
-static func GetEventController() -> EventController:
+func GetEventController() -> EventController:
 	return event
 
-static func GetTimeController() -> TimeController:
+func GetTimeController() -> TimeController:
 	return time
 
-static func GetEnemyController() -> EnemyController:
+func GetEnemyController() -> EnemyController:
 	return enemy
 	
-static func GetSystemControllers() -> Array:
+func GetControllers() -> Array[Controller]:
 	return SystemControllers
-	
-static func IsOnline() -> bool:
-	for controller in SystemControllers:
-		if (!controller):
-			state = ControllerState.FAIL
-			return false
-	return state
 
-func SystemReport() -> Dictionary:
+static func Get() -> System:
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	return tree.root.find_child("System", true, false) as System
+	
+func IsOnline() -> Controller.State:
+	for controller in SystemControllers:
+		if (controller == null):
+			return Controller.State.FAIL
+	return Controller.State.ONLINE
+
+func GetSystemReport() -> Dictionary:
 	var ControllerStates: Dictionary
 	for controller in SystemControllers:
-		ControllerStates[controller] = controller.GetControllerState()
+		ControllerStates[controller] = controller.GetState()
 	return ControllerStates
 
 func PrintSystemReport() -> void:
-	var report: Dictionary = SystemReport()
+	var report: Dictionary = GetSystemReport()
 	var keys = report.keys()
 	var max_length_ = 0
 	for key in report.keys():
 		max_length_ = maxi(max_length_, key.name.length())
 	print("SYSTEM: SYSTEM CONTROLLER INITIALIZATION COMPLETE -> {")
 	for key in keys:
-		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key])
+		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key] as Controller.State)
 	print("\t}\n")
+
+func GetController(controller: Controller) -> Controller:
+	if controller in SystemControllers:
+		return controller
+	else:
+		return null
+
+func shutdown() -> int:
+	return super.shutdown()

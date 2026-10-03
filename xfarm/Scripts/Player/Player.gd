@@ -1,8 +1,10 @@
 # PlayerStatus.gd
 
 class_name Player extends Entity
-var log = System.GetLogController()
-var game = System.GetGameController()
+var system: System = System.Get()
+var log = system.GetLogController()
+var game = system.GetGameController()
+
 func _ready() -> void:
 	log.message(self, "I am alive!")
 	log.message(self, "Game state: ", game.GetCurrentGameState())

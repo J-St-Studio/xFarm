@@ -2,7 +2,7 @@
 # Emits input signals for the rest of the program
 
 class_name InputController extends Controller
-var Event = System.GetEventController()
+var event: EventController
 
 const UI_CANCEL = "ui_cancel"
 
@@ -32,23 +32,34 @@ const UI_CANCEL = "ui_cancel"
 	InputTypes.Types.UI: UI_CANCEL
 };
 
-static var ControlType: InputTypes.Types = InputTypes.Types.UI
+var ControlType: InputTypes.Types;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
-	ControlType = InputTypes.Types.UI
-	pass # Replace with function body.
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	Initialize()
 
 func _process(delta: float) -> void:
 	ProcessInput();
 	pass
 	
-static func UpdateControlType(_ControlType: InputTypes.Types) -> void:
+func Initialize() -> Controller.State:
+	if (!system):
+		state = Controller.State.FAIL
+		return state
+	event = system.GetEventController()
+	if (!event):
+		state = Controller.State.FAIL
+		return state
+		
+	ControlType = InputTypes.Types.UI
+	state = Controller.State.ONLINE
+	return state
+	
+func UpdateControlType(_ControlType: InputTypes.Types) -> void:
 	ControlType = _ControlType;
 	
-static func GetControlType() -> int:
+func GetControlType() -> int:
 	return ControlType;
 	
 func ProcessInput() -> void:
@@ -64,43 +75,43 @@ func LeftMouseButton() -> bool:
 	# update for re-bindable inputs
 	var is_left = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)                              
 	if (is_left):                                                                                                     
-		Event.BroadcastInputLeftMousePressed()                                                                              
+		event.BroadcastInputLeftMousePressed()                                                                              
 	return is_left
 	
 func PauseKeyPressed() -> bool:
 	var pause_pressed = Input.is_action_just_pressed(BackInput[GetControlType()])
 	if (pause_pressed):
-		Event.BroadcastInputEscapePressed()
+		event.BroadcastInputEscapePressed()
 	return pause_pressed
 
 func Up() -> bool:
 	var is_up = Input.is_key_pressed(UpInput[GetControlType()])
 	if is_up:
-		Event.BroadcastInputUpPressed()
+		event.BroadcastInputUpPressed()
 	return is_up
 
 func Down() -> bool:
 	var is_down = Input.is_key_pressed(DownInput[GetControlType()])
 	if is_down:
-		Event.BroadcastInputDownPressed()
+		event.BroadcastInputDownPressed()
 	return is_down
 
 func Left() -> bool:
 	var is_left = Input.is_key_pressed(LeftInput[GetControlType()])
 	if is_left:
-		Event.BroadcastInputLeftPressed()
+		event.BroadcastInputLeftPressed()
 	return is_left
 
 func Right() -> bool:
 	var is_right = Input.is_key_pressed(RightInput[GetControlType()])
 	if is_right:
-		Event.BroadcastInputRightPressed()
+		event.BroadcastInputRightPressed()
 	return is_right
 
 func Confirm():
 	var confirm = Input.is_physical_key_pressed(InteractInput[GetControlType()])
 	if (confirm):
-		Event.BroadcastInputConfirmPressed()
+		event.BroadcastInputConfirmPressed()
 	return confirm
 
 func GetMousePosition() -> Vector2:

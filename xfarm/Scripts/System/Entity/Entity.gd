@@ -1,4 +1,6 @@
 class_name Entity extends Node2D
+
+
 enum State {
 	Idle,
 	Moving,
@@ -57,3 +59,8 @@ var Shield: float = MaxShield
 
 var MaxPower: float = 100.0
 var Power: float = MaxPower
+
+func _ready() -> void:
+	pass
+	
+	

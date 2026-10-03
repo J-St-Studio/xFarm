@@ -1,10 +1,8 @@
 class_name TimeController extends Controller
 var precision = preload("res://Scripts/System/Utilities/precision.gd")
 
-var game: GameController = System.GetGameController()
-
+var game: GameController
 signal one_second_elapsed
-
 var WorldTime: float = 0.0;
 var GlobalDelta: float = 0.0;
 const WorldTimeReportInterval: int = 1;
@@ -16,6 +14,7 @@ static var CurrentWorldTime: String; # Ideally get this represented in UI in a 2
 
 func _ready() -> void:
 	super._ready()
+	Initialize()
 	return
 
 func _process(delta: float) -> void:
@@ -23,7 +22,19 @@ func _process(delta: float) -> void:
 	if game.GameUnPaused(): 
 		AdvanceWorldTime()
 	return
-
+	
+func Initialize() -> Controller.State:
+	if (!system):
+		state = Controller.State.FAIL
+		return state
+	game = system.GetGameController()
+	if (!game):
+		state = Controller.State.FAIL
+		return state
+		
+	state = Controller.State.ONLINE
+	return state
+	
 func AdvanceWorldTime() -> void:
 	var old_world_time = WorldTime;
 	WorldTime += 1 * GlobalDelta;

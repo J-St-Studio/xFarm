@@ -2,44 +2,62 @@
 # controls many aspects of the game world
 # emits signals for game world / game systems
 class_name GameController extends Controller
-var EC = System.GetEventController()
-var LC = System.GetLogController()
+
+var event: EventController
+var logger: LogController
 var world: WorldGenerator;
 
 var GlobalDelta: float
 var CurrentGameState: int
-var spawn_controllers: bool = true
+var CurrentLevel: int = GameState.MainMenu
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
 	Initialize()
-
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	# main entry point for game functioning
 	GlobalDelta = delta
-	if (System.IsOnline() and world != null):
+	if (system.IsOnline() and world != null):
 		# do stuff here eventually maybe
 		pass
 
 func Initialize() -> int:
+	if (!system):
+		state = Controller.State.FAIL
+		return state
+	
+	event = system.GetEventController()
+	logger = system.GetLogController()
+	world = WorldGenerator.new()
+	
+	if (!event or !logger or !world):
+		state = Controller.State.FAIL
+		return state
+	
 	CurrentGameState = GameState.MainMenu
 	ConnectSignals({
-		EC.input_escape_pressed: PauseGame,
+		event.input_escape_pressed: PauseGame,
 	})
-	world = WorldGenerator.new()
+	allocations.append(world)
 	add_child(world)
-	return CurrentGameState
+	
+	state = Controller.State.ONLINE
+	return state
 
-func SetLevel(Level: PackedScene) -> void:
+func SetCurrentLevel(Level: int) -> void:
+	CurrentLevel = Level
 	pass
+
+func GetCurrentLevel() -> int:
+	return CurrentLevel
 
 func GetCurrentGameState() -> int:
 	return CurrentGameState
 
-func SetCurrentGameState(state: int) -> void:
-	CurrentGameState = state
+func SetCurrentGameState(state_: int) -> void:
+	CurrentGameState = state_
 
 func GamePaused() -> bool:
 	return CurrentGameState == GameState.Paused
@@ -55,14 +73,33 @@ func StartGame() -> void:
 
 func PauseGame() -> void:
 	if (GamePaused()):
-		LC.message(self, "unpausing game ...")
+		logger.message(self, "unpausing game ...")
 		SetCurrentGameState(GameState.UnPaused)
-		EC.game_set_control_type.emit(InputTypes.Types.PLAYER)
+		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
 	elif (GameUnPaused()):
-		LC.message(self, "pausing game ...")
+		logger.message(self, "pausing game ...")
 		SetCurrentGameState(GameState.Paused)
-		EC.game_set_control_type.emit(InputTypes.Types.UI)
+		event.game_set_control_type.emit(InputTypes.Types.UI)
 	elif (CurrentGameState == GameState.MainMenu):
-		LC.message(self, "game is in main menu, cannot pause")
+		logger.message(self, "game is in main menu, unpausing")
+		SetCurrentGameState(GameState.UnPaused)
+		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
 		# initiate quit dialogue or something
 	pass
+
+func QuitGame() -> void:
+	# do stuff
+	return
+
+func shutdown() -> int:
+	for allocation in world.allocations:
+		if (allocation): 
+			allocation.free()
+		else:
+			state = Controller.State.FAIL
+
+	state = Controller.State.OFFLINE
+	return super.shutdown()
+	
+
+	

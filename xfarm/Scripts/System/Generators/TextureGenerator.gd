@@ -1,4 +1,4 @@
-class_name TextureGenerator extends Node2D
+class_name TextureGenerator extends Controller
 
 const TEXTURE_SIZE: int = 64
 const BRICK_DEFAULT_COLOR = Color(0.17, 0.17, 0.17, 1)
@@ -12,7 +12,12 @@ const detail_scale = "detail_scale"
 const octaves = "octaves"
 
 func _ready() -> void:
-	pass
+	super._ready()
+	Initialize()
+	
+func Initialize() -> Controller.State:
+	state = Controller.State.ONLINE
+	return state
 
 func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Color = BRICK_LINE_DEFAULT_COLOR) -> Texture2D:
 	var pathTexture: Texture2D = Texture2D.new()

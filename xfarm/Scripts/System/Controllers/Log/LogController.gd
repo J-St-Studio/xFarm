@@ -1,6 +1,5 @@
 # LogController.gd
-# Used to log relevant info, currently tightly coupled
-
+# Used to log relevant info
 class_name LogController extends Controller
 
 const prefix: String = ">>> "
@@ -8,11 +7,11 @@ const NoFunctionName: String = "/NULL"
 
 func _ready() -> void:
 	super._ready()
-	#message(self, "online")
-	pass
-# Called when the script is executed (using File -> Run in Script Editor).
-func _run() -> void:
-	pass
+	Initialize()
+
+func Initialize() -> Controller.State:
+	state = Controller.State.ONLINE
+	return state
 
 func message(source: Object, message: Variant, ...args) -> void:
 	var tail_data: String = " ";

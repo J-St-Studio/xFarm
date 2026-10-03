@@ -9,18 +9,22 @@ class_name UIController extends Controller
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
-	pass # Replace with function body.
+	Initialize()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# if the game is unpaused, no UI control? -> what about in-game menu?
-	pass
+	return
+	
+func Initialize() -> Controller.State:
+	state = Controller.State.ONLINE
+	return state
 
 func Update(state: GameState) -> void:
 	# Implementation for broadcasting inventory full message
 	# update game UI
 	# this is gonna be a fucker of a function, not sure I like the design.
-	pass
+	return
 
 # maybe generic menu function with args passed in? Maybe.
 func RenderMainMenu() -> void:

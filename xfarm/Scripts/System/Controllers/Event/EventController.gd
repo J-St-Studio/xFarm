@@ -1,6 +1,6 @@
 class_name EventController extends Controller
 
-var LC = System.GetLogController()
+var logger: LogController
 
 # input event signals
 signal input_escape_pressed
@@ -13,37 +13,52 @@ signal input_input_right_pressed
 signal input_left_mouse_pressed
 signal input_right_mouse_pressed
 
+func _ready() -> void:
+	super._ready()
+	Initialize()
+	
+func Initialize() -> Controller.State:
+	if (!system):
+		state = Controller.State.FAIL
+		return state
+	logger = system.GetLogController()
+	if (!logger):
+		state = Controller.State.FAIL
+		return state
+	state = Controller.State.ONLINE
+	return state
+
 # Input Signals
 func BroadcastInputEscapePressed() -> void:
-	LC.message(self, "escape pressed")
+	logger.message(self, "escape pressed")
 	input_escape_pressed.emit()
 
 func BroadcastInputUpPressed() -> void:
-	LC.message(self, "up pressed")
+	logger.message(self, "up pressed")
 	input_up_pressed.emit()
 
 func BroadcastInputDownPressed() -> void:
-	LC.message(self, "down pressed")
+	logger.message(self, "down pressed")
 	input_down_pressed.emit()
 
 func BroadcastInputLeftPressed() -> void:
-	LC.message(self, "left pressed")
+	logger.message(self, "left pressed")
 	input_left_pressed.emit()
 
 func BroadcastInputRightPressed() -> void:
-	LC.message(self, "right pressed")
+	logger.message(self, "right pressed")
 	input_right_pressed.emit()
 
 func BroadcastInputConfirmPressed() -> void:
-	LC.message(self, "confirm pressed")
+	logger.message(self, "confirm pressed")
 	input_confirm_pressed.emit()
 
 func BroadcastInputLeftMousePressed() -> void:
-	LC.message(self, "left mouse pressed")
+	logger.message(self, "left mouse pressed")
 	input_left_mouse_pressed.emit()
 
 func BroadcastInputRightMousePressed() -> void:
-	LC.message(self, "right mouse pressed")
+	logger.message(self, "right mouse pressed")
 	input_right_mouse_pressed.emit()
 
 # game event signals
@@ -57,42 +72,42 @@ signal game_start_game
 signal game_generate_world
 
 func BroadcastStartGame() -> void:
-	LC.message(self, "start game")
+	logger.message(self, "start game")
 	game_start_game.emit()
 
 func BroadcastGameGenerateWorld() -> void:
-	LC.message(self, "generate world")
+	logger.message(self, "generate world")
 	game_generate_world.emit()
 
 func BroadcastGamePaused() -> void:
-	LC.message(self, "game paused")
+	logger.message(self, "game paused")
 	game_paused.emit()
 
 func BroadcastGameUnpaused() -> void:
-	LC.message(self, "game unpaused")
+	logger.message(self, "game unpaused")
 	game_unpaused.emit()
 
 func BroadcastGameOver() -> void:
-	LC.message(self, "game over")
+	logger.message(self, "game over")
 	game_over.emit()
 
 func BroadcastGameSetControlType() -> void:
-	LC.message(self, "game set control type")
+	logger.message(self, "game set control type")
 	game_set_control_type.emit()
 
 func BroadcastGameSpawnPlayer() -> void:
-	LC.message(self, "spawn player")
+	logger.message(self, "spawn player")
 	game_spawn_player.emit()
 
 func BroadcastGameGoToMainMenu() -> void:
-	LC.message(self, "go to main menu")
+	logger.message(self, "go to main menu")
 	game_go_to_main_menu.emit()
 	
 # player signals
 signal player_current_location
 
 func BroadcastPlayerLocation(location: Vector2) -> void:
-	LC.message(self, "player current location")
+	logger.message(self, "player current location")
 	player_current_location.emit(location)
 
 # world signals
@@ -100,16 +115,16 @@ signal world_generate_world
 signal world_generate_tiles
 
 func BroadcastWorldGenerateWorld() -> void:
-	LC.message(self, "world generate world")
+	logger.message(self, "world generate world")
 	world_generate_world.emit()
 
 func BroadcastWorldGenerateTiles(tileType: int) -> void:
-	LC.message(self, "world generate tiles")
+	logger.message(self, "world generate tiles")
 	world_generate_tiles.emit(tileType)
 	
 # enemy controller signals
 signal enemy_spawn_wave
 
 func BroadcastEnemySpawnWave() -> void:
-	LC.message(self, "enemy spawn wave")
+	logger.message(self, "enemy spawn wave")
 	enemy_spawn_wave.emit()
