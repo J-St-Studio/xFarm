@@ -2,7 +2,6 @@
 # controls many aspects of the game world
 # emits signals for game world / game systems
 class_name GameController extends Controller
-var system: System = System.Get()
 
 var event: EventController
 var logger: LogController

@@ -1,5 +1,4 @@
 class_name EventController extends Controller
-var system: System = System.Get()
 
 var logger: LogController
 

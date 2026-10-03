@@ -1,5 +1,4 @@
 class_name EnemyController extends Controller
-var system: System = System.Get()
 
 var game: GameController
 var world: WorldGenerator

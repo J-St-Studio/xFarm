@@ -1,5 +1,4 @@
 class_name WorldGenerator extends Controller
-var system: System = System.Get()
 var game: GameController
 
 var event: EventController

@@ -1,6 +1,5 @@
 # PlayerController.gd
 class_name PlayerController extends Controller
-var system: System = System.Get()
 
 var event: EventController
 var game: GameController
@@ -60,7 +59,7 @@ func SpawnPlayer() -> void:
 	player = Player.new()
 	allocations.append(player)
 	add_child(player)
-	SetPlayerState(Player.State.Idle);
+	SetPlayerState(Player.State.IDLE);
 	SetPlayerDirection(Player.Direction.Left);
 
 func ProcessPlayerActions():
@@ -103,22 +102,22 @@ func OnEscapePressed() -> void:
 func OnUpPressed() -> void:
 	if (system.GetGameController().GameUnPaused()):
 		player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Up)
+		SetPlayerStateAndDirection(Player.State.MOVING, Player.Direction.Up)
 
 func OnDownPressed() -> void:
 	if (game.GameUnPaused()):
 		player.translate(Vector2(0, 1) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Down)
+		SetPlayerStateAndDirection(player.State.MOVING, player.Direction.Down)
 
 func OnRightPressed() -> void:
 	if (game.GameUnPaused()):
 		player.translate(Vector2(1, 0) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Right)
+		SetPlayerStateAndDirection(player.State.MOVING, player.Direction.Right)
 
 func OnLeftPressed() -> void:
 	if (game.GameUnPaused()):
 		player.translate(Vector2(-1, 0) * PlayerSpeedCalculation())
-		SetPlayerStateAndDirection(player.State.Moving, player.Direction.Left)
+		SetPlayerStateAndDirection(player.State.MOVING, player.Direction.Left)
 
 func OnLeftMousePressed() -> void:
 	#EC.BroadcastSpawnItem(item, location)

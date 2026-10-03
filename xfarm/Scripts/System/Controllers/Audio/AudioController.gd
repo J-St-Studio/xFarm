@@ -1,6 +1,5 @@
 class_name AudioController extends Controller
 
-var system: System = System.Get()
 var event: EventController 
 
 func _ready() -> void:

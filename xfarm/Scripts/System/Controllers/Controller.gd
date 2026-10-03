@@ -1,12 +1,14 @@
 class_name Controller extends Node2D
 
+var system: System = System.Get()
+
 enum State {
 	OFFLINE = 0,
 	ONLINE = 1,
 	FAIL = -1
 }
 
-var state: Controller.State = Controller.State.OFFLINE
+var state: State = Controller.State.OFFLINE
 var signals: Array
 var allocations: Array[Variant]
 

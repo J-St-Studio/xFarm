@@ -1,17 +1,14 @@
 class_name Entity extends Node2D
 
+var system: System = System.Get()
+
 
 enum State {
-	Idle,
-	Moving,
-	Busy
-}
-
-enum HealthState {
-	Healthy,
-	Sick,
-	Dying,
-	Dead
+	IDLE,
+	MOVING,
+	BUSY,
+	DEAD,
+	ERROR = -1
 }
 
 enum Direction {

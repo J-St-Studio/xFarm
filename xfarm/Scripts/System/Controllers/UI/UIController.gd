@@ -2,7 +2,7 @@
 # UIController
 # Responsible for rendering information as UI.
 class_name UIController extends Controller
-var system: System = System.Get()
+
 var game: GameController
 var event: EventController
 var generator: TextureGenerator
