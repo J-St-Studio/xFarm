@@ -4,6 +4,7 @@ const TEXTURE_SIZE: int = 64
 const BRICK_DEFAULT_COLOR = Color(0.17, 0.17, 0.17, 1)
 const BRICK_LINE_DEFAULT_COLOR = Color(0.11, 0.11, 0.11, 1)
 
+const size = "size"
 const red = "red"
 const blue = "blue"
 const green = "green"
@@ -16,12 +17,10 @@ var random_seed: int = 0
 func _init(seed_: int) -> void:
 	random_seed = randi_range(-seed_, seed_)
 
-
 func _ready() -> void:
 	super._ready()
 	Initialize()
 
-	
 func Initialize() -> Controller.State:
 	state = Controller.State.ONLINE
 	return state
@@ -31,13 +30,8 @@ func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Co
 
 	for u in range(0, TEXTURE_SIZE):
 		for v in range(0, TEXTURE_SIZE):
-			# image.set_pixel(u, v, BrickColor)
 			if v != 0:
 				image.set_pixel(u, v, LineColor)
-			# if v == 0:
-			# 	image.set_pixel(u, v, LineColor)
-			# if v == TEXTURE_SIZE - 2:
-			# 	image.set_pixel(u, v, LineColor)
 
 			# create background path color
 			if v % 16 != 0 and v != 0:
@@ -63,26 +57,30 @@ func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Co
 			# sixth vertical line
 			if u == TEXTURE_SIZE - TEXTURE_SIZE/4 and v >= TEXTURE_SIZE - TEXTURE_SIZE / 4:
 				image.set_pixel(u, v, LineColor)
-			
-			# image.set_pixel(u, TEXTURE_SIZE - 1, LineColor)
-
+			# I forget
 			if v == 0 and u <= TEXTURE_SIZE:
 				image.set_pixel(u, v, LineColor)
 
 	return ImageTexture.create_from_image(image)
 
 func GenerateTexture(textureData: Dictionary) -> Texture2D:
-	var base_color_r = textureData["red"]
-	var base_color_g = textureData["green"]
-	var base_color_b = textureData["blue"]
-	var roughness = textureData["roughness"]
-	var detail_scale = textureData["detail_scale"]
-	var octaves = textureData["octaves"]
+	var texture_size: int = textureData["size"]
+	var base_color_r: float = textureData["red"]
+	var base_color_g: float = textureData["green"]
+	var base_color_b: float = textureData["blue"]
+	var roughness: float = 0.0
+	var detail_scale: float = 0.0
+	var octaves: float = 0.0
+	
+	if textureData.has("roughness"):
+		roughness = textureData["roughness"]
+	if textureData.has("detail_scale"): 
+		detail_scale = textureData["detail_scale"]
+	if textureData.has("octaves"): 
+		octaves = textureData["octaves"]
 
 	# incorporate random seed somehow
 	
-
-	var texture_size = 64
 	var image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
 
 	# MAGIC NUMBER HELL LMFAO

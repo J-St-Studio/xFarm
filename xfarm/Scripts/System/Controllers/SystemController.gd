@@ -22,8 +22,8 @@ func Initialize() -> Controller.State:
 	event = InitializeController(EventController)
 	input = InitializeController(InputController)
 	audio = InitializeController(AudioController)
-	UI = InitializeController(UIController)
 	game = InitializeController(GameController)
+	UI = InitializeController(UIController)
 	player = InitializeController(PlayerController)
 	time = InitializeController(TimeController)
 	enemy = InitializeController(EnemyController)
@@ -110,8 +110,10 @@ func PrintSystemReport() -> void:
 	var max_length_ = 0
 	for key in report.keys():
 		max_length_ = maxi(max_length_, key.name.length())
+		
 	print("SYSTEM: Initialized ", ControllerCount, " controllers.")
 	print("SYSTEM: SYSTEM CONTROLLER INITIALIZATION COMPLETE -> {")
+	
 	for key in keys:
 		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key] as Controller.State)
 	print("\t}\n")

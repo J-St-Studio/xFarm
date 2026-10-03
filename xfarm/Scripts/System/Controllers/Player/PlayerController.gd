@@ -24,9 +24,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	#if (GC.GamePaused()): return
-	SpawnPlayer()
 	GlobalDeltaTime = delta;
+	if (!player and game.CurrentGameState == GameState.UnPaused):
+		SpawnPlayer()
 	return
 	
 func Initialize() -> Controller.State:
@@ -57,7 +57,8 @@ func Initialize() -> Controller.State:
 	
 func SpawnPlayer() -> void:
 	if (player): return
-	player = player_scene.instantiate()
+	player = Player.new()
+	allocations.append(player)
 	add_child(player)
 	SetPlayerState(Player.State.Idle);
 	SetPlayerDirection(Player.Direction.Left);

@@ -1,5 +1,6 @@
 class_name WorldGenerator extends Controller
 var system: System = System.Get()
+var game: GameController
 
 var event: EventController
 var logger: LogController
@@ -7,6 +8,9 @@ var generator: TextureGenerator
 
 const MapMultiplier: int = 1;
 const MapSize: int = 1000;
+const WorldTileSize: int = 64
+
+var generateWorld: bool = true
 
 # map bounds
 const MapLeftBound: int = -MapSize * (MapMultiplier);
@@ -25,7 +29,6 @@ var WorldGrid: Array[Array]
 # eventually will be assigned by the
 # UI controller from the main menu
 const MapType: int = MapTypes.Dirt
-
 var generatedTextures: Array
 var GrassTexture: Texture2D
 var GrassTexture_2: Texture2D
@@ -38,7 +41,12 @@ func _ready() -> void:
 	
 	# default behavior, hard coded
 	# eventually this function will be called when the game starts a level
-	GenerateGameWorld()
+	#GenerateGameWorld()
+	
+func _process(delta: float) -> void:
+	if (generateWorld and game and game.CurrentGameState == GameState.UnPaused):
+		GenerateGameWorld()
+		generateWorld = false
 	
 func Initialize() -> Controller.State:
 	if (!system):
@@ -52,13 +60,18 @@ func Initialize() -> Controller.State:
 	if (!logger):
 		state = Controller.State.FAIL
 		return state
-	generator = TextureGenerator.new(seed: int)
+	generator = TextureGenerator.new(20)
 	allocations.append(generator)
 	if (!generator):
 		state = Controller.State.FAIL
 		return state
+	game = get_parent()
+	if (!game):
+		state = Controller.State.FAIL
+		return state
 		
 	GrassTexture = generator.GenerateTexture({
+		TextureGenerator.size: WorldTileSize,
 		TextureGenerator.red: 0.2,
 		TextureGenerator.green: 0.4,
 		TextureGenerator.blue: 0.2,
@@ -68,6 +81,7 @@ func Initialize() -> Controller.State:
 	})
 
 	GrassTexture_2 = generator.GenerateTexture({
+		TextureGenerator.size: WorldTileSize,
 		TextureGenerator.red: 0.21,
 		TextureGenerator.green: 0.4,
 		TextureGenerator.blue: 0.2,
@@ -77,6 +91,7 @@ func Initialize() -> Controller.State:
 	})
 
 	VariableTexture = generator.GenerateTexture({
+		TextureGenerator.size: WorldTileSize,
 		TextureGenerator.red: randf_range(0, 0.5),
 		TextureGenerator.green: randf_range(0, 0.5),
 		TextureGenerator.blue: randf_range(0, 0.5),

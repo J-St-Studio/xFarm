@@ -9,7 +9,7 @@ var logger: LogController
 var world: WorldGenerator;
 
 var GlobalDelta: float
-var CurrentGameState: int
+static var CurrentGameState: int = GameState.MainMenu
 var CurrentLevel: int = GameState.MainMenu
 
 # Called when the node enters the scene tree for the first time.
@@ -90,6 +90,7 @@ func PauseGame() -> void:
 
 func QuitGame() -> void:
 	# do stuff
+	event.BroadcastUIRenderMainMenu()
 	return
 
 func shutdown() -> Controller.State:

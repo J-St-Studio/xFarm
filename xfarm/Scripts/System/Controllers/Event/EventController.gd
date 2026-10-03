@@ -130,3 +130,14 @@ signal enemy_spawn_wave
 func BroadcastEnemySpawnWave() -> void:
 	logger.message(self, "enemy spawn wave")
 	enemy_spawn_wave.emit()
+	
+signal ui_render_main_menu
+signal ui_teardown_main_menu
+
+func BroadcastUIRenderMainMenu() -> void:
+	logger.message(self, "UI render main menu")
+	ui_render_main_menu.emit()
+
+func BroadcastUITeardownMainMenu() -> void:
+	logger.message(self, "UI teardown main menu")
+	ui_teardown_main_menu.emit()
