@@ -54,6 +54,7 @@ func Initialize() -> Player.State:
 	characterBody.add_child(playerSprite)
 	camera.ignore_rotation = true
 	camera.enabled = true
+	camera.position_smoothing_enabled = true
 	characterBody.add_child(camera)
 	characterBody.add_child(collisionShape)
 
