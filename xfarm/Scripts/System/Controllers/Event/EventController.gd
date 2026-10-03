@@ -1,4 +1,5 @@
 class_name EventController extends Controller
+var system: System = System.Get()
 
 var logger: LogController
 
@@ -25,6 +26,7 @@ func Initialize() -> Controller.State:
 	if (!logger):
 		state = Controller.State.FAIL
 		return state
+	
 	state = Controller.State.ONLINE
 	return state
 

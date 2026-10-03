@@ -3,19 +3,20 @@ extends GutTest
 class TestWorldGenerator:
 	extends GutTest
 	
-	var System = load("res://Scripts/System/Controllers/SystemController.gd")
-	var system = null
-	var game = null
-	var world = null
+	var system: System = null
+	var game: GameController = null
+	var world: WorldGenerator = null
 	
 	func before_all():
+		gut.p("Setting up testing environment")
 		system = System.new()
-		system.Initialize()
+		system.name = "System"
+		add_child(system)
 		game = system.GetGameController()
-		game.Initialize()
-		world = game.GetWorld()
+		
 		
 	func test_WorldGeneratorExists():
+		world = game.GetWorld()
 		assert_not_null(world)
 		
 	func test_HasTextureGenerator():

@@ -11,17 +11,24 @@ const roughness = "roughness"
 const detail_scale = "detail_scale"
 const octaves = "octaves"
 
+var random_seed: int = 0
+
+func _init(seed_: int) -> void:
+	random_seed = randi_range(-seed_, seed_)
+
+
 func _ready() -> void:
 	super._ready()
 	Initialize()
+
 	
 func Initialize() -> Controller.State:
 	state = Controller.State.ONLINE
 	return state
 
 func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Color = BRICK_LINE_DEFAULT_COLOR) -> Texture2D:
-	var pathTexture: Texture2D = Texture2D.new()
 	var image: Image = Image.create(TEXTURE_SIZE, TEXTURE_SIZE, false, Image.FORMAT_RGBA8)
+
 	for u in range(0, TEXTURE_SIZE):
 		for v in range(0, TEXTURE_SIZE):
 			# image.set_pixel(u, v, BrickColor)
@@ -61,12 +68,10 @@ func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Co
 
 			if v == 0 and u <= TEXTURE_SIZE:
 				image.set_pixel(u, v, LineColor)
-			
-	pathTexture = ImageTexture.create_from_image(image)
-	return pathTexture
+
+	return ImageTexture.create_from_image(image)
 
 func GenerateTexture(textureData: Dictionary) -> Texture2D:
-	
 	var base_color_r = textureData["red"]
 	var base_color_g = textureData["green"]
 	var base_color_b = textureData["blue"]
@@ -74,9 +79,12 @@ func GenerateTexture(textureData: Dictionary) -> Texture2D:
 	var detail_scale = textureData["detail_scale"]
 	var octaves = textureData["octaves"]
 
+	# incorporate random seed somehow
+	
+
 	var texture_size = 64
 	var image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
-	
+
 	# MAGIC NUMBER HELL LMFAO
 	for y in range(texture_size):
 		for x in range(texture_size):
@@ -114,6 +122,7 @@ func GenerateTexture(textureData: Dictionary) -> Texture2D:
 			
 			image.set_pixel(x, y, Color(r, g, b, 1.0))
 	
+
 	return ImageTexture.create_from_image(image)
 
 func fbm(x: float, y: float, octaves: int = 6, lacunarity: float = 2.0, persistence: float = 0.5) -> float:

@@ -1,37 +1,36 @@
 class_name Controller extends Node2D
 
-var system: System = System.Get()
-
 enum State {
 	OFFLINE = 0,
 	ONLINE = 1,
 	FAIL = -1
 }
 
-var state: Controller.State
+var state: Controller.State = Controller.State.OFFLINE
 var signals: Array
 var allocations: Array[Variant]
 
 func _ready() -> void:
-	if (!system):
+	if (!System.Get()):
 		# we are system
 		print("SYSTEM COMING ONLINE")
-	elif (system.GetLogController()):
-		system.GetLogController().message(self, "online")
+	elif (System.Get().GetLogController()):
+		System.Get().GetLogController().message(self, "online")
 	else: # we are the log controller
 		print(">>> LogController: online")
-	
-func Initialize() -> Controller.State:
+
 	state = Controller.State.ONLINE
+
+func Initialize() -> Controller.State:
 	return state
 
 func ConnectSignals(signal_map: Dictionary) -> void:
 	for sig in signal_map:
 		sig.connect(signal_map[sig])
-		signals.append(signal_map[sig])
+		signals.append([sig, signal_map[sig]])
 
 	# should be safe to use at this point
-	system.GetLogController().message(self, "signals connected")
+	System.Get().GetLogController().message(self, "signals connected")
 	return
 
 func GetState() -> Controller.State:
@@ -44,12 +43,18 @@ func GetAllocations() -> Array[Variant]:
 	return allocations
 
 func shutdown() -> Controller.State:
+	if (allocations.size() <= 0):
+		state = Controller.State.OFFLINE
+		return state
 	for allocation in allocations:
 		if (allocation):
 			allocation.free()
-		else:
-			state = Controller.State.FAIL
-	state = Controller.State.OFFLINE
+	
+
+	# chance for a controller to be in fail state
+	# before this function is ran. (child shutdown)
+	if (state != Controller.State.FAIL):
+		state = Controller.State.OFFLINE
 	return state
 
 func _exit_tree() -> void:

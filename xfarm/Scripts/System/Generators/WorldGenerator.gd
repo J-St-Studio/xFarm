@@ -1,4 +1,6 @@
 class_name WorldGenerator extends Controller
+var system: System = System.Get()
+
 var event: EventController
 var logger: LogController
 var generator: TextureGenerator
@@ -50,7 +52,8 @@ func Initialize() -> Controller.State:
 	if (!logger):
 		state = Controller.State.FAIL
 		return state
-	generator = TextureGenerator.new()
+	generator = TextureGenerator.new(seed: int)
+	allocations.append(generator)
 	if (!generator):
 		state = Controller.State.FAIL
 		return state
@@ -135,7 +138,6 @@ func GenerateWalls() -> void:
 	return
 
 func GeneratePaths() -> void:
-	var generator: TextureGenerator = TextureGenerator.new()
 	var path_texture: Texture2D = generator.GenerateBrickTexture()
 
 	var tile: Tile = Tile.new(path_texture)
@@ -164,6 +166,7 @@ func SpawnDynamicTile(location: Vector2) -> DynamicTile:
 	tile.global_position = location
 	if (randi_range(0, 1)): tile.global_rotation = PI * 2
 	add_child(tile)
+	allocations.append(tile)
 	return tile
 
 func SpawnSnowTile(location: Vector2) -> SnowTile:

@@ -2,6 +2,8 @@
 # Emits input signals for the rest of the program
 
 class_name InputController extends Controller
+var system: System = System.Get()
+
 var event: EventController
 
 const UI_CANCEL = "ui_cancel"

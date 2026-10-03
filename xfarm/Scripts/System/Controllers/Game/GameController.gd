@@ -2,6 +2,7 @@
 # controls many aspects of the game world
 # emits signals for game world / game systems
 class_name GameController extends Controller
+var system: System = System.Get()
 
 var event: EventController
 var logger: LogController
@@ -31,6 +32,7 @@ func Initialize() -> int:
 	event = system.GetEventController()
 	logger = system.GetLogController()
 	world = WorldGenerator.new()
+	allocations.append(world)
 	
 	if (!event or !logger or !world):
 		state = Controller.State.FAIL
@@ -40,7 +42,6 @@ func Initialize() -> int:
 	ConnectSignals({
 		event.input_escape_pressed: PauseGame,
 	})
-	allocations.append(world)
 	add_child(world)
 	
 	state = Controller.State.ONLINE
@@ -91,15 +92,7 @@ func QuitGame() -> void:
 	# do stuff
 	return
 
-func shutdown() -> int:
-	for allocation in world.allocations:
-		if (allocation): 
-			allocation.free()
-		else:
-			state = Controller.State.FAIL
-
-	state = Controller.State.OFFLINE
+func shutdown() -> Controller.State:
+	if (world):
+		world.free()
 	return super.shutdown()
-	
-
-	

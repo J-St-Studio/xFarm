@@ -3,30 +3,18 @@ extends GutTest
 class TestGameController:
 	extends GutTest
 	
-	var system: Controller = null
-	var game: Controller = null
+	var system: System = null
+	var game: GameController = null
 	
 	func before_all():
+		gut.p("Setting up testing environment")
 		system = System.new()
-		system.Initialize()
-
-		game = system.GetGameController()
-		game.Initialize()
+		system.name = "System"
+		add_child(system)
 		
-	func after_all():
-		game.shutdown()
-		assert_null(game.GetWorld(), "should be null")
-		game.free()
-		assert_null(game, "should be null")
-		game.queue_free()
-		await tree_exited
-		game = null
-
-		system.shutdown()
-		system.free()
-		system = null
-		
+	
 	func test_ControllerNotNull():
+		game = system.GetGameController()
 		assert_not_null(game, "should be valid")
 		
 	func test_WorldGeneratorNotNull():

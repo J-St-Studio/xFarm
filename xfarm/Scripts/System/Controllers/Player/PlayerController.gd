@@ -1,6 +1,10 @@
 # PlayerController.gd
-
 class_name PlayerController extends Controller
+var system: System = System.Get()
+
+var event: EventController
+var game: GameController
+
 @onready var player_scene = preload("res://Scenes/player.tscn");
 
 var playerLocationOneShot: OneShot;
@@ -11,7 +15,6 @@ var CurrentPlayerState: int;
 var CurrentPlayerDirection: int;
 
 var player: Player = null;
-var game: GameController = system.GetGameController()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,12 +34,13 @@ func Initialize() -> Controller.State:
 		state = Controller.State.FAIL
 		return state
 	
-	var event = system.GetEventController()
+	event = system.GetEventController()
+	game = system.GetGameController()
 	
-	if (!event):
+	if (!event or !game):
 		state = Controller.State.FAIL
 		return state
-
+	
 	ConnectSignals ({
 		event.input_confirm_pressed: OnConfirmPressed,
 		event.input_escape_pressed: OnEscapePressed,

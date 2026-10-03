@@ -11,6 +11,7 @@ var time: TimeController
 var enemy: EnemyController
 
 var SystemControllers: Array[Controller]
+var ControllerCount: int = 0
 
 func _ready() -> void:
 	Initialize()
@@ -34,7 +35,7 @@ func Initialize() -> Controller.State:
 		print("SYSTEM: all system-level controllers initialized successfully")
 	else:
 		print("CRITICAL SYSTEM FAILURE. ABORTING.")
-		
+		_exit_tree()
 	return state
 
 func InitializeController(ControllerType: Variant) -> Controller:
@@ -49,6 +50,7 @@ func InitializeController(ControllerType: Variant) -> Controller:
 	allocations.append(controller)
 	add_child(controller)
 	print("SYSTEM: ", controller.name, " initialized!\n")
+	ControllerCount += 1
 	return controller
 
 func GetGameController() -> GameController:
@@ -89,12 +91,17 @@ func IsOnline() -> Controller.State:
 	for controller in SystemControllers:
 		if (controller == null):
 			return Controller.State.FAIL
+		if (controller.GetState() != Controller.State.ONLINE):
+			return Controller.State.FAIL
 	return Controller.State.ONLINE
 
 func GetSystemReport() -> Dictionary:
 	var ControllerStates: Dictionary
 	for controller in SystemControllers:
-		ControllerStates[controller] = controller.GetState()
+		if (controller):
+			ControllerStates[controller] = controller.GetState()
+		else:
+			ControllerStates[controller] = Controller.State.FAIL
 	return ControllerStates
 
 func PrintSystemReport() -> void:
@@ -103,6 +110,7 @@ func PrintSystemReport() -> void:
 	var max_length_ = 0
 	for key in report.keys():
 		max_length_ = maxi(max_length_, key.name.length())
+	print("SYSTEM: Initialized ", ControllerCount, " controllers.")
 	print("SYSTEM: SYSTEM CONTROLLER INITIALIZATION COMPLETE -> {")
 	for key in keys:
 		print("\t\t\t", key.name.rpad(max_length_), "\t", report[key] as Controller.State)
@@ -114,5 +122,14 @@ func GetController(controller: Controller) -> Controller:
 	else:
 		return null
 
-func shutdown() -> int:
-	return super.shutdown()
+func shutdown() -> Controller.State:	
+	for controller in SystemControllers:
+		if (controller):
+			controller.shutdown()
+			controller.free()
+		else:
+			state = Controller.State.FAIL
+			return state
+
+	super.shutdown()
+	return state

@@ -1,4 +1,6 @@
 class_name TimeController extends Controller
+var system: System = System.Get()
+
 var precision = preload("res://Scripts/System/Utilities/precision.gd")
 
 var game: GameController
