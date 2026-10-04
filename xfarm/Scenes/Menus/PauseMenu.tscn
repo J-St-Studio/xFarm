@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c3x2kpbqb5j2l"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=174302683]
+offset = Vector2(-100, -50)
+transform = Transform2D(1, 0, 0, 1, -100, -50)
+
+[node name="QuitButton" type="Button" parent="." unique_id=1477268915]
+offset_left = 254.0
+offset_top = 333.0
+offset_right = 517.0
+offset_bottom = 407.0
+text = "QUIT"
+
+[node name="ResumeButton" type="Button" parent="." unique_id=2055156284]
+offset_left = 605.0
+offset_top = 333.0
+offset_right = 868.0
+offset_bottom = 407.0
+text = "RESUME"
+
+[node name="Label" type="Label" parent="." unique_id=693804283]
+offset_left = 492.0
+offset_top = 195.0
+offset_right = 626.0
+offset_bottom = 269.0
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1

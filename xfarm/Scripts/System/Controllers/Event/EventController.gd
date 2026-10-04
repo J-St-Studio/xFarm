@@ -13,6 +13,10 @@ signal input_input_right_pressed
 signal input_left_mouse_pressed
 signal input_right_mouse_pressed
 
+# UI Context Signal (New)
+signal ui_context_changed(is_active: bool)
+
+
 func _ready() -> void:
 	super._ready()
 	Initialize()
@@ -92,9 +96,9 @@ func BroadcastGameOver() -> void:
 	logger.message(self, "game over")
 	game_over.emit()
 
-func BroadcastGameSetControlType() -> void:
+func BroadcastGameSetControlType(control_type: InputTypes.Types) -> void: # Updated signature to accept argument
 	logger.message(self, "game set control type")
-	game_set_control_type.emit()
+	game_set_control_type.emit(control_type)
 
 func BroadcastGameSpawnPlayer() -> void:
 	logger.message(self, "spawn player")

@@ -12,6 +12,7 @@ static var CurrentGameState: int = GameState.MainMenu
 var CurrentLevel: int = GameState.MainMenu
 
 var mainMenuRendered: bool = false
+var is_ui_active: bool = false # Added state tracking for UI context
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -84,19 +85,19 @@ func PauseGame() -> void:
 	if (GamePaused()):
 		logger.message(self, "unpausing game ...")
 		SetCurrentGameState(GameState.UnPaused)
-		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
+		event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
 		event.BroadcastUITeardownPauseMenu()
 
 	elif (GameUnPaused()):
 		logger.message(self, "pausing game ...")
 		SetCurrentGameState(GameState.Paused)
-		event.game_set_control_type.emit(InputTypes.Types.UI)
+		event.BroadcastGameSetControlType(InputTypes.Types.UI)
 		event.BroadcastUIRenderPauseMenu()
-
+		
 	elif (CurrentGameState == GameState.MainMenu):
 		logger.message(self, "game is in main menu, unpausing")
 		SetCurrentGameState(GameState.UnPaused)
-		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
+		event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
 		event.BroadcastUITeardownPauseMenu()
 		event.BroadcastUIRenderMainMenu()
 

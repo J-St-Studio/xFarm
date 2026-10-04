@@ -1,9 +1,36 @@
-[gd_scene format=3 uid="uid://c3x2kpbqb5j2l"]
+[gd_scene format=3 uid="uid://b3wwm2xtiw7gc"]
 
-[node name="MainMenu" type="Control" unique_id=598882937]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1318130552]
+offset = Vector2(-100, -50)
+transform = Transform2D(1, 0, 0, 1, -100, -50)
+
+[node name="SettingsButton" type="Button" parent="." unique_id=671349488]
+offset_left = 245.0
+offset_top = 332.0
+offset_right = 508.0
+offset_bottom = 406.0
+text = "SETTINGS"
+metadata/_edit_use_anchors_ = true
+
+[node name="StartButton" type="Button" parent="." unique_id=1160747967]
+offset_left = 596.0
+offset_top = 332.0
+offset_right = 859.0
+offset_bottom = 406.0
+text = "START"
+
+[node name="QuitGameButton" type="Button" parent="." unique_id=2102145140]
+offset_left = 480.0
+offset_top = 450.0
+offset_right = 633.0
+offset_bottom = 504.0
+text = "QUIT"
+
+[node name="Label" type="Label" parent="." unique_id=502530945]
+offset_left = 485.0
+offset_top = 192.0
+offset_right = 619.0
+offset_bottom = 266.0
+text = "GAME TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -26,7 +26,14 @@ func _process(delta: float) -> void:
 	GlobalDeltaTime = delta;
 	if (!player and game.CurrentGameState == GameState.UnPaused):
 		SpawnPlayer()
-	return
+	
+	# Check if UI context prevents movement/action processing
+	var is_ui_active = system.GetGameController().is_ui_active
+	if (is_ui_active):
+		return # Do nothing if the UI is active
+	
+	#ProcessInput();
+	pass
 	
 func Initialize() -> Controller.State:
 	if (!system):
@@ -93,14 +100,15 @@ func PlayerSpeedCalculation() -> float:
 	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime;
 
 func OnConfirmPressed() -> void:
-	return
+	# Interaction logic here (e.g., checking for nearby interactable objects)
+	pass
 
 func OnEscapePressed() -> void:
 	#ask_to_pause_game.emit()
 	pass # Replace with function body.
 
 func OnUpPressed() -> void:
-	if (system.GetGameController().GameUnPaused()):
+	if (game.GameUnPaused()):
 		player.translate(Vector2(0, -1) * PlayerSpeedCalculation())
 		SetPlayerStateAndDirection(Player.State.MOVING, Player.Direction.Up)
 
