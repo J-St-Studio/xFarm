@@ -31,35 +31,35 @@ func Initialize() -> Controller.State:
 
 # Input Signals
 func BroadcastInputEscapePressed() -> void:
-	logger.message(self, "escape pressed")
+	# logger.message(self, "escape pressed")
 	input_escape_pressed.emit()
 
 func BroadcastInputUpPressed() -> void:
-	logger.message(self, "up pressed")
+	# logger.message(self, "up pressed")
 	input_up_pressed.emit()
 
 func BroadcastInputDownPressed() -> void:
-	logger.message(self, "down pressed")
+	# logger.message(self, "down pressed")
 	input_down_pressed.emit()
 
 func BroadcastInputLeftPressed() -> void:
-	logger.message(self, "left pressed")
+	# logger.message(self, "left pressed")
 	input_left_pressed.emit()
 
 func BroadcastInputRightPressed() -> void:
-	logger.message(self, "right pressed")
+	# logger.message(self, "right pressed")
 	input_right_pressed.emit()
 
 func BroadcastInputConfirmPressed() -> void:
-	logger.message(self, "confirm pressed")
+	# logger.message(self, "confirm pressed")
 	input_confirm_pressed.emit()
 
 func BroadcastInputLeftMousePressed() -> void:
-	logger.message(self, "left mouse pressed")
+	# logger.message(self, "left mouse pressed")
 	input_left_mouse_pressed.emit()
 
 func BroadcastInputRightMousePressed() -> void:
-	logger.message(self, "right mouse pressed")
+	# logger.message(self, "right mouse pressed")
 	input_right_mouse_pressed.emit()
 
 # game event signals
@@ -132,6 +132,8 @@ func BroadcastEnemySpawnWave() -> void:
 	
 signal ui_render_main_menu
 signal ui_teardown_main_menu
+signal ui_render_pause_menu
+signal ui_teardown_pause_menu
 
 func BroadcastUIRenderMainMenu() -> void:
 	logger.message(self, "UI render main menu")
@@ -140,3 +142,11 @@ func BroadcastUIRenderMainMenu() -> void:
 func BroadcastUITeardownMainMenu() -> void:
 	logger.message(self, "UI teardown main menu")
 	ui_teardown_main_menu.emit()
+
+func BroadcastUIRenderPauseMenu() -> void:
+	logger.message(self, "UI render pause menu")
+	ui_render_pause_menu.emit()
+
+func BroadcastUITeardownPauseMenu() -> void:
+	logger.message(self, "UI teardown pause menu")
+	ui_teardown_pause_menu.emit()

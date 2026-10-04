@@ -3,9 +3,12 @@
 # Responsible for rendering information as UI.
 class_name UIController extends Controller
 
-var game: GameController
 var event: EventController
 var generator: TextureGenerator
+var logger: LogController
+
+var pauseMenuCanvas: CanvasLayer
+var mainMenuCanvas: CanvasLayer
 
 var backgroundTexture: Texture2D
 
@@ -23,6 +26,9 @@ const TileStep: int = 64
 
 var mainMenuRendered: bool = false
 
+var PauseMenuAllocations: Array
+var MainMenuAllocations: Array
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
@@ -31,41 +37,43 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# if the game is unpaused, no UI control? -> what about in-game menu?
-	if (!mainMenuRendered and game and game.CurrentGameState == GameState.MainMenu):
-		event.BroadcastUIRenderMainMenu()
-		mainMenuRendered = true
-	elif(mainMenuRendered and game and game.CurrentGameState == GameState.UnPaused):
-		event.BroadcastUITeardownMainMenu()
-		mainMenuRendered = false
-		
 	return
 	
 func Initialize() -> Controller.State:
 	state = Controller.State.ONLINE
-	game = system.GetGameController()
 	event = system.GetEventController()
+	logger = system.GetLogController()
 	generator = TextureGenerator.new(1)
+	pauseMenuCanvas = CanvasLayer.new()
+	mainMenuCanvas = CanvasLayer.new()
+	allocations.append(pauseMenuCanvas)
+	allocations.append(mainMenuCanvas)
 	allocations.append(generator)
 	
-	if (!game or !event): 
+	if (!event or !logger or !pauseMenuCanvas or !mainMenuCanvas): 
 		state = Controller.State.FAIL
 		return state
-		
+	
+	add_child(pauseMenuCanvas)
+	add_child(mainMenuCanvas)
+
+	pauseMenuCanvas.hide()
+	mainMenuCanvas.show()
+	
 	ConnectSignals({
 		event.ui_render_main_menu: RenderMainMenu,
-		event.ui_teardown_main_menu: TeardownMainMenu
+		event.ui_teardown_main_menu: TeardownMainMenu,
+		event.ui_render_pause_menu: RenderPauseMenu,
+		event.ui_teardown_pause_menu: TeardownPauseMenu
 	})
 	
 	backgroundTexture = generator.GenerateTexture({
 		TextureGenerator.size: 64,
-		TextureGenerator.red: 1,
-		TextureGenerator.green: 1,
+		TextureGenerator.red: 0,
+		TextureGenerator.green: 0,
 		TextureGenerator.blue: 1,
-		
-		#TextureGenerator.roughness: randf_range(2, 3),
-		#TextureGenerator.detail_scale: randf_range(10, 20),
-		#TextureGenerator.octaves: randf_range(8, 9)
 	})
+
 	return state
 
 func Update(state: GameState) -> void:
@@ -77,31 +85,49 @@ func Update(state: GameState) -> void:
 # maybe generic menu function with args passed in? Maybe.
 	
 func RenderMainMenu() -> void:
-	# somehow decide what type of tile map we're generating
-	# ie: forest, desert, plains, etc
-	#var camera: Camera2D = Camera2D.new()
-	#camera.position = Vector2(0, 0)
+	logger.message(self, "rendering main menu!")
 	for x in range(MapLeftBound, MapRightBound, TileStep):
 		for y in range(MapUpperBound, MapLowerBound, -TileStep):
 			var spawn_point: Vector2 = Vector2(x, y)
 			UIMap[spawn_point] = SpawnMenuTexture(spawn_point)
-		pass
-	pass
-	#allocations.append(SpawnMenuTexture(Vector2(0, 0)))
-## end
+	
+	var mainMenuLabel: Label = Label.new()
+	mainMenuCanvas.add_child(mainMenuLabel)
+	return
 
 func SpawnMenuTexture(location: Vector2) -> Tile:
 	var tile: Tile = Tile.new(backgroundTexture, location)
 	add_child(tile)
 	allocations.append(tile)
+	MainMenuAllocations.append(tile)
 	return tile
 
 func RenderPauseMenu() -> void:
+	logger.message(self, "rendering pause menu!")
+	var pausedLabel: Label = Label.new()
+	pausedLabel.text = "PAUSED"
+	pauseMenuCanvas.add_child(pausedLabel)
+	pausedLabel.position = Vector2(get_viewport().size.x/2, get_viewport().size.y/2)
+	allocations.append(pausedLabel)
+	PauseMenuAllocations.append(pausedLabel)
+	pauseMenuCanvas.show()
 	return
 	
 func TeardownMainMenu() -> void:
-	for allocation in allocations:
+	logger.message(self, "tearing down main menu!")
+	for allocation in MainMenuAllocations:
 		if (allocation):
-			print("found UI allocation, freeing")
 			allocation.free()
-	allocations.clear()
+	mainMenuCanvas.hide()
+
+func TeardownPauseMenu() -> void:
+	logger.message(self, "tearing down pause menu!")
+	for allocation in PauseMenuAllocations:
+		if (allocation):
+			allocation.free()
+	pauseMenuCanvas.hide()
+	return
+
+static func Get() -> UIController:
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	return tree.root.get_main_looop().find_child("UIController", true, false) as UIController

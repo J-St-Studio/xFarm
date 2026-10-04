@@ -11,6 +11,8 @@ var GlobalDelta: float
 static var CurrentGameState: int = GameState.MainMenu
 var CurrentLevel: int = GameState.MainMenu
 
+var mainMenuRendered: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
@@ -19,9 +21,16 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	GlobalDelta = delta
-	if (system.IsOnline() and world != null):
+	if (!system.IsOnline() or world == null):
 		# do stuff here eventually maybe
-		pass
+		state = Controller.State.FAIL
+		return
+	if (!mainMenuRendered and CurrentGameState == GameState.MainMenu):
+		event.BroadcastUIRenderMainMenu()
+		mainMenuRendered = true
+	elif(mainMenuRendered and CurrentGameState == GameState.UnPaused):
+		event.BroadcastUITeardownMainMenu()
+		mainMenuRendered = false
 
 func Initialize() -> int:
 	if (!system):
@@ -76,16 +85,20 @@ func PauseGame() -> void:
 		logger.message(self, "unpausing game ...")
 		SetCurrentGameState(GameState.UnPaused)
 		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
+		event.BroadcastUITeardownPauseMenu()
+
 	elif (GameUnPaused()):
 		logger.message(self, "pausing game ...")
 		SetCurrentGameState(GameState.Paused)
 		event.game_set_control_type.emit(InputTypes.Types.UI)
+		event.BroadcastUIRenderPauseMenu()
+
 	elif (CurrentGameState == GameState.MainMenu):
 		logger.message(self, "game is in main menu, unpausing")
 		SetCurrentGameState(GameState.UnPaused)
 		event.game_set_control_type.emit(InputTypes.Types.PLAYER)
-		# initiate quit dialogue or something
-	pass
+		event.BroadcastUITeardownPauseMenu()
+		event.BroadcastUIRenderMainMenu()
 
 func QuitGame() -> void:
 	# do stuff

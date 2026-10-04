@@ -4,13 +4,14 @@ class_name Player extends Entity
 
 var logger: LogController
 var game: GameController
+var camera: Camera2D
+
 var generator: TextureGenerator
+var playerSprite: Tile
 
 var playerTexture: Texture2D
 var characterBody: CharacterBody2D
-var playerSprite: Tile
 var collisionShape: CollisionShape2D
-var camera: Camera2D
 
 static var state: State
 
@@ -35,8 +36,8 @@ func Initialize() -> Player.State:
 		TextureGenerator.red: 1,
 		TextureGenerator.green: 0,
 		TextureGenerator.blue: 0,
-
 	})
+
 	playerSprite = Tile.new()
 	playerSprite.setTexture(playerTexture)
 	characterBody = CharacterBody2D.new()

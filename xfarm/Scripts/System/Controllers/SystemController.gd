@@ -9,6 +9,7 @@ var audio: AudioController
 var event: EventController
 var time: TimeController
 var enemy: EnemyController
+var camera: CameraController
 
 var SystemControllers: Array[Controller]
 var ControllerCount: int = 0
@@ -27,6 +28,7 @@ func Initialize() -> Controller.State:
 	player = InitializeController(PlayerController)
 	time = InitializeController(TimeController)
 	enemy = InitializeController(EnemyController)
+	# camera = InitializeController(CameraController)
 	PrintSystemReport()
 	
 	state = IsOnline()
@@ -80,6 +82,9 @@ func GetTimeController() -> TimeController:
 func GetEnemyController() -> EnemyController:
 	return enemy
 	
+func GetCameraController() -> CameraController:
+	return camera
+
 func GetControllers() -> Array[Controller]:
 	return SystemControllers
 
