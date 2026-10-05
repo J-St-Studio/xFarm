@@ -16,16 +16,6 @@ offset_top = 53.0
 offset_right = 139.0
 offset_bottom = 93.0
 
-[node name="Label" type="Label" parent="Control" unique_id=502530945]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = 146.0
-offset_bottom = 86.0
-text = "GAME TITLE"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Quit" parent="Control" unique_id=1843276650 instance=ExtResource("1_rhk34")]
 layout_mode = 0
 offset_left = 25.0
@@ -46,3 +36,13 @@ offset_left = 25.0
 offset_top = 144.0
 offset_right = 65.0
 offset_bottom = 184.0
+
+[node name="Label" type="Label" parent="Control/Start" unique_id=502530945]
+layout_mode = 0
+offset_left = -13.0
+offset_top = -132.0
+offset_right = 121.0
+offset_bottom = -58.0
+text = "GAME TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1

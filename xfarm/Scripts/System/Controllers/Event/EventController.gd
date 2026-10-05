@@ -138,6 +138,7 @@ signal ui_render_main_menu
 signal ui_teardown_main_menu
 signal ui_render_pause_menu
 signal ui_teardown_pause_menu
+signal ui_quit_button_pressed
 
 func BroadcastUIRenderMainMenu() -> void:
 	logger.message(self, "UI render main menu")
@@ -154,3 +155,7 @@ func BroadcastUIRenderPauseMenu() -> void:
 func BroadcastUITeardownPauseMenu() -> void:
 	logger.message(self, "UI teardown pause menu")
 	ui_teardown_pause_menu.emit()
+
+func BroadcastUIQuitButtonPressed() -> void:
+	logger.message(self, "UI quit button pressed")
+	ui_quit_button_pressed.emit()

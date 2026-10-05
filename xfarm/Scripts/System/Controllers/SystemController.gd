@@ -129,14 +129,17 @@ func GetController(controller: Controller) -> Controller:
 	else:
 		return null
 
-func shutdown() -> Controller.State:	
+func shutdown() -> Controller.State:
+	print("SYSTEM: beginning system shutdown")
 	for controller in SystemControllers:
 		if (controller):
 			controller.shutdown()
-			controller.free()
+			controller.queue_free()
 		else:
 			state = Controller.State.FAIL
 			return state
 
 	super.shutdown()
+	get_tree().quit()
+	
 	return state

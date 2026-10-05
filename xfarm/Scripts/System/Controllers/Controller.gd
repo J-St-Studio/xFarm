@@ -45,12 +45,13 @@ func GetAllocations() -> Array[Variant]:
 	return allocations
 
 func shutdown() -> Controller.State:
+	print(self, " shut down by ", self.get_parent())
 	if (allocations.size() <= 0):
 		state = Controller.State.OFFLINE
 		return state
 	for allocation in allocations:
 		if (allocation):
-			allocation.free()
+			allocation.queue_free()
 	
 
 	# chance for a controller to be in fail state
