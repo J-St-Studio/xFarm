@@ -18,9 +18,9 @@ offset_bottom = 93.0
 
 [node name="Quit" parent="Control" unique_id=1843276650 instance=ExtResource("1_rhk34")]
 layout_mode = 0
-offset_left = 25.0
+offset_left = 26.0
 offset_top = 318.0
-offset_right = 65.0
+offset_right = 66.0
 offset_bottom = 358.0
 
 [node name="Settings" parent="Control" unique_id=399509507 instance=ExtResource("2_83y2r")]

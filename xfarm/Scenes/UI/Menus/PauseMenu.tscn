@@ -26,21 +26,21 @@ text = "PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control" parent="Control" unique_id=1843276650 instance=ExtResource("1_a1d1p")]
+[node name="Quit" parent="Control" unique_id=1843276650 instance=ExtResource("1_a1d1p")]
 layout_mode = 0
 offset_left = 438.0
 offset_top = 418.0
 offset_right = 478.0
 offset_bottom = 458.0
 
-[node name="Control2" parent="Control" unique_id=203073066 instance=ExtResource("2_v2qak")]
+[node name="Resume" parent="Control" unique_id=203073066 instance=ExtResource("2_v2qak")]
 layout_mode = 0
 offset_left = 438.0
 offset_top = 246.0
 offset_right = 478.0
 offset_bottom = 286.0
 
-[node name="Control3" parent="Control" unique_id=330374909 instance=ExtResource("3_jgrc2")]
+[node name="Settings" parent="Control" unique_id=330374909 instance=ExtResource("3_jgrc2")]
 layout_mode = 0
 offset_left = 438.0
 offset_top = 331.0

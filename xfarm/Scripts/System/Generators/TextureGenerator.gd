@@ -40,7 +40,8 @@ func GenerateBrickTexture(BrickColor: Color = BRICK_DEFAULT_COLOR, LineColor: Co
 			# first vertical line
 			if u == TEXTURE_SIZE/2 and v <= TEXTURE_SIZE/4:
 				image.set_pixel(u, v, LineColor)
-				image.set_pixel(u, v - 1, LineColor)
+				if (v != 0):
+					image.set_pixel(u, v - 1, LineColor)
 
 			# second vertical line
 			if u == TEXTURE_SIZE/4 and not v >= TEXTURE_SIZE/2 and not v <= TEXTURE_SIZE/4:

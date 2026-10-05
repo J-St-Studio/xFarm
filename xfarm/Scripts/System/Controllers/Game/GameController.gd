@@ -49,6 +49,7 @@ func Initialize() -> int:
 	CurrentGameState = GameState.MainMenu
 	ConnectSignals({
 		event.input_escape_pressed: PauseGame,
+		event.game_start_game: StartGame
 	})
 	add_child(world)
 	
@@ -79,6 +80,7 @@ func GetWorld() -> WorldGenerator:
 	
 func StartGame() -> void:
 	CurrentGameState = GameState.UnPaused
+	event.BroadcastUITeardownMainMenu()
 
 func PauseGame() -> void:
 	if (GameUnPaused()):

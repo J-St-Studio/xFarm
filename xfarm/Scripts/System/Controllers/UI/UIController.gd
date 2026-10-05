@@ -9,7 +9,6 @@ var mainMenuResource: PackedScene = preload("res://Scenes/UI/Menus/MainMenu.tscn
 var pauseMenu	: CanvasLayer = null
 var mainMenu	: CanvasLayer = null
 
-var quitButton			: Button = null
 var mainMenuQuitButton	: Button = null
 var mainMenuStartButton	: Button = null
 var settingsButton		: Button = null
@@ -42,9 +41,17 @@ func Initialize() -> Controller.State:
 	MakeAllocations()
 	state = VerifyAllocations()
 	SetupMenus()
-	ConnectSignals({})
 	CreateBackgroundTexture()
-	
+
+	ConnectSignals({
+		event.ui_render_main_menu: RenderMainMenu,
+		event.ui_teardown_main_menu: TeardownMainMenu,
+		event.ui_render_pause_menu: RenderPauseMenu,
+		event.ui_teardown_pause_menu: TeardownPauseMenu,
+		mainMenuQuitButton.button_up: QuitButtonPressed,
+		mainMenuStartButton.button_up: StartButtonPressed,
+		pauseMenuQuitButton.button_up: PauseMenuQuitButtonPressed,
+	})
 	return state
 
 func CreateBackgroundTexture() -> void:
@@ -55,24 +62,29 @@ func CreateBackgroundTexture() -> void:
 		TextureGenerator.blue: 1,
 	})
 
-func ConnectSignals(_map: Dictionary) -> void:
-	super.ConnectSignals({
-		event.ui_render_main_menu: RenderMainMenu,
-		event.ui_teardown_main_menu: TeardownMainMenu,
-		event.ui_render_pause_menu: RenderPauseMenu,
-		event.ui_teardown_pause_menu: TeardownPauseMenu,
-		quitButton.button_up: QuitButtonPressed
-	})
-
 func SetupMenus() -> void:
+	var controlPtr: Control = null
+	
 	mainMenu = mainMenuResource.instantiate()
 	pauseMenu = pauseMenuResouce.instantiate()
+
 	mainMenu.hide()
 	pauseMenu.hide()
+
 	add_child(mainMenu)
 	add_child(pauseMenu)
-	var QuitControl: Control = mainMenu.get_node("./Control/Quit")
-	quitButton = QuitControl.get_node("./QuitButton")
+
+	controlPtr = mainMenu.get_node("./Control/Quit")
+	mainMenuQuitButton = controlPtr.get_node("./QuitButton")
+
+	controlPtr = mainMenu.get_node("./Control/Start")
+	mainMenuStartButton = controlPtr.get_node("./StartButton")
+
+	controlPtr = pauseMenu.get_node("./Control/Resume")
+	resumeButton = controlPtr.get_node("./ResumeButton")
+
+	controlPtr = pauseMenu.get_node("./Control/Quit")
+	pauseMenuQuitButton = controlPtr.get_node("./QuitButton")
 
 func MakeAllocations() -> void:
 	event = system.GetEventController()
@@ -111,4 +123,9 @@ static func Get() -> UIController:
 
 func QuitButtonPressed() -> void:
 	system.shutdown()
-	
+
+func StartButtonPressed() -> void:
+	event.BroadcastStartGame()
+
+func PauseMenuQuitButtonPressed() -> void:
+	event.BroadcastReturnToMainMenu()

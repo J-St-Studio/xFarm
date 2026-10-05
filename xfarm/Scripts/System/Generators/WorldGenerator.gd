@@ -48,6 +48,7 @@ func _process(delta: float) -> void:
 		generateWorld = false
 	
 func Initialize() -> Controller.State:
+	name = "WorldGenerator"
 	if (!system):
 		state = Controller.State.FAIL
 		return state
@@ -104,9 +105,6 @@ func Initialize() -> Controller.State:
 
 
 func GenerateGameWorld() -> void:
-	GenerateGameWorldResponse()
-
-func GenerateGameWorldResponse() -> void:
 	logger.message(self, "generating game world")
 	GenerateBaseTileMap()
 	GeneratePlants()
@@ -119,7 +117,7 @@ func GenerateGameWorldResponse() -> void:
 	return
 
 func GeneratePlants() -> void:
-	print("spawning plants")
+	logger.message(self, "spawning plants")
 	# generate plants using the GroundMap to determine where to place them, and the PlantMap to ensure no duplicates are placed
 	for location in GroundMap.keys():
 		# 10% chance to spawn a plant on a tile

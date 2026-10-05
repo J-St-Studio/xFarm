@@ -60,6 +60,7 @@ func Initialize() -> Controller.State:
 func SpawnPlayer() -> void:
 	if (player): return
 	player = Player.new()
+	player.name = "Player"
 	allocations.append(player)
 	add_child(player)
 	SetPlayerState(Player.State.IDLE)
