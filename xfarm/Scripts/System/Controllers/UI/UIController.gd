@@ -3,8 +3,8 @@
 # Responsible for rendering information as UI.
 class_name UIController extends Controller
 
-var pauseMenuResouce: PackedScene = preload("res://Scenes/Menus/PauseMenu.tscn")
-var mainMenuResource: PackedScene = preload("res://Scenes/Menus/MainMenu.tscn")
+var pauseMenuResouce: PackedScene = preload("res://Scenes/UI/Menus/PauseMenu.tscn")
+var mainMenuResource: PackedScene = preload("res://Scenes/UI/Menus/MainMenu.tscn")
 
 var pauseMenu: CanvasLayer = null
 var mainMenu: CanvasLayer = null

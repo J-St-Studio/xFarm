@@ -23,14 +23,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	GlobalDelta = delta
 	if (!system.IsOnline() or world == null):
-		# do stuff here eventually maybe
 		state = Controller.State.FAIL
 		return
+		
 	if (!mainMenuRendered and CurrentGameState == GameState.MainMenu):
 		event.BroadcastUIRenderMainMenu()
 		mainMenuRendered = true
 	elif(mainMenuRendered and CurrentGameState == GameState.UnPaused):
-		event.BroadcastUITeardownMainMenu()
 		mainMenuRendered = false
 
 func Initialize() -> int:
@@ -82,24 +81,23 @@ func StartGame() -> void:
 	CurrentGameState = GameState.UnPaused
 
 func PauseGame() -> void:
-	if (GamePaused()):
-		logger.message(self, "unpausing game ...")
-		SetCurrentGameState(GameState.UnPaused)
-		event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
-		event.BroadcastUITeardownPauseMenu()
-
-	elif (GameUnPaused()):
+	if (GameUnPaused()):
 		logger.message(self, "pausing game ...")
 		SetCurrentGameState(GameState.Paused)
-		event.BroadcastGameSetControlType(InputTypes.Types.UI)
+		# event.BroadcastGameSetControlType(InputTypes.Types.UI)
 		event.BroadcastUIRenderPauseMenu()
-		
-	elif (CurrentGameState == GameState.MainMenu):
-		logger.message(self, "game is in main menu, unpausing")
+
+	elif (GamePaused()):
+		logger.message(self, "unpausing game ...")
 		SetCurrentGameState(GameState.UnPaused)
-		event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
+		# event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
 		event.BroadcastUITeardownPauseMenu()
-		event.BroadcastUIRenderMainMenu()
+
+	elif (CurrentGameState == GameState.MainMenu):
+		logger.message(self, "game is in main menu, starting game")
+		SetCurrentGameState(GameState.UnPaused)
+		# event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
+		event.BroadcastUITeardownMainMenu()
 
 func QuitGame() -> void:
 	# do stuff

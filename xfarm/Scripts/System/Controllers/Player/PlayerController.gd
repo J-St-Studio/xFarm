@@ -4,16 +4,14 @@ class_name PlayerController extends Controller
 var event: EventController
 var game: GameController
 
-@onready var player_scene = preload("res://Scenes/player.tscn");
+var playerLocationOneShot: OneShot
+var GlobalDeltaTime: float = 0
+var CurrentMovementSpeed: int
+var MovementSpeedMultiplier: int
+var CurrentPlayerState: int
+var CurrentPlayerDirection: int
 
-var playerLocationOneShot: OneShot;
-var GlobalDeltaTime: float = 0;
-var CurrentMovementSpeed: int;
-var MovementSpeedMultiplier: int;
-var CurrentPlayerState: int;
-var CurrentPlayerDirection: int;
-
-var player: Player = null;
+var player: Player = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,7 +21,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	GlobalDeltaTime = delta;
+	GlobalDeltaTime = delta
 	if (!player and game.CurrentGameState == GameState.UnPaused):
 		SpawnPlayer()
 	
@@ -31,8 +29,6 @@ func _process(delta: float) -> void:
 	var is_ui_active = system.GetGameController().is_ui_active
 	if (is_ui_active):
 		return # Do nothing if the UI is active
-	
-	#ProcessInput();
 	pass
 	
 func Initialize() -> Controller.State:
@@ -66,8 +62,8 @@ func SpawnPlayer() -> void:
 	player = Player.new()
 	allocations.append(player)
 	add_child(player)
-	SetPlayerState(Player.State.IDLE);
-	SetPlayerDirection(Player.Direction.Left);
+	SetPlayerState(Player.State.IDLE)
+	SetPlayerDirection(Player.Direction.Left)
 
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
@@ -80,24 +76,24 @@ func ProcessPlayerActions():
 	pass
 
 func GetPlayerDirection() -> int:
-	return CurrentPlayerDirection;
+	return CurrentPlayerDirection
 
 func GetPlayerState() -> int:
-	return CurrentPlayerState;
+	return CurrentPlayerState
 
 func SetPlayerState(state: int) -> void:
-	CurrentPlayerState = state;
+	CurrentPlayerState = state
 
 func SetPlayerDirection(direction: int) -> void:
-	CurrentPlayerDirection = direction;
+	CurrentPlayerDirection = direction
 
 func SetPlayerStateAndDirection(state: int, direction: int) -> void:
-	CurrentPlayerState = state;
-	CurrentPlayerDirection = direction;
+	CurrentPlayerState = state
+	CurrentPlayerDirection = direction
 	pass;
 
 func PlayerSpeedCalculation() -> float:
-	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime;
+	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime
 
 func OnConfirmPressed() -> void:
 	# Interaction logic here (e.g., checking for nearby interactable objects)

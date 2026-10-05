@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://c3x2kpbqb5j2l"]
+
+[ext_resource type="PackedScene" uid="uid://lph7munu4ms4" path="res://Scenes/UI/Buttons/QuitButton.tscn" id="1_a1d1p"]
+[ext_resource type="PackedScene" uid="uid://ce4lc4f8iglre" path="res://Scenes/UI/Buttons/ResumeButton.tscn" id="2_v2qak"]
+[ext_resource type="PackedScene" uid="uid://des8lhcfeicwu" path="res://Scenes/UI/Buttons/SettingsButton.tscn" id="3_jgrc2"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=174302683]
+offset = Vector2(-100, -50)
+transform = Transform2D(1, 0, 0, 1, -100, -50)
+
+[node name="Control" type="Control" parent="." unique_id=765239723]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -53.0
+offset_top = -62.0
+offset_right = -13.0
+offset_bottom = -22.0
+
+[node name="Label" type="Label" parent="Control" unique_id=693804283]
+layout_mode = 0
+offset_left = 502.0
+offset_top = 159.0
+offset_right = 636.0
+offset_bottom = 233.0
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" parent="Control" unique_id=1843276650 instance=ExtResource("1_a1d1p")]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 418.0
+offset_right = 478.0
+offset_bottom = 458.0
+
+[node name="Control2" parent="Control" unique_id=203073066 instance=ExtResource("2_v2qak")]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 246.0
+offset_right = 478.0
+offset_bottom = 286.0
+
+[node name="Control3" parent="Control" unique_id=330374909 instance=ExtResource("3_jgrc2")]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 331.0
+offset_right = 478.0
+offset_bottom = 371.0

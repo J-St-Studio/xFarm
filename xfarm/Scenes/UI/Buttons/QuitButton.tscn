@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://lph7munu4ms4"]
+
+[node name="Control" type="Control" unique_id=1843276650]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuitButton" type="Button" parent="." unique_id=886956712]
+layout_mode = 0
+offset_right = 263.0
+offset_bottom = 74.0
+text = "QUIT"
