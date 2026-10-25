@@ -6,25 +6,25 @@ class_name UIController extends Controller
 var pauseMenuResouce: PackedScene = preload("res://Scenes/UI/Menus/PauseMenu.tscn")
 var mainMenuResource: PackedScene = preload("res://Scenes/UI/Menus/MainMenu.tscn")
 
-var pauseMenu	: CanvasLayer = null
-var mainMenu	: CanvasLayer = null
+var pauseMenu: CanvasLayer = null
+var mainMenu: CanvasLayer = null
 
-var mainMenuQuitButton	: Button = null
-var mainMenuStartButton	: Button = null
-var settingsButton		: Button = null
-var resumeButton		: Button = null
-var pauseMenuQuitButton	: Button = null
+var mainMenuQuitButton: Button = null
+var mainMenuStartButton: Button = null
+var settingsButton: Button = null
+var resumeButton: Button = null
+var pauseMenuQuitButton: Button = null
 
-var event		: EventController 	= null
-var generator	: TextureGenerator 	= null
-var logger		: LogController 	= null
+var event: EventController = null
+var generator: TextureGenerator = null
+var logger: LogController = null
 
-var backgroundTexture	: Texture2D = null
+var backgroundTexture: Texture2D = null
 
-var mainMenuRendered	: bool = false
+var mainMenuRendered: bool = false
 
-var PauseMenuAllocations	: Array
-var MainMenuAllocations		: Array
+var PauseMenuAllocations: Array
+var MainMenuAllocations: Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -51,6 +51,7 @@ func Initialize() -> Controller.State:
 		mainMenuQuitButton.button_up: QuitButtonPressed,
 		mainMenuStartButton.button_up: StartButtonPressed,
 		pauseMenuQuitButton.button_up: PauseMenuQuitButtonPressed,
+		resumeButton.button_up: ResumeButtonPressed,
 	})
 	return state
 
@@ -93,7 +94,7 @@ func MakeAllocations() -> void:
 	allocations.append(generator)
 
 func VerifyAllocations() -> Controller.State:
-	if (!event or !logger ): 
+	if (!event or !logger):
 		return Controller.State.FAIL
 	return Controller.State.ONLINE
 ## end initialization
@@ -129,3 +130,7 @@ func StartButtonPressed() -> void:
 
 func PauseMenuQuitButtonPressed() -> void:
 	event.BroadcastReturnToMainMenu()
+	# do stuff here
+
+func ResumeButtonPressed() -> void:
+	event.BroadcastGameUnpaused()

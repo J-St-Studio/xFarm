@@ -3,6 +3,7 @@ class_name PlayerController extends Controller
 
 var event: EventController
 var game: GameController
+var logger: LogController
 
 var playerLocationOneShot: OneShot
 var GlobalDeltaTime: float = 0
@@ -24,11 +25,6 @@ func _process(delta: float) -> void:
 	GlobalDeltaTime = delta
 	if (!player and game.CurrentGameState == GameState.UnPaused):
 		SpawnPlayer()
-	
-	# Check if UI context prevents movement/action processing
-	var is_ui_active = system.GetGameController().is_ui_active
-	if (is_ui_active):
-		return # Do nothing if the UI is active
 	pass
 	
 func Initialize() -> Controller.State:
@@ -36,6 +32,7 @@ func Initialize() -> Controller.State:
 		state = Controller.State.FAIL
 		return state
 	
+	logger = system.GetLogController()
 	event = system.GetEventController()
 	game = system.GetGameController()
 	
@@ -43,7 +40,7 @@ func Initialize() -> Controller.State:
 		state = Controller.State.FAIL
 		return state
 	
-	ConnectSignals ({
+	ConnectSignals({
 		event.input_confirm_pressed: OnConfirmPressed,
 		event.input_escape_pressed: OnEscapePressed,
 		event.input_up_pressed: OnUpPressed,
@@ -51,7 +48,9 @@ func Initialize() -> Controller.State:
 		event.input_left_pressed: OnLeftPressed,
 		event.input_right_pressed: OnRightPressed,
 		event.input_left_mouse_pressed: OnLeftMousePressed,
-		event.input_right_mouse_pressed: OnRightMousePressed
+		event.input_right_mouse_pressed: OnRightMousePressed,
+		event.ui_pause_menu_quit_button_pressed: DespawnPlayer,
+		event.input_left_mouse_pressed: OnLeftMousePressed,
 	})
 	
 	state = Controller.State.ONLINE
@@ -65,6 +64,12 @@ func SpawnPlayer() -> void:
 	add_child(player)
 	SetPlayerState(Player.State.IDLE)
 	SetPlayerDirection(Player.Direction.Left)
+
+func DespawnPlayer() -> void:
+	if (!player): return
+	SetPlayerState(Player.State.NONE)
+	SetPlayerDirection(Player.Direction.None)
+	player.queue_free()
 
 func ProcessPlayerActions():
 	#actions include interacting with items/objects
@@ -91,13 +96,12 @@ func SetPlayerDirection(direction: int) -> void:
 func SetPlayerStateAndDirection(state: int, direction: int) -> void:
 	CurrentPlayerState = state
 	CurrentPlayerDirection = direction
-	pass;
 
 func PlayerSpeedCalculation() -> float:
 	return player.MoveSpeed * player.MoveSpeedM * GlobalDeltaTime
 
 func OnConfirmPressed() -> void:
-	# Interaction logic here (e.g., checking for nearby interactable objects)
+	logger.message(self, "Confirm button pressed")
 	pass
 
 func OnEscapePressed() -> void:
@@ -125,8 +129,8 @@ func OnLeftPressed() -> void:
 		SetPlayerStateAndDirection(player.State.MOVING, player.Direction.Left)
 
 func OnLeftMousePressed() -> void:
-	#EC.BroadcastSpawnItem(item, location)
-	pass # Replace with function body.
+	logger.message(self, "left mouse button")
+
 
 func OnRightMousePressed() -> void:
 	return

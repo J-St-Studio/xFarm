@@ -8,7 +8,8 @@ enum State {
 	MOVING,
 	BUSY,
 	DEAD,
-	ERROR = -1
+	ERROR = -1,
+	NONE
 }
 
 enum Direction {
@@ -59,5 +60,3 @@ var Power: float = MaxPower
 
 func _ready() -> void:
 	pass
-	
-	

@@ -3,6 +3,8 @@ class_name TimeController extends Controller
 var precision = preload("res://Scripts/System/Utilities/precision.gd")
 
 var game: GameController
+var event: EventController
+
 signal one_second_elapsed
 var WorldTime: float = 0.0;
 var GlobalDelta: float = 0.0;
@@ -20,7 +22,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	GlobalDelta = delta;
-	if game.GameUnPaused(): 
+	if game.GameUnPaused():
 		AdvanceWorldTime()
 	return
 	
@@ -28,10 +30,17 @@ func Initialize() -> Controller.State:
 	if (!system):
 		state = Controller.State.FAIL
 		return state
+
+	event = system.GetEventController()
 	game = system.GetGameController()
-	if (!game):
+
+	if (!game or !event):
 		state = Controller.State.FAIL
 		return state
+
+	ConnectSignals({
+		event.game_go_to_main_menu: ResetWorldTime,
+	})
 		
 	state = Controller.State.ONLINE
 	return state
@@ -45,6 +54,10 @@ func AdvanceWorldTime() -> void:
 		LastLoggedSecond = int(current_second);
 		one_second_elapsed.emit()
 		print("WorldTime: ", GetWorldTimeAsString(0))
+
+func ResetWorldTime() -> void:
+	WorldTime = 0.0
+	LastLoggedSecond = -1
 
 func GetWorldTimeAsString(_precision: int = 0) -> String:
 	return precision.of(WorldTime, _precision)

@@ -5,7 +5,7 @@ class_name GameController extends Controller
 
 var event: EventController
 var logger: LogController
-var world: WorldGenerator;
+var world: WorldGenerator
 
 var GlobalDelta: float
 static var CurrentGameState: int = GameState.MainMenu
@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 	if (!mainMenuRendered and CurrentGameState == GameState.MainMenu):
 		event.BroadcastUIRenderMainMenu()
 		mainMenuRendered = true
-	elif(mainMenuRendered and CurrentGameState == GameState.UnPaused):
+	elif (mainMenuRendered and CurrentGameState == GameState.UnPaused):
 		mainMenuRendered = false
 
 func Initialize() -> int:
@@ -49,7 +49,10 @@ func Initialize() -> int:
 	CurrentGameState = GameState.MainMenu
 	ConnectSignals({
 		event.input_escape_pressed: PauseGame,
-		event.game_start_game: StartGame
+		event.game_start_game: StartGame,
+		event.game_unpaused: PauseGame,
+
+		event.ui_pause_menu_quit_button_pressed: ReturnToMainMenu
 	})
 	add_child(world)
 	
@@ -100,6 +103,11 @@ func PauseGame() -> void:
 		SetCurrentGameState(GameState.UnPaused)
 		# event.BroadcastGameSetControlType(InputTypes.Types.PLAYER)
 		event.BroadcastUITeardownMainMenu()
+
+func ReturnToMainMenu() -> void:
+	event.BroadcastGameGoToMainMenu()
+	event.BroadcastUITeardownPauseMenu()
+	event.BroadcastUIRenderMainMenu()
 
 func QuitGame() -> void:
 	# do stuff

@@ -120,7 +120,6 @@ func GenerateTexture(textureData: Dictionary) -> Texture2D:
 			b = clamp(b, 0.0, 1.0)
 			
 			image.set_pixel(x, y, Color(r, g, b, 1.0))
-	
 
 	return ImageTexture.create_from_image(image)
 
